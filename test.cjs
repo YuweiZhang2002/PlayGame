@@ -59,6 +59,7 @@ new vm.Script(fs.readFileSync("public/flow.js", "utf8"));
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
 assert.equal(ids.length, new Set(ids).size, "Every UI element must have a unique ID");
 vm.runInContext(html.match(/<script id="translations">([\s\S]*?)<\/script>/)[1] + "\nglobalThis.copy = TRANSLATIONS;", context);
+vm.runInContext(fs.readFileSync("public/classroom.js", "utf8"), context);
 assert.deepEqual(Object.keys(context.copy.zh).sort(), Object.keys(context.copy.en).sort());
 for (const match of html.matchAll(/data-i18n="([^"]+)"/g)) {
   assert.equal(typeof context.copy.zh[match[1]], "string", `Missing Chinese copy: ${match[1]}`);

@@ -49,14 +49,37 @@
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.choice.effect-wrong:after{display:none}}
   </style>
   <link rel="stylesheet" href="/arcade.css">
+  <link rel="stylesheet" href="/classroom.css">
 </head>
 <body>
+  <aside id="course-sidebar" class="course-sidebar" aria-label="Group 12 class outline">
+    <div class="course-brand">GROUP <strong>12</strong><span>PROBABILITY LAB</span></div>
+    <button id="course-toggle" class="course-toggle" aria-expanded="false" aria-controls="course-links"><span data-i18n="courseNav">课堂目录</span><span aria-hidden="true">☰</span></button>
+    <div id="course-links"><p class="course-label" data-i18n="courseNav">课堂目录</p>
+      <nav class="course-links">
+        <button data-course="intro"><b>01</b><span data-i18n="courseIntro">主题介绍</span><small>2.5′</small></button>
+        <button data-course="rules"><b>02</b><span data-i18n="courseRules">游戏规则</span><small>2.5′</small></button>
+        <button data-course="game"><b>03</b><span data-i18n="courseGame">抽球挑战</span><small>3′</small></button>
+        <button data-course="formula"><b>04</b><span data-i18n="courseFormula">概念与公式</span><small>5′</small></button>
+        <button data-course="weather"><b>05</b><span data-i18n="courseWeather">天气随堂题</span><small>3′</small></button>
+        <button data-course="board" class="course-board"><b>↗</b><span data-i18n="courseBoard">实时排行榜</span></button>
+      </nav>
+      <p id="course-hint" class="course-hint"></p><div class="course-duration" data-i18n="courseTiming">约 16 分钟 · 互动课堂</div>
+    </div>
+  </aside>
   <div class="shell">
     <header class="topbar">
       <div class="brand"><span class="brand-mark" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="4" fill="#f3bb84"/><circle cx="16" cy="16" r="4" fill="#dfe8bd"/><circle cx="17" cy="6" r="2" fill="#90b095"/><circle cx="6" cy="17" r="2" fill="#90b095"/></svg></span><span data-i18n="brand">概率游乐场</span></div>
       <div class="top-tools"><span class="classroom" data-i18n="tagline">一点好奇，一点概率</span><button class="language-button" id="language-toggle" aria-label="Switch to English">EN</button><button class="text-button" id="rules-open"><span class="question-mark" aria-hidden="true">?</span><span data-i18n="howTo">怎么玩</span></button></div>
     </header>
     <main>
+      <section id="class-introduction" class="class-introduction" hidden>
+        <div class="class-hero"><p class="section-kicker" data-i18n="courseGroup">大家好，我们是 Group 12</p><h1 tabindex="-1" data-i18n="courseTitle">一条线索，<br><em>如何改变概率？</em></h1><p class="class-subject" data-i18n="courseLead">Conditional probability · 条件概率</p><p class="class-question" data-i18n="courseQuestion"></p>
+          <div class="clue-comparison"><div><span data-i18n="introBefore">还没有线索</span><div class="intro-orbs" aria-hidden="true"><i class="warm">★</i><i class="cool"></i><i class="warm">★</i><i class="cool">★</i><i class="cool"></i><i class="warm"></i><i class="cool"></i><i class="warm">★</i></div><strong data-i18n="introBeforeValue">看所有球</strong></div><b class="comparison-arrow" aria-hidden="true">→</b><div><span data-i18n="introAfter">已知带星星</span><div class="intro-orbs" aria-hidden="true"><i class="warm">★</i><i class="cool faded"></i><i class="warm">★</i><i class="cool">★</i><i class="cool faded"></i><i class="warm faded"></i><i class="cool faded"></i><i class="warm">★</i></div><strong data-i18n="introAfterValue">只看符合条件的球</strong></div></div>
+          <div class="hero-bottom"><button id="intro-continue" class="next-button" data-i18n="introCTA">开始了解游戏规则 →</button><span data-i18n="introInsight">先亲手玩，再把直觉写成公式。</span></div>
+        </div>
+        <div class="learning-journey"><article><b>01</b><h2 data-i18n="journeyOne">看见条件</h2><p data-i18n="journeyOneText"></p></article><article><b>02</b><h2 data-i18n="journeyTwo">理解公式</h2><p data-i18n="journeyTwoText"></p></article><article><b>03</b><h2 data-i18n="journeyThree">迁移应用</h2><p data-i18n="journeyThreeText"></p></article></div>
+      </section>
       <section class="intro" aria-labelledby="game-title">
         <div><div class="eyebrow">THE LITTLE PROBABILITY CLUB <span data-i18n="topic">条件概率</span></div><h1 id="game-title" data-i18n="title">抽球，猜<em>颜色。</em></h1><p data-i18n="subtitle">球还是那些球。换一条线索，胜算会改变吗？</p></div>
         <div class="intro-stamp" aria-label="三轮小游戏"><span>PLAY & DISCOVER</span><strong>3 rounds</strong><span data-i18n="stamp">让直觉遇见概率</span></div>
@@ -113,7 +136,14 @@
       <section id="results-screen" class="results-screen" hidden>
         <div class="result-banner"><div class="result-identity"><span class="avatar-icon" id="result-avatar" aria-hidden="true"></span><div><p class="section-kicker" data-i18n="missionComplete">MISSION COMPLETE · 挑战完成</p><h2 id="result-title" tabindex="-1"><span id="result-name"></span><span data-i18n="completedSuffix">，漂亮完赛！</span></h2><p data-i18n="resultSaved">成绩已保存，正在加入实时排行榜。</p></div></div>
           <div class="result-metrics"><div><small data-i18n="accuracyLabel">正确率</small><strong id="result-accuracy"></strong><small id="result-score"></small></div><div><small data-i18n="totalTimeLabel">总用时</small><strong id="result-time"></strong><small><span data-i18n="averageLabel">每题平均</span> <span id="result-average"></span></small></div></div></div>
-        <div class="result-actions"><button class="next-button" id="summary-lesson" data-i18n="unlockLesson">已解锁 · 查看条件概率讲解 →</button><button class="secondary-button" id="play-again" data-i18n="playAgain">再玩一局 ↗</button></div><p class="result-note" data-i18n="resultTimingNote">总用时从开始游戏到最后一题提交成功；每题平均 = 总用时 ÷ 3。</p>
+        <p class="result-note" data-i18n="resultTimingNote">总用时从开始游戏到最后一题提交成功；每题平均 = 总用时 ÷ 3。</p>
+        <div id="large-bag-challenge" class="large-bag-challenge">
+          <p class="section-kicker" data-i18n="bigKicker"></p><h2 data-i18n="bigTitle"></h2><p class="activity-lead" data-i18n="bigLead"></p>
+          <div class="large-bag-layout"><figure><div id="large-ball-cloud" class="large-ball-cloud"></div><figcaption data-i18n="bigSchematic"></figcaption></figure><div class="large-data"><p data-i18n="bigA"></p><p data-i18n="bigB"></p><div class="given-stat"><strong>P(B) = 0.40</strong><span data-i18n="bigGivenB"></span></div><div class="given-stat warm-stat"><strong>P(A ∩ B) = 0.24</strong><span data-i18n="bigGivenAB"></span></div></div></div>
+          <h3 id="big-prompt" data-i18n="bigPrompt"></h3><div id="big-choices" class="activity-choices" role="group" aria-labelledby="big-prompt"><button data-big-answer="24" aria-pressed="false">24%</button><button data-big-answer="40" aria-pressed="false">40%</button><button data-big-answer="60" aria-pressed="false">60%</button><button data-big-answer="unsure" aria-pressed="false" data-i18n="bigUnsure"></button></div>
+          <p class="activity-note" data-i18n="bigNote"></p><p id="big-status" class="prediction-status" role="status" data-i18n="bigSaved" hidden></p><p class="big-bridge" data-i18n="bigBridge"></p>
+        </div>
+        <div class="result-actions"><button class="next-button" id="summary-lesson" data-i18n="unlockLesson">进入概念与公式 →</button><button class="secondary-button" id="play-again" data-i18n="playAgain">再玩一局 ↗</button></div>
       </section>
       <section id="leaderboard" class="leaderboard" aria-labelledby="board-title" hidden>
         <div class="board-heading"><div><p class="section-kicker">THE PROBABILITY LEAGUE</p><h2 id="board-title" data-i18n="leaderboardTitle">实时排行榜</h2><p data-i18n="leaderboardIntro">和其他玩家一起，挑战又准又快。</p></div><span id="board-status" class="live-pill" role="status"></span></div>
@@ -163,6 +193,23 @@
         </div>
         <details class="lesson-think"><summary data-i18n="lessonQuestion">想一想：只抽带星星的球时，为什么不是 3/8？</summary><p data-i18n="lessonAnswer">3/8 是从全部 8 颗球中抽到“橙色且带星星”的概率，也就是 P(A ∩ B)。但已知只抽带星星的球后，参照范围变成了 4 颗带星星的球，因此 P(A | B) = 3/4。</p></details>
         <div class="lesson-memory"><span aria-hidden="true">✦</span><p data-i18n="lessonMemory"><strong>先看条件留下了谁，再看里面有多少符合目标。</strong><br>3/4 描述的是抽取概率，单次仍可能抽到蓝色球。</p></div>
+        <div class="general-method"><h3 data-i18n="methodTitle"></h3><div class="method-steps"><article><b>1</b><h4 data-i18n="methodOne"></h4><p data-i18n="methodOneText"></p></article><article><b>2</b><h4 data-i18n="methodTwo"></h4><p data-i18n="methodTwoText"></p></article><article><b>3</b><h4 data-i18n="methodThree"></h4><p data-i18n="methodThreeText"></p></article></div><p class="activity-note" data-i18n="generalNote"></p></div>
+        <div id="revisit" class="revisit"><p class="section-kicker">04 / APPLY THE FORMULA</p><h3 data-i18n="revisitTitle"></h3><p class="activity-lead" data-i18n="revisitLead"></p><p id="revisit-guess" class="prediction-status" hidden></p>
+          <div class="revisit-givens"><span>P(B) = <b>0.40</b></span><span>P(A ∩ B) = <b>0.24</b></span></div>
+          <div class="probability-strip" role="img" aria-label="All balls: 24 percent are orange and starred; another 16 percent are starred. Together they form B, 40 percent."><span class="strip-overlap" style="width:24%">24%</span><span class="strip-rest" style="width:16%">16%</span><span class="strip-outside" style="width:60%">60%</span></div><p class="strip-caption">A ∩ B <span>⊂ B = 40%</span></p>
+          <button id="revisit-reveal" class="next-button" data-i18n="revisitReveal"></button>
+          <div id="revisit-solution" hidden><p class="section-kicker" data-i18n="revisitLabel"></p><div class="probability-strip rescaled" role="img" aria-label="Within the starred group: 60 percent orange, 40 percent blue."><span class="strip-overlap" style="width:60%">60%</span><span class="strip-rest" style="width:40%">40%</span></div><p class="revisit-equation" data-i18n="revisitAnswer"></p><p class="activity-lead" data-i18n="revisitExplanation"></p><p class="activity-note" data-i18n="revisitCount"></p></div>
+          <button id="weather-continue" class="next-button" data-i18n="weatherCTA" hidden></button>
+        </div>
+      </section>
+      <section id="weather-check" class="weather-check" hidden>
+        <p class="section-kicker" data-i18n="weatherKicker"></p><h2 tabindex="-1" data-i18n="weatherTitle"></h2><p class="activity-lead" data-i18n="weatherLead"></p>
+        <div class="weather-givens"><article><span class="weather-icon" aria-hidden="true">☁</span><h3 data-i18n="weatherC"></h3><strong data-i18n="weatherGivenC"></strong><p data-i18n="weatherDataC"></p></article><article><span class="weather-icon rain-icon" aria-hidden="true">☂</span><h3 data-i18n="weatherR"></h3><strong data-i18n="weatherGivenRC"></strong><p data-i18n="weatherDataRC"></p></article></div>
+        <p class="activity-note" data-i18n="weatherNote"></p><h3 id="weather-prompt" data-i18n="weatherPrompt"></h3>
+        <div id="weather-choices" class="activity-choices" role="group" aria-labelledby="weather-prompt"><button data-weather-answer="0.2" aria-pressed="false">20%</button><button data-weather-answer="0.4" aria-pressed="false">40%</button><button data-weather-answer="0.5" aria-pressed="false">50%</button><button data-weather-answer="1" aria-pressed="false">100%</button></div>
+        <button id="weather-submit" class="next-button" data-i18n="weatherSubmit" disabled></button><p class="activity-note" data-i18n="weatherUnscored"></p>
+        <div id="weather-feedback" class="weather-feedback" role="status" tabindex="-1" hidden><h3 id="weather-verdict"></h3><p class="weather-equation" data-i18n="weatherCalculation"></p><p data-i18n="weatherReason"></p><strong data-i18n="weatherTakeaway"></strong></div>
+        <div class="result-actions"><button id="weather-review" class="secondary-button" data-i18n="weatherReplay"></button><button id="weather-finish" class="text-button" data-i18n="weatherFinish"></button></div>
       </section>
     </main>
     <footer class="footer"><span data-i18n="footer">每一次选择，都是一个小实验。</span><span class="footer-note" data-i18n="footerNote">概率论 · 课堂互动小游戏</span></footer>
@@ -435,6 +482,7 @@
       }
     };
   </script>
+  <script src="/classroom.js"></script>
   <script src="/flow.js"></script>
   <script>
     (() => {
@@ -712,6 +760,7 @@
       $("play-again").addEventListener("click",reset);
       $("answer-retry").addEventListener("click",()=>choose(pendingValue));
       $("summary-lesson").addEventListener("click",openLesson);
+      document.addEventListener("classroom-answer",event=>playAnswerEffect(event.detail.correct,event.detail.button));
       conditionButtons.forEach(button=>button.addEventListener("click",()=>{
         lessonCondition=Number(button.dataset.condition);
         renderLesson();

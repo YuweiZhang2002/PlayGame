@@ -60,6 +60,16 @@ No stars / 不带星星:    (1/8) / (4/8) = 1/4
 
 The guide explains why probabilities are first calculated over the original eight equally likely balls, why the denominator changes after conditioning, and how joint probability differs from conditional probability.
 
+## Group 12 classroom flow / 课堂流程
+
+The left navigation follows a 16-minute lesson: introduction (2.5 min), rules (2.5 min), game and large-bag prediction (3 min), concept and formula (5 min), and a weather check (3 min). On narrow screens the outline collapses into a menu.
+
+After the three scored rounds, learners predict the orange probability among starred balls in a hypothetical 10,000-ball bag: `P(B) = 0.40`, `P(A ∩ B) = 0.24`. The lesson revisits that question and rescales the visual probability bar to show `0.24 / 0.40 = 60%`. The ball cloud is explicitly a schematic, not an inventory.
+
+Revealing that solution unlocks the weather check, using hypothetical data `P(C) = 0.50` and `P(R ∩ C) = 0.20`, giving `P(R | C) = 40%`. Both teaching questions are untimed and unscored. Their answers and reveal state stay in this tab's session storage, keyed to the game attempt; they do not change the server leaderboard.
+
+The English speech and slide deck are separate teaching documents, not website routes or public assets.
+
 ## Local development / 本地运行
 
 Requires Node.js 22.13+ and npm.
@@ -88,6 +98,7 @@ Tests cover conditional probabilities and formula derivations, uniform draws, tr
 - `web/index.html`: game, bilingual copy and visual explanation.
 - `public/arcade.css`: responsive neon arcade theme.
 - `public/flow.js`: onboarding, session recovery, timer and leaderboard UI.
+- `public/classroom.js`, `public/classroom.css`: bilingual course outline, introduction, large-bag prediction, formula application and weather check.
 - `server/game.mjs`: scoring, sessions and leaderboard API.
 - `app/`: HTML and API route handlers, including the gated lesson route.
 - `db/schema.ts`, `drizzle/`: durable database schema and migrations.

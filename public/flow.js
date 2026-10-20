@@ -13,6 +13,7 @@ class ArcadeFlow {
     this.boardBusy = false;
     this.boardError = false;
     this.$ = id => document.getElementById(id);
+    this.classroom = new ClassroomFlow(this);
     this.$("rules-accept").addEventListener("click", () => {
       this.accepted = true;
       this.phase = "profile";
@@ -80,10 +81,11 @@ class ArcadeFlow {
         this.phase = session.completed ? (location.pathname === "/lesson" ? "lesson" : "results") : "playing";
         this.onSession(session);
       } else {
-        this.phase = "rules";
+        this.phase = "intro";
       }
+      this.classroom.restore();
       // Old deep links must not expose the lesson before a completed attempt.
-      if (location.hash && this.phase !== "lesson") history.replaceState(null, "", location.pathname);
+      if (location.hash && !["lesson","weather"].includes(this.phase)) history.replaceState(null, "", location.pathname);
       this.render();
       if (this.phase === "results") this.refreshBoard();
     } catch {
@@ -119,6 +121,7 @@ class ArcadeFlow {
     try {
       const {session} = await this.api("/api/start", {startId:this.startId,name,avatar:this.avatar,rulesAccepted:true});
       this.sync(session);
+      this.classroom.reset();
       this.phase = session.completed ? "results" : "playing";
       this.onSession(session);
       this.startId = null;
@@ -161,6 +164,7 @@ class ArcadeFlow {
     this.accepted = false;
     this.startId = null;
     this.session = null;
+    this.classroom.reset();
     this.render();
     this.$("rules-accept").focus({preventScroll:true});
     this.$("onboarding").scrollIntoView({block:"start",behavior:"instant"});
@@ -180,8 +184,8 @@ class ArcadeFlow {
     $("results-screen").hidden = phase !== "results";
     $("leaderboard").hidden = phase !== "results";
     $("conditional-lesson").hidden = phase !== "lesson";
-    $("lesson-nav").hidden = phase !== "lesson";
-    $("flow-track").hidden = phase === "lesson" || phase === "loading";
+    $("lesson-nav").hidden = !["lesson","weather"].includes(phase);
+    $("flow-track").hidden = !["rules","profile","playing","results"].includes(phase);
     const step = ["rules","profile","playing","results"].indexOf(phase);
     document.querySelectorAll("[data-flow-step]").forEach((el, i) => {
       el.classList.toggle("active", i === step);
@@ -201,6 +205,7 @@ class ArcadeFlow {
     }
     this.renderTimer();
     this.renderBoard();
+    this.classroom.render();
   }
   escape(value) { return String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
   accuracy(score) { return (score/3*100).toFixed(score%3?1:0) + "%"; }
