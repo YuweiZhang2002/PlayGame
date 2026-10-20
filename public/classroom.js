@@ -150,7 +150,7 @@ class ClassroomFlow {
     const answer = this.read("weather");
     this.weatherAnswer = answer === null ? null : Number(answer);
     this.weatherChoice = this.weatherAnswer;
-    if (location.pathname === "/lesson" && location.hash === "#weather-check" && this.canWeather()) this.flow.phase = "weather";
+    if (this.flow.isLessonPage && location.hash === "#weather-check" && this.canWeather()) this.flow.phase = "weather";
   }
   reset() { this.guess=null;this.revisited=false;this.weatherChoice=null;this.weatherAnswer=null; }
   canWeather() { return this.flow.session?.completed && this.revisited; }
@@ -160,8 +160,8 @@ class ClassroomFlow {
     if (["formula","weather","board"].includes(section) && !f.session?.completed) return;
     if (section==="weather" && !this.canWeather()) return;
     if (section==="formula" || section==="weather") {
-      if (location.pathname !== "/lesson") {
-        location.assign("/lesson" + (section==="weather" ? "#weather-check" : ""));
+      if (!this.flow.isLessonPage) {
+        location.assign(this.flow.lessonPath + (section==="weather" ? "#weather-check" : ""));
         return;
       }
       f.phase=section==="weather"?"weather":"lesson";

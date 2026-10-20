@@ -3,6 +3,13 @@ class ArcadeFlow {
     this.t = t;
     this.onSession = onSession;
     this.clearEffects = clearEffects;
+    this.site = window.PROBABILITY_SITE || {basePath:"/",apiBase:""};
+    this.lessonPath = this.site.basePath + "lesson" + (this.site.apiBase ? "/" : "");
+    this.isLessonPage = location.pathname.replace(/\/+$/, "") === this.lessonPath.replace(/\/+$/, "");
+    this.tokenKey = "probability-attempt:" + this.site.basePath;
+    if (this.site.apiBase) {
+      try { this.sessionToken = localStorage.getItem(this.tokenKey); } catch {}
+    }
     this.phase = "loading";
     this.session = null;
     this.accepted = false;
@@ -50,11 +57,13 @@ class ArcadeFlow {
     window.addEventListener("pageshow", event => { if (event.persisted) this.init(); });
   }
   async api(path, input) {
-    const response = await fetch(path, {
+    const headers = input ? { "Content-Type": "application/json" } : {};
+    if (this.site.apiBase && this.sessionToken) headers.Authorization = "Bearer " + this.sessionToken;
+    const response = await fetch(this.site.apiBase + path, {
       method: input ? "POST" : "GET",
-      headers: input ? { "Content-Type": "application/json" } : {},
+      headers,
       body: input ? JSON.stringify(input) : undefined,
-      credentials: "same-origin",
+      credentials: this.site.apiBase ? "omit" : "same-origin",
       cache: "no-store",
       signal: AbortSignal.timeout(15000),
     });
@@ -78,9 +87,17 @@ class ArcadeFlow {
         this.avatar = session.avatar;
         this.$("player-name").value = session.name;
         this.accepted = true;
-        this.phase = session.completed ? (location.pathname === "/lesson" ? "lesson" : "results") : "playing";
+        if (this.isLessonPage && !session.completed) {
+          location.replace(this.site.basePath);
+          return;
+        }
+        this.phase = session.completed ? (this.isLessonPage ? "lesson" : "results") : "playing";
         this.onSession(session);
       } else {
+        if (this.isLessonPage) {
+          location.replace(this.site.basePath);
+          return;
+        }
         this.phase = "intro";
       }
       this.classroom.restore();
@@ -117,6 +134,11 @@ class ArcadeFlow {
     this.$("profile-error").textContent = "";
     // Keep the same ID after uncertain network failure; a retry must not create two games.
     this.startId ??= crypto.randomUUID();
+    if (this.site.apiBase) {
+      // Retain the attempt across refreshes without relying on third-party cookies.
+      this.sessionToken = this.startId;
+      try { localStorage.setItem(this.tokenKey, this.sessionToken); } catch {}
+    }
     this.renderProfile();
     try {
       const {session} = await this.api("/api/start", {startId:this.startId,name,avatar:this.avatar,rulesAccepted:true});
@@ -170,7 +192,7 @@ class ArcadeFlow {
     this.$("onboarding").scrollIntoView({block:"start",behavior:"instant"});
   }
   openLesson() {
-    if (this.session?.completed) location.assign("/lesson");
+    if (this.session?.completed) location.assign(this.lessonPath);
   }
   render() {
     const $ = this.$, phase = this.phase;

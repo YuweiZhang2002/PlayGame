@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#244e42">
+  <meta name="description" content="三轮抽球小游戏，动手理解条件概率。看线索，猜概率，抽球揭晓！">
+  <title>抽球猜颜色 · 概率游乐场</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23244e42'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23ef9366'/%3E%3Ctext x='32' y='43' font-size='34' text-anchor='middle' fill='white'%3E★%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{--ink:#243e35;--muted:#6e7c72;--green:#244e42;--paper:#f7f7ef;--line:#dce3d8;--orange:#e57d4c;--blue:#6b8cb8;--cream:#f9eed5}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:15px;line-height:1.6}button{font:inherit;cursor:pointer}button:disabled{cursor:default}button:focus-visible,a:focus-visible{outline:3px solid #b77332;outline-offset:5px}button{touch-action:manipulation}button svg{pointer-events:none}[hidden]{display:none!important}
+    .shell{max-width:1180px;margin:auto;padding:0 42px}.topbar{display:flex;align-items:center;justify-content:space-between;min-height:88px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:750;letter-spacing:.04em}.brand-mark{height:33px;width:33px;background:var(--green);border-radius:11px;display:grid;place-items:center;color:var(--cream)}.top-tools{display:flex;align-items:center;gap:24px}.classroom{font-size:12px;color:var(--muted);letter-spacing:.08em}.classroom:before{content:"";display:inline-block;width:6px;height:6px;background:#7e9e6f;border-radius:50%;margin-right:8px}.text-button{background:none;border:0;color:var(--ink);padding:8px 0;font-size:13px}.text-button:hover{text-decoration:underline;text-underline-offset:5px}.question-mark{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid #91a095;border-radius:50%;font-size:11px;margin-right:6px}
+    .intro{padding:38px 0 27px;display:flex;align-items:center;justify-content:space-between;gap:25px}.eyebrow{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:650;letter-spacing:.13em;color:#6d7e6e;margin-bottom:9px}.eyebrow span{background:#e8eddf;padding:3px 8px;border-radius:4px;color:#51654d;font-size:10px}h1{font-size:43px;letter-spacing:-.035em;line-height:1.25;margin:0 0 12px;font-weight:780}h1 em{font-style:normal;color:#b96838}.intro p{margin:0;color:var(--muted);font-size:14px}.intro-stamp{flex:0 0 auto;border:1px solid #ccd5c5;transform:rotate(7deg);border-radius:50%;width:96px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#66805c;line-height:1.25;font-size:10px;letter-spacing:.1em;margin-right:15px}.intro-stamp strong{font-family:Georgia,serif;font-weight:400;font-size:31px;letter-spacing:0;margin:4px 0}.game-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 0 20px;gap:15px}.steps{display:flex;align-items:center;gap:10px}.step{display:flex;gap:7px;align-items:center;font-size:12px;color:#8c958b}.step b{font-weight:500;width:25px;height:25px;display:grid;place-items:center;border:1px solid #d4ddce;border-radius:50%;font-size:11px}.step.active{color:var(--green);font-weight:650}.step.active b{background:var(--green);border-color:var(--green);color:white}.step.complete b{background:#e3ebda;color:#4a6843;border-color:#e3ebda}.step-line{height:1px;width:31px;background:#d5ddcf}.score{font-size:12px;display:flex;align-items:center;gap:8px}.score-icon{color:#b98531}.score strong{font-size:17px;font-weight:650}.score .total{color:#8a958a}
+    .game-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);border:1px solid #d4dece;border-radius:22px;overflow:hidden;background:#fffef8;box-shadow:0 15px 45px #334f2710}.lab{position:relative;padding:26px 30px 22px;background:#eaf0e2;background-image:radial-gradient(#b8c5ac77 .8px,transparent .8px);background-size:17px 17px;min-height:425px;display:flex;flex-direction:column}.lab-head{display:flex;justify-content:space-between;align-items:center}.label{font-size:11px;font-weight:650;letter-spacing:.07em}.lab-head .label{color:#69815b}.pool-label{font-size:11px;background:#f7faef;border:1px solid #d7e1cd;border-radius:20px;padding:4px 10px;color:#657959}.bag{position:relative;margin:28px auto 19px;width:100%;max-width:370px;padding:29px 24px 24px;border:2px solid #fbfff6;border-radius:19px 19px 60px 60px;background:#ffffff45;box-shadow:inset 0 -5px 12px #79905e0a,0 8px 0 #9caf8330}.bag:before{content:"";position:absolute;top:-8px;left:-7px;right:-7px;border-radius:14px;background:#f6f9ed;border:1px solid #d3ddc6;height:14px;box-shadow:0 2px 1px #91a17915}.ball-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 15px;align-items:center;justify-items:center}.ball-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .4s,filter .4s}.ball-wrap.excluded{opacity:.17;filter:grayscale(.6)}.ball{position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;box-shadow:inset -4px -7px 9px #63351118,0 5px 5px #29412215;transition:transform .25s;user-select:none}.ball:before{content:"";position:absolute;width:16px;height:7px;border-radius:50%;background:#ffffff63;top:10px;left:11px;transform:rotate(-35deg)}.ball.orange{background:radial-gradient(circle at 30% 25%,#fbb791,#e68955 65%,#cf723f)}.ball.blue{background:radial-gradient(circle at 30% 25%,#aec5e4,#7d9fc9 65%,#6583ad)}.star{font-size:26px;line-height:1;color:#fffdf0;text-shadow:0 1px 2px #675b4b23}.ball-name{font-size:9px;line-height:1.3;color:#5f6f55;letter-spacing:.05em}.ball-wrap.drawn .ball{outline:3px solid #51723c;outline-offset:5px;transform:translateY(-4px)}.drawing .ball-wrap:not(.excluded) .ball{animation:wobble .45s ease-in-out infinite}.drawing .ball-wrap:nth-child(even) .ball{animation-delay:.15s}.legend{display:flex;justify-content:center;align-items:center;gap:17px;color:#647456;font-size:11px;margin:4px 0 15px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.dot.orange{background:var(--orange)}.dot.blue{background:var(--blue)}.legend .star-key{font-size:13px;color:#7f906b;margin-right:4px}.lab-caption{text-align:center;font-size:12px;color:#6c7c60;margin:0 auto;max-width:330px;min-height:40px}.lab-caption strong{font-weight:600;color:#49643b}.draw-result{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;width:100%;border-top:1px solid #cbd8bd;padding-top:13px;min-height:54px}.draw-result .mini-ball{width:31px;height:31px;font-size:16px;box-shadow:inset -2px -3px 5px #0001}.draw-result .mini-ball:before{display:none}.draw-result p{margin:0;color:#425a37;font-size:12px;line-height:1.5}.draw-result small{display:block;color:#718064;font-size:10px}.draw-result strong{font-weight:650}
+    .play{padding:29px 30px 24px;display:flex;flex-direction:column}.round-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.round-number{font-family:Georgia,serif;font-size:13px;letter-spacing:.1em;color:#87927d}.topic-pill{font-size:10px;padding:3px 9px;background:#f2f2e7;color:#79806a;border-radius:4px}.clue{display:flex;align-items:center;gap:12px;background:var(--cream);border:1px solid #eddfbd;border-radius:11px;padding:13px 15px}.clue-icon{font-size:22px;color:#ae853c;line-height:1.4}.clue small{color:#93733b;font-size:10px;display:block;margin-bottom:2px;letter-spacing:.06em}.clue strong{font-size:16px;font-weight:650;color:#6a5733}.prompt{font-size:21px;font-weight:700;line-height:1.5;margin:23px 0 4px;letter-spacing:-.02em}.orange-text{color:#be6338}.prompt-note{font-size:12px;margin:0;color:#8b9286}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 16px}.choice{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:105px;padding:12px 5px 10px;border-radius:11px;border:1px solid #dbe1d4;background:#fcfcf6;color:var(--ink);transition:border-color .2s,transform .2s,background .2s}.choice:not(:disabled):hover{background:#edf3e4;border-color:#8ca779;transform:translateY(-3px)}.fraction{display:inline-flex;flex-direction:column;align-items:stretch;font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.05;min-width:29px;text-align:center}.fraction .num{border-bottom:1.5px solid currentColor;padding:0 5px 5px}.fraction .den{padding:5px 5px 0}.choice .percent{font-size:10px;color:#919985;line-height:1.2;margin-top:9px}.choice.correct{background:#e7efdd;border:2px solid #69894e;color:#365328}.choice.wrong{background:#faeee6;border:2px solid #cb9475;color:#9a5737}.choice:disabled:not(.correct):not(.wrong){opacity:.45}.choice-mark{position:absolute;top:5px;right:8px;font-size:12px}.feedback{border-top:1px solid #e7eade;padding-top:13px;min-height:62px;font-size:13px}.feedback .initial{color:#88917f;font-size:11px;display:flex;align-items:center;gap:7px;padding-top:6px}.tiny-ring{display:inline-block;width:12px;height:12px;border:1px solid #a3b28e;border-radius:50%}.feedback strong{font-size:13px;display:block;margin-bottom:4px;color:#496937}.feedback.incorrect strong{color:#a96b43}.feedback p{margin:0;font-size:12px;color:#74806b;line-height:1.7}.next-button{margin-top:15px;display:flex;align-items:center;justify-content:space-between;background:var(--green);border:1px solid var(--green);color:#fffdf3;border-radius:9px;padding:12px 16px;font-size:13px;font-weight:600;transition:background .2s}.next-button:hover{background:#346654}.next-button:disabled{background:#8b9d83;border-color:#8b9d83}.next-button svg{width:16px;height:16px}.underboard{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:19px 3px}.underboard p{margin:0;font-size:11px;color:#849078}.underboard .text-button{font-size:11px;color:#758567}.reset-icon{display:inline-block;margin-right:5px;font-size:15px;vertical-align:middle}.footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:17px 0 22px;margin-top:17px;color:#91a086;font-size:10px;letter-spacing:.07em}.footer .footer-note{letter-spacing:0}
+    dialog{padding:0;border:1px solid #d9dfce;border-radius:22px;max-width:520px;width:calc(100% - 32px);background:#fffef7;color:var(--ink);box-shadow:0 25px 100px #132c3350}dialog::backdrop{background:#173b345c;backdrop-filter:blur(5px)}.dialog-body{padding:29px 32px}.dialog-top{display:flex;justify-content:space-between;align-items:center;gap:15px}.dialog-top h2{font-size:22px;letter-spacing:-.02em;margin:0}.close-dialog{width:31px;height:31px;border-radius:50%;border:1px solid #dce2d0;background:transparent;color:#829174;font-size:19px;line-height:1}.rules-lead{color:#728267;font-size:13px;margin:12px 0 22px}.rules-list{list-style:none;padding:0;margin:0;display:grid;gap:18px}.rules-list li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#65755b}.rules-list b{color:#3e5733;font-size:14px;display:block;margin-bottom:2px}.rule-n{width:26px;height:26px;flex:0 0 26px;background:#e9eedf;color:#6b8258;display:grid;place-items:center;border-radius:50%;font-size:12px}.rule-note{border-top:1px solid #e2e6d6;margin:20px 0 0;padding-top:17px;color:#819070;font-size:11px;line-height:1.8}.dialog-body .next-button{width:100%;justify-content:center}
+    .summary{text-align:center;padding:35px 32px 30px}.summary-eyebrow{font-size:11px;letter-spacing:.13em;color:#839473}.summary-score{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:12px 0 0}.summary-score strong{font-family:Georgia,serif;font-size:74px;font-weight:400;color:#395d34;line-height:1.15}.summary-score span{font-size:18px;color:#9aa58c}.summary h2{margin:8px 0 9px;font-size:23px}.summary-intro{font-size:12px;color:#8a947c;margin:0 0 23px}.recap{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #dbe3cf;border-radius:11px;background:#f3f6eb;overflow:hidden}.recap>div{padding:14px 4px;display:flex;flex-direction:column;gap:4px;border-right:1px solid #dbe3cf}.recap>div:last-child{border-right:0}.recap span{font-size:10px;color:#7e8f6a}.recap strong{font-family:Georgia,serif;font-weight:400;font-size:26px;color:#4f6c3c}.recap small{font-size:10px;color:#9aa58b}.takeaway{font-size:13px;line-height:1.9;color:#687e54;margin:21px 0 0}.takeaway strong{color:#3f5e32}.summary .next-button{width:100%;justify-content:center;margin-top:23px}.summary .text-button{font-size:11px;color:#869574;margin-top:6px}
+    .intro-stamp strong{white-space:nowrap;font-size:24px}.intro-stamp>span{font-size:8px;letter-spacing:.025em;white-space:nowrap}
+    .language-button{border:1px solid #cfd9c6;background:#edf1e6;color:#4e6842;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:650;min-width:43px}.language-button:hover{background:#dfe9d5}html[lang="en"] .intro p{max-width:620px}html[lang="en"] .clue strong{font-size:15px}html[lang="en"] .prompt{font-size:21px}html[lang="en"] .lab-caption{font-size:11px}html[lang="en"] .dialog-top h2{font-size:20px}html[lang="en"] .summary h2{font-size:22px}
+    @keyframes wobble{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-7px) rotate(8deg)}}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}.draw-result:not([hidden]){animation:fadeIn .4s ease-out}
+    @media(min-width:1400px){.shell{max-width:1260px}.intro{padding-top:45px;padding-bottom:35px}.game-layout{min-height:455px}.bag{max-width:390px;padding-top:35px;padding-bottom:30px}.ball{width:64px;height:64px}.ball-grid{gap:25px 18px}.play{padding:31px 35px}.lab{padding:29px 35px}h1{font-size:46px}.intro-stamp{margin-right:27px}}
+    @media(max-width:850px){.shell{padding:0 25px}.classroom{display:none}.intro-stamp{width:80px;height:80px;margin-right:2px}.intro-stamp strong{font-size:20px}h1{font-size:35px}.lab{padding:24px 17px}.play{padding:24px 22px}.bag{padding:27px 14px 22px}.ball{width:50px;height:50px}.ball-grid{gap:21px 10px}.prompt{font-size:19px}.clue{padding:11px}.clue strong{font-size:15px}.choice{min-height:100px}.step-line{width:18px}}
+    @media(max-width:650px){.shell{padding:0 19px}.topbar{min-height:70px}.brand{font-size:16px}.brand-mark{width:29px;height:29px;border-radius:9px}.top-tools{gap:12px}.intro{padding:29px 0 23px;align-items:flex-start}.intro-stamp{display:none}h1{font-size:34px;margin-bottom:9px}.intro p{font-size:12px;max-width:260px}.eyebrow{font-size:9px;margin-bottom:11px}.game-bar{padding-bottom:15px}.step{font-size:10px;gap:5px}.step b{width:22px;height:22px;font-size:10px}.steps{gap:6px}.step-line{width:12px}.score{font-size:10px;gap:5px}.score strong{font-size:15px}.game-layout{grid-template-columns:1fr;border-radius:17px}.lab{min-height:0;padding:17px 22px 15px}.bag{max-width:320px;margin:22px auto 12px;padding:23px 26px 19px;border-radius:16px 16px 43px 43px}.ball{width:49px;height:49px}.ball-grid{gap:12px 13px}.star{font-size:23px}.ball-name{font-size:8px}.legend{margin:0 0 7px;font-size:10px}.lab-caption{font-size:11px;min-height:0;max-width:100%}.lab-head .label{font-size:10px}.pool-label{font-size:10px;padding:3px 8px}.play{padding:20px 21px}.round-top{margin-bottom:12px}.round-number{font-size:11px}.clue{padding:10px 13px}.clue small{font-size:9px}.clue strong{font-size:14px}.prompt{margin-top:18px;margin-bottom:2px;font-size:21px}.prompt-note{font-size:11px}.choices{margin:16px 0 13px;gap:10px}.choice{min-height:95px}.fraction{font-size:23px}.feedback{min-height:47px;padding-top:10px}.feedback .initial{padding-top:3px}.next-button{padding:11px 15px}.underboard{padding:14px 0;align-items:flex-start}.underboard p{font-size:10px;max-width:230px}.underboard .text-button{flex-shrink:0;padding:0}.footer{margin-top:7px;font-size:9px}.footer-note{display:none}.dialog-body{padding:25px}.summary{padding:28px 24px}.draw-result{min-height:45px;padding-top:10px;margin-top:5px}.draw-result small{font-size:9px}}
+    .answer-confetti{position:fixed;inset:0;width:100%;height:100%;z-index:900;pointer-events:none}
+    .answer-toast{position:fixed;z-index:901;pointer-events:none;display:flex;align-items:center;gap:9px;padding:11px 18px;border-radius:30px;background:#fcfff4;border:1px solid #a8bf8d;box-shadow:0 8px 26px #244e4224;color:#3f6532;font-size:14px;font-weight:700;white-space:nowrap;transform:translateX(-50%);animation:answer-toast-in .45s cubic-bezier(.2,.8,.3,1.2) both}
+    .answer-toast[data-kind="wrong"]{background:#fff5ea;border-color:#dfb794;color:#9b623b}
+    .answer-toast-icon{display:grid;place-items:center;width:25px;height:25px;background:#e1edce;border-radius:50%;font-size:16px}.answer-toast[data-kind="wrong"] .answer-toast-icon{background:#f4dfc8}
+    .choice.effect-correct{animation:answer-glow .85s ease-out}.choice.effect-wrong{animation:answer-shake .5s ease-in-out}
+    .choice.effect-wrong:after{content:"";position:absolute;inset:-3px;border:2px solid #d79b6b;border-radius:13px;pointer-events:none;animation:answer-ripple .85s ease-out both}
+    .score.effect-score{animation:score-bounce .65s cubic-bezier(.2,.8,.3,1.2)}
+    @keyframes answer-toast-in{from{opacity:0;transform:translate(-50%,14px) scale(.87)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+    @keyframes answer-glow{0%{box-shadow:0 0 0 0 #8aa66a66;transform:scale(1)}38%{box-shadow:0 0 0 9px #8aa66a22;transform:scale(1.055)}100%{box-shadow:0 0 0 16px #8aa66a00;transform:scale(1)}}
+    @keyframes answer-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px) rotate(-1deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+    @keyframes answer-ripple{from{opacity:.8;transform:scale(.98)}to{opacity:0;transform:scale(1.22)}}
+    @keyframes score-bounce{0%,100%{transform:scale(1)}40%{transform:scale(1.2);color:#50773d}}
+    .lesson-jump{display:flex;justify-content:center;padding:4px 0 17px}.lesson-link{border:0;background:none;color:#5b7649;padding:8px 13px;font-size:12px;text-decoration:underline;text-underline-offset:5px}
+    .lesson{border-top:1px solid var(--line);margin-top:18px;padding:43px 0 20px;scroll-margin-top:28px}.lesson-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.lesson-heading h2{font-size:30px;line-height:1.35;letter-spacing:-.035em;margin:9px 0 12px}.lesson-heading p{font-size:14px;color:#77846d;max-width:710px;margin:0}.lesson-time{flex-shrink:0;white-space:nowrap;font-size:11px;color:#788c65;border:1px solid #d8e1cc;border-radius:20px;padding:6px 11px;margin-top:26px}
+    .condition-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:25px 0 17px}.condition-controls>span{color:#7e8b72;font-size:11px;margin-right:4px}.condition-button{border:1px solid #d5dfcb;background:#fdfef6;border-radius:22px;padding:8px 16px;color:#6b7e5b;font-size:12px;transition:background .2s,border-color .2s,color .2s}.condition-button:hover{border-color:#89a56d;background:#eef3e7}.condition-button[aria-pressed="true"]{background:#365b42;color:#f8fff1;border-color:#365b42}
+    .lesson-explorer{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);border:1px solid #d6dfce;border-radius:19px;overflow:hidden;background:#fffef8}.lesson-universe{padding:25px 28px;background:#eff3e8}.lesson-step-label{font-size:10px;letter-spacing:.08em;color:#798e67;font-weight:650}.lesson-universe h3,.lesson-count h3{font-size:17px;line-height:1.5;margin:8px 0 6px;letter-spacing:-.02em}.lesson-universe>p,.lesson-count>p{color:#839075;font-size:11px;margin:0}
+    .lesson-balls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:21px 0 17px}.lesson-ball-cell{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 7px;border:1.5px solid #a7ba91;border-radius:13px;background:#f9fcf3;transition:opacity .35s,background .35s,border-color .35s}.lesson-ball-cell.excluded{opacity:.23;background:transparent;border-color:transparent}.lesson-ball-cell.intersection{border-color:#d69a6b;background:#fff7e8}.lesson-ball-cell .ball{width:45px;height:45px}.lesson-ball-cell .ball:before{top:8px;left:8px;width:13px}.lesson-ball-cell .star{font-size:22px}.lesson-ball-cell small{font-size:9px;color:#697d58;line-height:1.3}.lesson-legend{display:flex;gap:15px;flex-wrap:wrap;font-size:10px;color:#728561}.legend-square{display:inline-block;border:1.5px solid #96af7b;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:5px}.legend-square.overlap{background:#f9e0c5;border-color:#d69a6b}
+    .lesson-count{padding:25px 28px}.count-ratio{max-width:290px;margin:16px auto 8px}.count-part{display:flex;align-items:center;gap:14px;padding:11px 3px}.count-part:first-child{border-bottom:1.5px solid #9aa78b}.count-part strong{font-family:Georgia,serif;font-size:44px;line-height:1;min-width:35px;font-weight:400;color:#51713b}.count-part:first-child strong{color:#bf7945}.count-part span.count-label{display:block;font-size:10px;line-height:1.5;color:#849175;margin-bottom:7px}.mini-balls{display:flex;flex-wrap:wrap;gap:6px}.mini-balls .ball{width:21px;height:21px;box-shadow:inset -1px -2px 3px #63351115;flex-shrink:0}.mini-balls .ball:before{display:none}.mini-balls .star{font-size:12px}.lesson-probability{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:10px 0 5px;font-size:14px;color:#80906c}.lesson-probability strong{font-family:Georgia,serif;font-weight:400;font-size:31px;color:#4b6d3b}.lesson-probability .probability-percent{font-family:inherit;font-size:15px;color:#6a8356}.lesson-narration{font-size:11px;text-align:center;color:#788c65;line-height:1.7;margin:9px 0 0;min-height:36px}
+    .formula-section{margin-top:19px;padding:26px 29px 25px;background:#fffef8;border:1px solid #dce3d3;border-radius:18px}.formula-heading{display:flex;gap:14px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}.formula-heading h3{font-size:19px;letter-spacing:-.02em;margin:0}.formula-heading p{font-size:11px;color:#899579;margin:0}.event-definitions{display:grid;grid-template-columns:1fr 1fr 1.45fr;gap:10px;margin:18px 0}.event-definition{display:flex;align-items:center;gap:10px;background:#f1f5e9;padding:10px 12px;border-radius:9px;font-size:11px;line-height:1.5;color:#718362}.event-symbol{font-family:Georgia,serif;font-size:22px;color:#5c7d42;white-space:nowrap}.event-definition:first-child{background:#fbf0df;color:#9b7955}.event-definition:first-child .event-symbol,.intersection-color{color:#bd7542}
+    .formula-general{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:13px;margin:21px 0 8px;font-family:Georgia,"Times New Roman",serif;font-size:26px;color:#3f5e32}.math-frac{display:inline-flex;flex-direction:column;align-items:stretch;text-align:center;font-family:Georgia,"Times New Roman",serif;line-height:1.25;vertical-align:middle}.math-frac>span:first-child{border-bottom:1.3px solid currentColor;padding:0 10px 5px}.math-frac>span:last-child{padding:5px 10px 0}.formula-general .formula-precondition{font-size:14px;color:#839571;margin-left:8px}.formula-gloss{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;font-size:11px;color:#8b967c;margin:13px 0 20px}.formula-gloss b{font-family:Georgia,serif;font-size:16px;font-weight:400;color:#627b4f;margin-right:5px}
+    .formula-worked{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:22px;align-items:center;background:#f0f4e7;border-radius:11px;padding:18px 21px}.formula-worked h4{font-size:12px;margin:0 0 9px;color:#587543}.formula-probabilities{display:grid;gap:7px;font-family:Georgia,serif;font-size:18px;color:#70875b}.formula-probabilities span{display:flex;gap:8px;align-items:center}.formula-probabilities small{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:10px;color:#8a987a}.formula-numeric{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:13px;font-family:Georgia,serif;font-size:25px;color:#4d6b3b}.formula-numeric>strong{font-weight:400;font-size:31px}.formula-numeric .math-frac>span{padding-left:8px;padding-right:8px}.formula-note{margin:16px 0 0;font-size:11px;color:#81916e;line-height:1.8}.formula-note strong{color:#5b7845;font-weight:600}
+    .lesson-think{margin:17px 0 0;border:1px solid #dce4d2;border-radius:11px;background:#f3f6ec;overflow:hidden}.lesson-think summary{cursor:pointer;padding:14px 18px;color:#637e4e;font-size:12px;font-weight:600;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:15px}.lesson-think summary::-webkit-details-marker{display:none}.lesson-think summary:after{content:"+";font-size:20px;font-weight:400}.lesson-think[open] summary:after{content:"−"}.lesson-think summary:focus-visible{outline:3px solid #b77332;outline-offset:-4px}.lesson-think p{padding:0 18px 16px;margin:0;font-size:12px;color:#7b8a6b;line-height:1.9}.lesson-memory{display:flex;gap:13px;align-items:flex-start;margin:20px 0 0;padding:4px 3px;color:#70885c;font-size:12px;line-height:1.9}.lesson-memory>span{font-size:19px;color:#a8b88c}.lesson-memory p{margin:0}.lesson-memory strong{color:#486e36}.summary .lesson-secondary{display:block;width:100%;border:1px solid #cdd9bf;border-radius:9px;background:transparent;color:#6d8358;padding:11px 16px;font-size:13px;margin-top:10px}
+    @media(max-width:850px){.lesson-universe,.lesson-count{padding:21px 18px}.lesson-balls{gap:7px}.lesson-ball-cell .ball{width:39px;height:39px}.lesson-ball-cell .star{font-size:19px}.event-definitions{grid-template-columns:1fr 1fr}.event-definition:last-child{grid-column:1/-1}.formula-numeric{gap:9px;font-size:22px}}
+    @media(max-width:650px){.lesson{padding-top:29px;margin-top:12px}.lesson-heading h2{font-size:25px}.lesson-heading p{font-size:12px}.lesson-time{display:none}.condition-controls{gap:7px;margin-top:19px}.condition-controls>span{width:100%;margin-bottom:2px}.condition-button{padding:8px 13px;font-size:11px}.lesson-explorer{grid-template-columns:1fr}.lesson-universe,.lesson-count{padding:21px}.lesson-balls{max-width:340px;margin:19px auto 15px;gap:9px}.lesson-ball-cell .ball{width:43px;height:43px}.lesson-ball-cell .star{font-size:20px}.lesson-count{border-top:1px solid #dbe3d0}.lesson-narration{min-height:0}.formula-section{padding:22px 18px}.formula-heading h3{font-size:18px}.event-definitions{gap:8px}.event-definition{padding:10px;font-size:10px}.event-symbol{font-size:20px}.formula-general{font-size:23px;gap:9px}.formula-general .formula-precondition{font-size:12px;flex-basis:100%;text-align:center;margin:5px 0 0}.formula-gloss{gap:9px 17px;font-size:10px}.formula-worked{grid-template-columns:1fr;gap:18px;padding:16px}.formula-numeric{padding-top:14px;border-top:1px solid #d6dfc9}.formula-numeric>strong{font-size:30px}.lesson-think summary{font-size:11px;padding:13px 15px}.lesson-memory{font-size:11px}.lesson-jump{padding-bottom:8px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.choice.effect-wrong:after{display:none}}
+  </style>
+  <link rel="stylesheet" href="/PlayGame/arcade.css">
+  <link rel="stylesheet" href="/PlayGame/classroom.css">
+  <script>window.PROBABILITY_SITE={"basePath":"/PlayGame/","apiBase":"https://probability-detective-20261020.yuweizhang2002.chatgpt.site"};</script>
+</head>
+<body>
+  <aside id="course-sidebar" class="course-sidebar" aria-label="Group 12 class outline">
+    <div class="course-brand">GROUP <strong>12</strong><span>PROBABILITY LAB</span></div>
+    <button id="course-toggle" class="course-toggle" aria-expanded="false" aria-controls="course-links"><span data-i18n="courseNav">课堂目录</span><span aria-hidden="true">☰</span></button>
+    <div id="course-links"><p class="course-label" data-i18n="courseNav">课堂目录</p>
+      <nav class="course-links">
+        <button data-course="intro"><b>01</b><span data-i18n="courseIntro">主题介绍</span><small>2.5′</small></button>
+        <button data-course="rules"><b>02</b><span data-i18n="courseRules">游戏规则</span><small>2.5′</small></button>
+        <button data-course="game"><b>03</b><span data-i18n="courseGame">抽球挑战</span><small>3′</small></button>
+        <button data-course="formula"><b>04</b><span data-i18n="courseFormula">概念与公式</span><small>5′</small></button>
+        <button data-course="weather"><b>05</b><span data-i18n="courseWeather">天气随堂题</span><small>3′</small></button>
+        <button data-course="board" class="course-board"><b>↗</b><span data-i18n="courseBoard">实时排行榜</span></button>
+      </nav>
+      <p id="course-hint" class="course-hint"></p><div class="course-duration" data-i18n="courseTiming">约 16 分钟 · 互动课堂</div>
+    </div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="4" fill="#f3bb84"/><circle cx="16" cy="16" r="4" fill="#dfe8bd"/><circle cx="17" cy="6" r="2" fill="#90b095"/><circle cx="6" cy="17" r="2" fill="#90b095"/></svg></span><span data-i18n="brand">概率游乐场</span></div>
+      <div class="top-tools"><span class="classroom" data-i18n="tagline">一点好奇，一点概率</span><button class="language-button" id="language-toggle" aria-label="Switch to English">EN</button><button class="text-button" id="rules-open"><span class="question-mark" aria-hidden="true">?</span><span data-i18n="howTo">怎么玩</span></button></div>
+    </header>
+    <main>
+      <section id="class-introduction" class="class-introduction" hidden>
+        <div class="class-hero"><p class="section-kicker" data-i18n="courseGroup">大家好，我们是 Group 12</p><h1 tabindex="-1" data-i18n="courseTitle">一条线索，<br><em>如何改变概率？</em></h1><p class="class-subject" data-i18n="courseLead">Conditional probability · 条件概率</p><p class="class-question" data-i18n="courseQuestion"></p>
+          <div class="clue-comparison"><div><span data-i18n="introBefore">还没有线索</span><div class="intro-orbs" aria-hidden="true"><i class="warm">★</i><i class="cool"></i><i class="warm">★</i><i class="cool">★</i><i class="cool"></i><i class="warm"></i><i class="cool"></i><i class="warm">★</i></div><strong data-i18n="introBeforeValue">看所有球</strong></div><b class="comparison-arrow" aria-hidden="true">→</b><div><span data-i18n="introAfter">已知带星星</span><div class="intro-orbs" aria-hidden="true"><i class="warm">★</i><i class="cool faded"></i><i class="warm">★</i><i class="cool">★</i><i class="cool faded"></i><i class="warm faded"></i><i class="cool faded"></i><i class="warm">★</i></div><strong data-i18n="introAfterValue">只看符合条件的球</strong></div></div>
+          <div class="hero-bottom"><button id="intro-continue" class="next-button" data-i18n="introCTA">开始了解游戏规则 →</button><span data-i18n="introInsight">先亲手玩，再把直觉写成公式。</span></div>
+        </div>
+        <div class="learning-journey"><article><b>01</b><h2 data-i18n="journeyOne">看见条件</h2><p data-i18n="journeyOneText"></p></article><article><b>02</b><h2 data-i18n="journeyTwo">理解公式</h2><p data-i18n="journeyTwoText"></p></article><article><b>03</b><h2 data-i18n="journeyThree">迁移应用</h2><p data-i18n="journeyThreeText"></p></article></div>
+      </section>
+      <section class="intro" aria-labelledby="game-title">
+        <div><div class="eyebrow">THE LITTLE PROBABILITY CLUB <span data-i18n="topic">条件概率</span></div><h1 id="game-title" data-i18n="title">抽球，猜<em>颜色。</em></h1><p data-i18n="subtitle">球还是那些球。换一条线索，胜算会改变吗？</p></div>
+        <div class="intro-stamp" aria-label="三轮小游戏"><span>PLAY & DISCOVER</span><strong>3 rounds</strong><span data-i18n="stamp">让直觉遇见概率</span></div>
+      </section>
+      <div id="boot-screen" class="boot-screen"><div class="boot-ring" aria-hidden="true"></div><p id="boot-text" role="status" data-i18n="loadingGame">正在连接游戏…</p><button id="boot-retry" class="secondary-button" data-i18n="retry" hidden>重新连接</button></div>
+      <nav id="flow-track" class="flow-track" aria-label="Game flow" hidden><span data-flow-step="0" data-i18n="flowRules">01 阅读规则</span><i>→</i><span data-flow-step="1" data-i18n="flowPlayer">02 玩家就位</span><i>→</i><span data-flow-step="2" data-i18n="flowPlay">03 计时挑战</span><i>→</i><span data-flow-step="3" data-i18n="flowRank">04 成绩排名</span></nav>
+      <section id="onboarding" class="entry-card" hidden>
+        <div class="entry-rules"><p class="section-kicker">MISSION BRIEFING</p><h2 data-i18n="entryTitle">挑战前，先了解规则。</h2><p class="rules-lead" data-i18n="rulesLead"></p>
+          <ol class="rules-list"><li><span class="rule-n">1</span><div data-i18n="rule1"></div></li><li><span class="rule-n">2</span><div data-i18n="rule2"></div></li><li><span class="rule-n">3</span><div data-i18n="timedRule"></div></li></ol>
+          <p class="rule-note" data-i18n="rankingRule"></p><button class="next-button" id="rules-accept" data-i18n="acceptRules">我已阅读并了解</button><div id="rules-confirmed" class="entry-confirmed" data-i18n="rulesConfirmed" hidden>✓ 已阅读并了解规则</div>
+        </div>
+        <div class="entry-profile"><div id="profile-locked" class="profile-locked"><span class="lock-symbol" aria-hidden="true">◇</span><strong data-i18n="profileLockedTitle">你的玩家身份，即将上线</strong><p data-i18n="profileLockedNote">确认左侧规则后，选择头像并输入昵称。</p></div>
+          <form id="profile-form" hidden><p class="section-kicker">PLAYER SELECT</p><div class="profile-preview"><span class="avatar-icon" id="profile-avatar" aria-hidden="true"></span><div><strong id="profile-preview-name"></strong><small data-i18n="playerReady">准备好，来一场概率挑战。</small></div></div>
+          <label for="player-name" class="field-label" data-i18n="nameLabel">玩家昵称</label><input id="player-name" class="name-input" name="nickname" maxlength="40" autocomplete="off" required aria-describedby="profile-note profile-error">
+          <div class="avatar-label"><span id="avatar-label" data-i18n="chooseAvatar">选择游戏头像</span><button id="random-avatar" type="button" class="text-button" data-i18n="randomAvatar">⚄ 随机选一个</button></div><div id="avatar-grid" class="avatar-grid" role="group" aria-labelledby="avatar-label"></div>
+          <p id="profile-note" class="profile-note" data-i18n="profileNote">1–20 字。昵称、头像和完成成绩会公开显示在排行榜。</p><p id="profile-error" class="inline-error" role="alert"></p><button type="submit" id="start-game" class="next-button" disabled data-i18n="startGame">开始游戏 · 开始计时 →</button></form>
+        </div>
+      </section>
+      <div id="game-stage" hidden>
+      <div class="player-hud"><div class="hud-player"><span class="avatar-icon" id="hud-avatar" aria-hidden="true"></span><div><small data-i18n="activePlayer">挑战进行中</small><strong id="hud-name"></strong></div></div><div class="timer-block"><small data-i18n="elapsedLabel">本局用时</small><output id="game-timer" aria-live="off">0.00 s</output></div></div>
+      <div class="game-bar">
+        <div class="steps" aria-label="游戏进度">
+          <div class="step active" id="step-0" aria-current="step"><b>1</b><span>所有球</span></div><div class="step-line" aria-hidden="true"></div>
+          <div class="step" id="step-1"><b>2</b><span>带星星</span></div><div class="step-line" aria-hidden="true"></div>
+          <div class="step" id="step-2"><b>3</b><span>无星星</span></div>
+        </div>
+        <div class="score" aria-live="polite"><span class="score-icon" aria-hidden="true">✦</span><span data-i18n="score">得分</span> <strong id="score">0</strong><span class="total">/ 3</span></div>
+      </div>
+      <section class="game-layout" aria-label="抽球游戏">
+        <div class="lab">
+          <div class="lab-head"><span class="label" data-i18n="observe">01 — 观察球袋</span><span class="pool-label" id="pool-label">8 颗球参与抽取</span></div>
+          <div class="bag"><div class="ball-grid" id="ball-grid" role="list" aria-label="球袋中的八颗球"></div></div>
+          <div class="legend" aria-hidden="true"><span><i class="dot orange"></i><span data-i18n="orange">橙色</span></span><span><i class="dot blue"></i><span data-i18n="blue">蓝色</span></span><span><i class="star-key">★</i><span data-i18n="starred">带星星</span></span></div>
+          <p class="lab-caption" id="lab-caption">每颗球都有<strong>同样的机会</strong>被抽中。</p>
+          <div class="draw-result" id="draw-result" role="status" hidden></div>
+        </div>
+        <div class="play">
+          <div class="round-top"><span class="round-number" id="round-number">ROUND 01 / 03</span><span class="topic-pill" data-i18n="pill">看线索 → 选概率</span></div>
+          <div class="clue"><span class="clue-icon" id="clue-icon" aria-hidden="true">◎</span><div><small data-i18n="ruleLabel">本轮抽球规则</small><strong id="clue-text">所有球都可以抽</strong></div></div>
+          <h2 class="prompt" id="prompt" data-i18n="prompt">抽到<span class="orange-text">橙色球</span>的概率是？</h2>
+          <p class="prompt-note" data-i18n="promptNote">数一数有机会被抽中的球，再选一个答案。</p>
+          <div class="choices" role="group" aria-labelledby="prompt">
+            <button class="choice" data-answer="0.25" aria-label="四分之一，25%"><span class="fraction" aria-hidden="true"><span class="num">1</span><span class="den">4</span></span><span class="percent" aria-hidden="true">25%</span><span class="choice-mark" aria-hidden="true"></span></button>
+            <button class="choice" data-answer="0.5" aria-label="二分之一，50%"><span class="fraction" aria-hidden="true"><span class="num">1</span><span class="den">2</span></span><span class="percent" aria-hidden="true">50%</span><span class="choice-mark" aria-hidden="true"></span></button>
+            <button class="choice" data-answer="0.75" aria-label="四分之三，75%"><span class="fraction" aria-hidden="true"><span class="num">3</span><span class="den">4</span></span><span class="percent" aria-hidden="true">75%</span><span class="choice-mark" aria-hidden="true"></span></button>
+          </div>
+          <div class="feedback" id="feedback" role="status" aria-live="polite"><div class="initial"><i class="tiny-ring" aria-hidden="true"></i>答对得 1 分，实际抽到什么颜色不影响得分。</div></div>
+          <p id="answer-error" class="inline-error" role="alert" hidden></p><button id="answer-retry" class="secondary-button" data-i18n="retryAnswer" hidden>重试提交此答案</button>
+          <button class="next-button" id="next-button" hidden><span id="next-label">下一轮</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </section>
+      <div class="underboard"><p data-i18n="tip">小提示：变淡的球不参与本轮抽取；每轮都会放回全部球。</p><button id="restart-open" class="text-button"><span class="reset-icon" aria-hidden="true">↻</span><span data-i18n="restart">重新开始</span></button></div>
+      </div>
+      <section id="results-screen" class="results-screen" hidden>
+        <div class="result-banner"><div class="result-identity"><span class="avatar-icon" id="result-avatar" aria-hidden="true"></span><div><p class="section-kicker" data-i18n="missionComplete">MISSION COMPLETE · 挑战完成</p><h2 id="result-title" tabindex="-1"><span id="result-name"></span><span data-i18n="completedSuffix">，漂亮完赛！</span></h2><p data-i18n="resultSaved">成绩已保存，正在加入实时排行榜。</p></div></div>
+          <div class="result-metrics"><div><small data-i18n="accuracyLabel">正确率</small><strong id="result-accuracy"></strong><small id="result-score"></small></div><div><small data-i18n="totalTimeLabel">总用时</small><strong id="result-time"></strong><small><span data-i18n="averageLabel">每题平均</span> <span id="result-average"></span></small></div></div></div>
+        <p class="result-note" data-i18n="resultTimingNote">总用时从开始游戏到最后一题提交成功；每题平均 = 总用时 ÷ 3。</p>
+        <div id="large-bag-challenge" class="large-bag-challenge">
+          <p class="section-kicker" data-i18n="bigKicker"></p><h2 data-i18n="bigTitle"></h2><p class="activity-lead" data-i18n="bigLead"></p>
+          <div class="large-bag-layout"><figure><div id="large-ball-cloud" class="large-ball-cloud"></div><figcaption data-i18n="bigSchematic"></figcaption></figure><div class="large-data"><p data-i18n="bigA"></p><p data-i18n="bigB"></p><div class="given-stat"><strong>P(B) = 0.40</strong><span data-i18n="bigGivenB"></span></div><div class="given-stat warm-stat"><strong>P(A ∩ B) = 0.24</strong><span data-i18n="bigGivenAB"></span></div></div></div>
+          <h3 id="big-prompt" data-i18n="bigPrompt"></h3><div id="big-choices" class="activity-choices" role="group" aria-labelledby="big-prompt"><button data-big-answer="24" aria-pressed="false">24%</button><button data-big-answer="40" aria-pressed="false">40%</button><button data-big-answer="60" aria-pressed="false">60%</button><button data-big-answer="unsure" aria-pressed="false" data-i18n="bigUnsure"></button></div>
+          <p class="activity-note" data-i18n="bigNote"></p><p id="big-status" class="prediction-status" role="status" data-i18n="bigSaved" hidden></p><p class="big-bridge" data-i18n="bigBridge"></p>
+        </div>
+        <div class="result-actions"><button class="next-button" id="summary-lesson" data-i18n="unlockLesson">进入概念与公式 →</button><button class="secondary-button" id="play-again" data-i18n="playAgain">再玩一局 ↗</button></div>
+      </section>
+      <section id="leaderboard" class="leaderboard" aria-labelledby="board-title" hidden>
+        <div class="board-heading"><div><p class="section-kicker">THE PROBABILITY LEAGUE</p><h2 id="board-title" data-i18n="leaderboardTitle">实时排行榜</h2><p data-i18n="leaderboardIntro">和其他玩家一起，挑战又准又快。</p></div><span id="board-status" class="live-pill" role="status"></span></div>
+        <div class="board-tabs" role="group" aria-label="Leaderboard ranking"><button data-board-mode="overall" aria-pressed="true" data-i18n="boardOverall">✦ 综合榜</button><button data-board-mode="accuracy" aria-pressed="false" data-i18n="boardAccuracy">◎ 正确率榜</button><button data-board-mode="speed" aria-pressed="false" data-i18n="boardSpeed">ϟ 速度榜</button></div>
+        <p id="board-rule" class="board-rule"></p><div id="podium" class="podium" hidden></div><div id="board-empty" class="board-empty" role="status"></div>
+        <div id="board-table-wrap" class="board-table-wrap" hidden><table class="board-table"><thead><tr><th scope="col" data-i18n="rankColumn">名次</th><th scope="col" data-i18n="playerColumn">玩家</th><th scope="col" data-i18n="accuracyLabel">正确率</th><th scope="col" data-i18n="totalTimeLabel">总用时</th><th scope="col" data-i18n="averageLabel">每题平均</th></tr></thead><tbody id="board-rows"></tbody></table></div><div id="own-rank" class="own-rank" hidden></div>
+        <div class="board-meta"><div><span id="board-total"></span><br><span id="board-updated"></span></div><button id="board-refresh" class="text-button" data-i18n="refreshBoard">↻ 刷新排名</button></div><p class="profile-note" data-i18n="boardFootnote">只记录完成的挑战；每次完整挑战独立上榜，展示前 50 名。</p>
+      </section>
+      <nav id="lesson-nav" class="lesson-nav" hidden><a href="/PlayGame/" data-i18n="backToResults">← 返回成绩与排行榜</a><span data-i18n="lessonUnlocked">✓ 通关后解锁</span></nav>
+      <section class="lesson" id="conditional-lesson" aria-labelledby="lesson-title" hidden>
+        <div class="lesson-heading"><div><div class="eyebrow">THE WHY BEHIND THE GAME</div><h2 id="lesson-title" tabindex="-1" data-i18n="lessonTitle">从这袋球，走到条件概率。</h2><p data-i18n="lessonIntro">条件概率，就是知道一个条件成立后，重新计算目标事件的概率。先看图，再把刚才的动作写成公式。</p></div><span class="lesson-time" data-i18n="lessonTime">2 分钟 · 看图理解</span></div>
+        <div class="condition-controls" role="group" aria-labelledby="condition-label"><span id="condition-label" data-i18n="conditionLabel">点击，换一个条件 B：</span>
+          <button class="condition-button" data-condition="0" aria-pressed="false" data-i18n="lessonAll">◎ 所有球</button>
+          <button class="condition-button" data-condition="1" aria-pressed="true" data-i18n="lessonStarred">★ 带星星</button>
+          <button class="condition-button" data-condition="2" aria-pressed="false" data-i18n="lessonUnstarred">○ 不带星星</button>
+        </div>
+        <div class="lesson-explorer">
+          <div class="lesson-universe"><div class="lesson-step-label" data-i18n="lessonStepOne">01 / 条件决定看哪些球</div><h3 data-i18n="universeTitle">原来的范围：8 颗等可能的球</h3><p data-i18n="universeNote">条件之外的球变淡；亮起的球组成新的参照范围 B。</p>
+            <div class="lesson-balls" id="lesson-balls" role="list" aria-label="条件概率示意图"></div>
+            <div class="lesson-legend"><span><i class="legend-square" aria-hidden="true"></i><span data-i18n="conditionLegend">B：符合条件</span></span><span><i class="legend-square overlap" aria-hidden="true"></i><span data-i18n="overlapLegend">A ∩ B：同时符合条件且为橙色</span></span></div>
+          </div>
+          <div class="lesson-count"><div class="lesson-step-label" data-i18n="lessonStepTwo">02 / 在这个范围里重新计数</div><h3 data-i18n="countTitle">符合目标的球 ÷ 符合条件的球</h3><p data-i18n="countNote">每颗球等可能，所以可以直接比较数量。</p>
+            <div class="count-ratio">
+              <div class="count-part"><strong id="lesson-overlap-count">3</strong><div><span class="count-label" data-i18n="overlapCountLabel">A ∩ B：既是橙色，又符合条件</span><div class="mini-balls" id="lesson-overlap-balls" aria-hidden="true"></div></div></div>
+              <div class="count-part"><strong id="lesson-condition-count">4</strong><div><span class="count-label" data-i18n="conditionCountLabel">B：所有符合条件的球</span><div class="mini-balls" id="lesson-condition-balls" aria-hidden="true"></div></div></div>
+            </div>
+            <div class="lesson-probability"><span>=</span><strong id="lesson-result">3/4</strong><span>=</span><span class="probability-percent" id="lesson-percent">75%</span></div>
+            <div class="lesson-narration" id="lesson-narration" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="formula-section">
+          <div class="formula-heading"><h3 data-i18n="formulaTitle">03 / 把图里的关系，写成公式</h3><p data-i18n="formulaSubtitle">字母对应的，就是刚才那几颗球。</p></div>
+          <div class="event-definitions">
+            <div class="event-definition"><span class="event-symbol">A</span><span data-i18n="eventA">抽到橙色球</span></div>
+            <div class="event-definition"><span class="event-symbol">B</span><span id="event-b"></span></div>
+            <div class="event-definition"><span class="event-symbol intersection-color">A ∩ B</span><span id="event-intersection"></span></div>
+          </div>
+          <div class="formula-general" id="formula-general" role="math">
+            <span>P(A | B)</span><span>=</span><span class="math-frac"><span class="intersection-color">P(A ∩ B)</span><span>P(B)</span></span><span class="formula-precondition">P(B) &gt; 0</span>
+          </div>
+          <div class="formula-gloss"><span data-i18n="givenGloss"><b>|</b>读作“在……条件下”</span><span data-i18n="intersectionGloss"><b>∩</b>表示“两件事同时发生”</span></div>
+          <div class="formula-worked">
+            <div><h4 data-i18n="originalDenominator">先从原来的 8 颗球计算：</h4><div class="formula-probabilities"><span id="joint-probability"></span><span id="condition-probability"></span></div></div>
+            <div class="formula-numeric" id="formula-numeric" role="math"></div>
+          </div>
+          <p class="formula-note" data-i18n="formulaNote">除以 P(B)，就是把<strong>符合条件 B 的范围重新当成整体</strong>。在本游戏中，“都除以 8”会约掉，所以最后就是<strong>符合目标且符合条件的球数 ÷ 符合条件的球数</strong>。</p>
+        </div>
+        <details class="lesson-think"><summary data-i18n="lessonQuestion">想一想：只抽带星星的球时，为什么不是 3/8？</summary><p data-i18n="lessonAnswer">3/8 是从全部 8 颗球中抽到“橙色且带星星”的概率，也就是 P(A ∩ B)。但已知只抽带星星的球后，参照范围变成了 4 颗带星星的球，因此 P(A | B) = 3/4。</p></details>
+        <div class="lesson-memory"><span aria-hidden="true">✦</span><p data-i18n="lessonMemory"><strong>先看条件留下了谁，再看里面有多少符合目标。</strong><br>3/4 描述的是抽取概率，单次仍可能抽到蓝色球。</p></div>
+        <div class="general-method"><h3 data-i18n="methodTitle"></h3><div class="method-steps"><article><b>1</b><h4 data-i18n="methodOne"></h4><p data-i18n="methodOneText"></p></article><article><b>2</b><h4 data-i18n="methodTwo"></h4><p data-i18n="methodTwoText"></p></article><article><b>3</b><h4 data-i18n="methodThree"></h4><p data-i18n="methodThreeText"></p></article></div><p class="activity-note" data-i18n="generalNote"></p></div>
+        <div id="revisit" class="revisit"><p class="section-kicker">04 / APPLY THE FORMULA</p><h3 data-i18n="revisitTitle"></h3><p class="activity-lead" data-i18n="revisitLead"></p><p id="revisit-guess" class="prediction-status" hidden></p>
+          <div class="revisit-givens"><span>P(B) = <b>0.40</b></span><span>P(A ∩ B) = <b>0.24</b></span></div>
+          <div class="probability-strip" role="img" aria-label="All balls: 24 percent are orange and starred; another 16 percent are starred. Together they form B, 40 percent."><span class="strip-overlap" style="width:24%">24%</span><span class="strip-rest" style="width:16%">16%</span><span class="strip-outside" style="width:60%">60%</span></div><p class="strip-caption">A ∩ B <span>⊂ B = 40%</span></p>
+          <button id="revisit-reveal" class="next-button" data-i18n="revisitReveal"></button>
+          <div id="revisit-solution" hidden><p class="section-kicker" data-i18n="revisitLabel"></p><div class="probability-strip rescaled" role="img" aria-label="Within the starred group: 60 percent orange, 40 percent blue."><span class="strip-overlap" style="width:60%">60%</span><span class="strip-rest" style="width:40%">40%</span></div><p class="revisit-equation" data-i18n="revisitAnswer"></p><p class="activity-lead" data-i18n="revisitExplanation"></p><p class="activity-note" data-i18n="revisitCount"></p></div>
+          <button id="weather-continue" class="next-button" data-i18n="weatherCTA" hidden></button>
+        </div>
+      </section>
+      <section id="weather-check" class="weather-check" hidden>
+        <p class="section-kicker" data-i18n="weatherKicker"></p><h2 tabindex="-1" data-i18n="weatherTitle"></h2><p class="activity-lead" data-i18n="weatherLead"></p>
+        <div class="weather-givens"><article><span class="weather-icon" aria-hidden="true">☁</span><h3 data-i18n="weatherC"></h3><strong data-i18n="weatherGivenC"></strong><p data-i18n="weatherDataC"></p></article><article><span class="weather-icon rain-icon" aria-hidden="true">☂</span><h3 data-i18n="weatherR"></h3><strong data-i18n="weatherGivenRC"></strong><p data-i18n="weatherDataRC"></p></article></div>
+        <p class="activity-note" data-i18n="weatherNote"></p><h3 id="weather-prompt" data-i18n="weatherPrompt"></h3>
+        <div id="weather-choices" class="activity-choices" role="group" aria-labelledby="weather-prompt"><button data-weather-answer="0.2" aria-pressed="false">20%</button><button data-weather-answer="0.4" aria-pressed="false">40%</button><button data-weather-answer="0.5" aria-pressed="false">50%</button><button data-weather-answer="1" aria-pressed="false">100%</button></div>
+        <button id="weather-submit" class="next-button" data-i18n="weatherSubmit" disabled></button><p class="activity-note" data-i18n="weatherUnscored"></p>
+        <div id="weather-feedback" class="weather-feedback" role="status" tabindex="-1" hidden><h3 id="weather-verdict"></h3><p class="weather-equation" data-i18n="weatherCalculation"></p><p data-i18n="weatherReason"></p><strong data-i18n="weatherTakeaway"></strong></div>
+        <div class="result-actions"><button id="weather-review" class="secondary-button" data-i18n="weatherReplay"></button><button id="weather-finish" class="text-button" data-i18n="weatherFinish"></button></div>
+      </section>
+    </main>
+    <footer class="footer"><span data-i18n="footer">每一次选择，都是一个小实验。</span><span class="footer-note" data-i18n="footerNote">概率论 · 课堂互动小游戏</span></footer>
+  </div>
+  <dialog id="rules-dialog" aria-labelledby="rules-title">
+    <div class="dialog-body">
+      <div class="dialog-top"><h2 id="rules-title" data-i18n="rulesTitle">三轮，玩懂条件概率。</h2><button class="close-dialog" data-close="rules-dialog" aria-label="关闭游戏规则">×</button></div>
+      <p class="rules-lead" data-i18n="rulesLead">8 颗球，4 颗橙色、4 颗蓝色。其中 3 颗橙色球和 1 颗蓝色球带星星。</p>
+      <ol class="rules-list">
+        <li><span class="rule-n">1</span><div data-i18n="rule1"><b>看线索</b>每轮的规则不同：所有球、带星星的球、不带星星的球。</div></li>
+        <li><span class="rule-n">2</span><div data-i18n="rule2"><b>选概率</b>只看本轮参与的球，判断橙色球占多少。从三个答案里选一个。</div></li>
+        <li><span class="rule-n">3</span><div data-i18n="rule3"><b>抽球揭晓</b>答对得 1 分，满分 3 分。选完后随机抽一颗球，看结果！</div></li>
+      </ol>
+      <p class="rule-note" data-i18n="ruleNote">每个符合规则的球被抽中的机会相同，每轮结束后放回。分数只看概率判断，随机抽到的颜色不影响得分。概率高，也不代表每次都会发生。</p>
+      <button class="next-button" data-close="rules-dialog" data-i18n="gotIt">知道了，开始玩</button>
+    </div>
+  </dialog>
+  <dialog id="restart-dialog" aria-labelledby="restart-title"><div class="dialog-body"><div class="dialog-top"><h2 id="restart-title" data-i18n="restartTitle">再来一局？</h2><button class="close-dialog" data-close="restart-dialog" aria-label="取消重新开始">×</button></div><p class="rules-lead" data-i18n="restartNote">本局得分将清零，从第一轮重新开始。</p><button class="next-button" id="restart-confirm" data-i18n="restart">重新开始</button></div></dialog>
+  <canvas id="answer-confetti" class="answer-confetti" aria-hidden="true" hidden></canvas>
+  <div id="answer-toast" class="answer-toast" aria-hidden="true" hidden><span class="answer-toast-icon"></span><span id="answer-toast-text"></span></div>
+  <noscript><p style="padding:20px;text-align:center">请开启浏览器的 JavaScript，即可开始抽球小游戏。</p></noscript>
+  <script id="game-engine">
+    const BallGame = (() => {
+      const balls = Object.freeze([
+        {id:0,color:"orange",star:true},{id:1,color:"blue",star:false},
+        {id:2,color:"orange",star:true},{id:3,color:"blue",star:true},
+        {id:4,color:"blue",star:false},{id:5,color:"orange",star:false},
+        {id:6,color:"blue",star:false},{id:7,color:"orange",star:true}
+      ].map(Object.freeze));
+      const rounds = Object.freeze([
+        {clue:"所有球都可以抽",icon:"◎",accept:()=>true,fraction:"1/2",explain:"8 颗球中，有 4 颗橙色球。4 ÷ 8 = 1/2。"},
+        {clue:"只抽带星星的球",icon:"★",accept:ball=>ball.star,fraction:"3/4",explain:"4 颗带星星的球中，有 3 颗橙色球。3 ÷ 4 = 3/4。"},
+        {clue:"只抽不带星星的球",icon:"○",accept:ball=>!ball.star,fraction:"1/4",explain:"4 颗不带星星的球中，有 1 颗橙色球。1 ÷ 4 = 1/4。"}
+      ].map(Object.freeze));
+      function pool(round){return balls.filter(rounds[round].accept);}
+      function probability(round){const eligible=pool(round);return eligible.filter(ball=>ball.color==="orange").length/eligible.length;}
+      function explanation(round){
+        const eligible=pool(round),overlap=eligible.filter(ball=>ball.color==="orange");
+        return {total:balls.length,eligible,overlap,jointProbability:overlap.length/balls.length,conditionProbability:eligible.length/balls.length};
+      }
+      function draw(round,random=Math.random){const eligible=pool(round);return eligible[Math.floor(random()*eligible.length)];}
+      function createState(){return {round:0,score:0,answered:false,ready:false,results:[]};}
+      function answer(state,value){if(state.answered||![.25,.5,.75].includes(value))return null;const correct=value===probability(state.round);state.answered=true;if(correct)state.score++;state.results.push(correct);return correct;}
+      return Object.freeze({balls,rounds,pool,probability,explanation,draw,createState,answer});
+    })();
+  </script>
+  <script id="translations">
+    const TRANSLATIONS = {
+      zh: {
+        "loadingGame":"正在连接游戏…",
+        "retry":"重新连接",
+        "flowRules":"01 阅读规则",
+        "flowPlayer":"02 玩家就位",
+        "flowPlay":"03 计时挑战",
+        "flowRank":"04 成绩排名",
+        "entryTitle":"挑战前，先了解规则。",
+        "acceptRules":"我已阅读并了解",
+        "rulesConfirmed":"✓ 已阅读并了解规则",
+        "timedRule":"<b>计时挑战</b>点击开始游戏后计时，三题各答一次。答完最后一题自动停止计时、保存成绩。",
+        "rankingRule":"综合榜先比正确率，同正确率时用时越短排名越高。每轮随机抽到的球不影响得分；完成三题后解锁公式讲解。",
+        "profileLockedTitle":"你的玩家身份，即将上线",
+        "profileLockedNote":"确认规则后，选择头像并输入昵称。",
+        "playerReady":"准备好，来一场概率挑战。",
+        "nameLabel":"玩家昵称",
+        "chooseAvatar":"选择游戏头像",
+        "randomAvatar":"⚄ 随机选一个",
+        "profileNote":"1–20 字。昵称、头像和完成成绩会公开显示在排行榜。",
+        "startGame":"开始游戏 · 开始计时 →",
+        "activePlayer":"挑战进行中",
+        "elapsedLabel":"本局用时",
+        "missionComplete":"MISSION COMPLETE · 挑战完成",
+        "completedSuffix":"，漂亮完赛！",
+        "resultSaved":"成绩已保存，已加入共享排行榜。",
+        "accuracyLabel":"正确率",
+        "totalTimeLabel":"总用时",
+        "averageLabel":"每题平均",
+        "unlockLesson":"已解锁 · 查看条件概率讲解 →",
+        "resultTimingNote":"总用时从开始游戏到最后一题提交成功，包含两题之间的抽球展示和切题时间；每题平均 = 总用时 ÷ 3。",
+        "leaderboardTitle":"实时排行榜",
+        "leaderboardIntro":"和其他玩家一起，挑战又准又快。",
+        "boardOverall":"✦ 综合榜",
+        "boardAccuracy":"◎ 正确率榜",
+        "boardSpeed":"ϟ 速度榜",
+        "rankColumn":"名次",
+        "playerColumn":"玩家",
+        "refreshBoard":"↻ 刷新排名",
+        "boardFootnote":"只记录完成的挑战；每次完整挑战独立上榜，展示前 50 名。",
+        "backToResults":"← 返回成绩与排行榜",
+        "lessonUnlocked":"✓ 通关后解锁",
+        "yourNickname":"你的昵称",
+        "namePlaceholder":"输入你的玩家昵称",
+        "startingGame":"正在连接并开始…",
+        "connectionError":"暂时无法连接游戏，请检查网络后重试。",
+        "startError":"开始连接未确认，请重试。重复点击不会创建重复挑战。",
+        "retryAnswer":"重试提交此答案",
+        "answerSaving":"正在提交答案…",
+        "answerError":"答案提交未确认，计时仍在继续。请重试提交同一个答案。",
+        "avatarNames":["星际猫咪", "灵巧狐狸", "宇宙熊猫", "幸运青蛙", "智慧猫头鹰", "元气小狗", "电子机器人", "外星访客", "幽灵队长", "太空探索者", "梦幻独角兽", "八爪高手"],
+        "boardRule_overall":"先比正确率，再比总用时；正确率和用时都相同则并列。",
+        "boardRule_accuracy":"按正确率从高到低排名；相同正确率并列，较快者先展示。",
+        "boardRule_speed":"按总用时从短到长排名；用时相同则并列，请同时留意正确率。",
+        "boardLive":"LIVE · 每 5 秒更新",
+        "boardOffline":"连接中断 · 可重试",
+        "boardError":"排行榜暂时无法连接，请点击刷新排名。你的已完成成绩仍已保存。",
+        "boardEmpty":"还没有完成的挑战。第一位上榜的会是你吗？",
+        "boardLoading":"正在获取共享排行榜…",
+        "boardCount":"共 {n} 次完整挑战",
+        "boardUpdated":"最近更新 {time}",
+        "boardStale":"显示上次成功更新的数据 · {time}",
+        "rankLabel":"第 {n} 名",
+        "correctCount":"答对 {n} / 3 题",
+        "yourRun":"本局",
+        "yourRanking":"你的本局排名：第 {n} 名 · 共 {total} 次完整挑战",
+        pageTitle:"抽球猜颜色 · 概率游乐场",brand:"概率游乐场",tagline:"一点好奇，一点概率",howTo:"怎么玩",topic:"条件概率",
+        title:"抽球，猜<em>颜色。</em>",subtitle:"球还是那些球。换一条线索，胜算会改变吗？",stamp:"让直觉遇见概率",
+        step0:"所有球",step1:"带星星",step2:"无星星",score:"得分",observe:"01 — 观察球袋",orange:"橙色",blue:"蓝色",starred:"带星星",
+        pill:"看线索 → 选概率",ruleLabel:"本轮抽球规则",prompt:'抽到<span class="orange-text">橙色球</span>的概率是？',promptNote:"数一数有机会被抽中的球，再选一个答案。",
+        tip:"小提示：变淡的球不参与本轮抽取；每轮都会放回全部球。",restart:"重新开始",footer:"每一次选择，都是一个小实验。",footerNote:"概率论 · 课堂互动小游戏",
+        rulesTitle:"三轮，玩懂条件概率。",rulesLead:"8 颗球，4 颗橙色、4 颗蓝色。其中 3 颗橙色球和 1 颗蓝色球带星星。",
+        rule1:"<b>看线索</b>每轮的规则不同：所有球、带星星的球、不带星星的球。",
+        rule2:"<b>选概率</b>只看本轮参与的球，判断橙色球占多少。从三个答案里选一个。",
+        rule3:"<b>抽球揭晓</b>答对得 1 分，满分 3 分。选完后随机抽一颗球，看结果！",
+        ruleNote:"每个符合规则的球被抽中的机会相同，每轮结束后放回。分数只看概率判断，随机抽到的颜色不影响得分。概率高，也不代表每次都会发生。",
+        gotIt:"关闭规则",restartTitle:"再来一局？",restartNote:"退出当前挑战并返回玩家准备页。已保存的历史成绩会保留。",complete:"三轮挑战 · 完成",
+        count0:"4 橙 / 8 颗",count1:"3 橙 / 4 颗",count2:"1 橙 / 4 颗",takeaway:"这就是<strong>条件概率</strong>：<br>在<strong>符合条件的球</strong>中，重新计算橙色球的比例。",
+        playAgain:"再玩一局 ↗",backToGame:"返回查看最后一轮",summaryIntro:"同样一袋球，三个不同的概率。",
+        summaryTitles:["每一次思考，都有收获。","你已经迈出了第一步！","离满分，只差一点点！","你发现了线索的力量！"],
+        clues:["所有球都可以抽","只抽带星星的球","只抽不带星星的球"],
+        explanations:["8 颗球中，有 4 颗橙色球。4 ÷ 8 = 1/2。","4 颗带星星的球中，有 3 颗橙色球。3 ÷ 4 = 3/4。","4 颗不带星星的球中，有 1 颗橙色球。1 ÷ 4 = 1/4。"],
+        choices:["四分之一，25%","二分之一，50%","四分之三，75%"],
+        initial:"答对得 1 分，实际抽到什么颜色不影响得分。",correct:"答对了！+1 分",wrong:"再想一想，正确答案是 {fraction}。",celebration:"好判断！+1",encouragement:"没关系，看看解析",
+        allCaption:"每颗球都有<strong>同样的机会</strong>被抽中。",filteredCaption:"只看亮起的球，它们都有<strong>同样的机会</strong>被抽中。",
+        pool:"{n} 颗球参与抽取",drawing:"摇一摇球袋，随机抽取一颗……",drawingButton:"正在抽球…",
+        result:"这次抽到了<strong>{color}球</strong>",randomNote:"单次结果有随机性，概率高也不保证抽中。",
+        next:"下一轮，换条线索",finish:"看看我的成绩",closeRules:"关闭游戏规则",closeRestart:"取消重新开始",
+        gameAria:"抽球游戏",progressAria:"游戏进度",ballsAria:"球袋中的八颗球",stampAria:"三轮小游戏",
+        ballAria:"{color}球，{star}，{eligible}",hasStar:"带星星",noStar:"无星星",eligible:"参与本轮抽取",excluded:"不参与本轮抽取",orangeShort:"橙",blueShort:"蓝",
+        lessonJump:"玩完后，看看概率为什么会变 ↓",lessonTitle:"从这袋球，走到条件概率。",
+        lessonIntro:"条件概率，就是知道一个条件成立后，重新计算目标事件的概率。先看图，再把刚才的动作写成公式。",
+        lessonTime:"2 分钟 · 看图理解",conditionLabel:"点击，换一个条件 B：",lessonAll:"◎ 所有球",lessonStarred:"★ 带星星",lessonUnstarred:"○ 不带星星",
+        lessonStepOne:"01 / 条件决定看哪些球",universeTitle:"原来的范围：8 颗等可能的球",universeNote:"条件之外的球变淡；亮起的球组成新的参照范围 B。",
+        conditionLegend:"亮起的球：B",overlapLegend:"橙色框：A ∩ B",lessonStepTwo:"02 / 在这个范围里重新计数",
+        countTitle:"符合目标的球 ÷ 符合条件的球",countNote:"每颗球等可能，所以可以直接比较数量。",
+        overlapCountLabel:"A ∩ B：既是橙色，又符合条件",conditionCountLabel:"B：所有符合条件的球",
+        lessonNarration:"在符合条件的 {eligible} 颗球里，有 {overlap} 颗橙色球：{fraction}。",
+        formulaTitle:"03 / 把图里的关系，写成公式",formulaSubtitle:"字母对应的，就是刚才那几颗球。",eventA:"抽到橙色球",
+        eventBs:["抽到任意一颗球（必然事件）","抽到带星星的球","抽到不带星星的球"],
+        eventIntersections:["抽到橙色球","抽到橙色且带星星的球","抽到橙色且不带星星的球"],
+        givenGloss:"<b>|</b>读作“在……条件下”",intersectionGloss:"<b>∩</b>表示“两件事同时发生”",
+        originalDenominator:"先从原来的 8 颗球计算：",
+        formulaNote:"除以 P(B)，就是把<strong>符合条件 B 的范围重新当成整体</strong>。在本游戏中，“都除以 8”会约掉，所以最后就是<strong>符合目标且符合条件的球数 ÷ 符合条件的球数</strong>。",
+        lessonQuestion:"想一想：只抽带星星的球时，为什么不是 3/8？",
+        lessonAnswer:"在这个问题中，把 B 设为“带星星”。3/8 是从全部 8 颗球中抽到“橙色且带星星”的概率，也就是 P(A ∩ B)。但已知只抽带星星的球后，参照范围变成了 4 颗带星星的球，因此 P(A | B) = 3/4。",
+        lessonMemory:"<strong>先看条件留下了谁，再看里面有多少符合目标。</strong><br>例如，只抽带星星的球时，3/4 是抽到橙色球的概率，单次仍可能抽到蓝色球。",
+        summaryLesson:"看图理解条件概率 ↓",lessonDiagramAria:"八颗球的条件概率示意图",
+        lessonBallAria:"{color}球，{star}，{membership}",lessonMembership:["不在条件 B 中","在条件 B 中","在交集 A ∩ B 中，也在条件 B 中"],
+        formulaAria:"A 在 B 条件下的概率，等于 A 与 B 同时发生的概率除以 B 的概率。要求 B 的概率大于零。",
+        workedFormulaAria:"条件概率等于 {overlap}/{total} 除以 {eligible}/{total}，结果为 {fraction}。"
+      },
+      en: {
+        "loadingGame":"Connecting to the game…",
+        "retry":"Reconnect",
+        "flowRules":"01 Read the rules",
+        "flowPlayer":"02 Choose your player",
+        "flowPlay":"03 Timed challenge",
+        "flowRank":"04 Results & ranks",
+        "entryTitle":"Your mission starts here.",
+        "acceptRules":"I have read and understood",
+        "rulesConfirmed":"✓ Rules read and understood",
+        "timedRule":"<b>Race the clock</b>The timer starts when the game begins. Answer each of the 3 questions once. Your final answer stops the timer and saves your result.",
+        "rankingRule":"Overall ranking prioritizes accuracy, then the fastest time. The random draw does not affect your score. Finish all 3 questions to unlock the formula guide.",
+        "profileLockedTitle":"Your player identity is waiting",
+        "profileLockedNote":"Confirm the rules, then choose an avatar and enter your nickname.",
+        "playerReady":"Ready for a probability challenge?",
+        "nameLabel":"Player nickname",
+        "chooseAvatar":"Choose your avatar",
+        "randomAvatar":"⚄ Pick at random",
+        "profileNote":"1–20 characters. Your nickname, avatar and completed result will appear on the public leaderboard.",
+        "startGame":"Start game · Start timer →",
+        "activePlayer":"CHALLENGE IN PROGRESS",
+        "elapsedLabel":"ELAPSED TIME",
+        "missionComplete":"MISSION COMPLETE",
+        "completedSuffix":", challenge complete!",
+        "resultSaved":"Your result is saved to the shared leaderboard.",
+        "accuracyLabel":"Accuracy",
+        "totalTimeLabel":"Total time",
+        "averageLabel":"Average / question",
+        "unlockLesson":"Unlocked · Explore conditional probability →",
+        "resultTimingNote":"Total time runs from game start to acceptance of your final answer, including draws and transitions between questions. Average = total time ÷ 3.",
+        "leaderboardTitle":"Live leaderboard",
+        "leaderboardIntro":"Think clearly. Answer quickly. See where you stand.",
+        "boardOverall":"✦ Overall",
+        "boardAccuracy":"◎ Accuracy",
+        "boardSpeed":"ϟ Speed",
+        "rankColumn":"Rank",
+        "playerColumn":"Player",
+        "refreshBoard":"↻ Refresh rankings",
+        "boardFootnote":"Completed runs only. Each completed attempt is a separate entry. Showing the top 50.",
+        "backToResults":"← Back to results & leaderboard",
+        "lessonUnlocked":"✓ Unlocked by completing the game",
+        "yourNickname":"Your nickname",
+        "namePlaceholder":"Enter your player nickname",
+        "startingGame":"Connecting and starting…",
+        "connectionError":"Unable to connect. Check your network and try again.",
+        "startError":"The start was not confirmed. Retry safely; it will not create a duplicate game.",
+        "retryAnswer":"Retry the same answer",
+        "answerSaving":"Submitting your answer…",
+        "answerError":"Submission was not confirmed; the timer is still running. Retry the same answer.",
+        "avatarNames":["Cosmic cat", "Clever fox", "Space panda", "Lucky frog", "Wise owl", "Happy pup", "Circuit robot", "Alien explorer", "Ghost captain", "Astronaut", "Dream unicorn", "Octopus ace"],
+        "boardRule_overall":"Highest accuracy first, then shortest total time. Identical accuracy and time share a rank.",
+        "boardRule_accuracy":"Highest accuracy first. Equal accuracy shares a rank; faster runs are displayed first.",
+        "boardRule_speed":"Shortest total time first. Equal times share a rank. Check accuracy alongside speed.",
+        "boardLive":"LIVE · UPDATES EVERY 5s",
+        "boardOffline":"OFFLINE · RETRY",
+        "boardError":"Unable to load the leaderboard. Refresh to retry. Your completed result is still saved.",
+        "boardEmpty":"No completed runs yet. Who will take the first spot?",
+        "boardLoading":"Loading shared rankings…",
+        "boardCount":"{n} completed runs",
+        "boardUpdated":"Last updated {time}",
+        "boardStale":"Showing the last successful update · {time}",
+        "rankLabel":"RANK {n}",
+        "correctCount":"{n} / 3 correct",
+        "yourRun":"YOU",
+        "yourRanking":"Your run: rank {n} out of {total} completed runs",
+        pageTitle:"Pick a Ball · Probability Playground",brand:"Probability Club",tagline:"A little curiosity. A little probability.",howTo:"How to play",topic:"CONDITIONAL PROBABILITY",
+        title:"Pick a ball.<br>Guess the <em>odds.</em>",subtitle:"Same balls. A new clue. Will the chance of drawing orange change?",stamp:"INTUITION MEETS CHANCE",
+        step0:"All balls",step1:"Starred",step2:"No stars",score:"Score",observe:"01 — EXPLORE THE BAG",orange:"Orange",blue:"Blue",starred:"Starred",
+        pill:"Read → Choose",ruleLabel:"THIS ROUND’S RULE",prompt:'What’s the chance of <span class="orange-text">orange</span>?',promptNote:"Count the eligible balls, then choose your answer.",
+        tip:"Faded balls are excluded this round. All balls return for the next round.",restart:"Start over",footer:"Every choice is a little experiment.",footerNote:"PROBABILITY · A CLASSROOM GAME",
+        rulesTitle:"Three rounds. One big idea.",rulesLead:"8 balls: 4 orange and 4 blue. Of these, 3 orange balls and 1 blue ball have a star.",
+        rule1:"<b>Read the clue</b>Each round has a new rule: all balls, starred balls, or balls without stars.",
+        rule2:"<b>Choose the probability</b>Look only at eligible balls. What fraction are orange? Pick one of three answers.",
+        rule3:"<b>Reveal the draw</b>Earn 1 point for each correct answer, up to 3 points. Then see a randomly drawn ball!",
+        ruleNote:"Every eligible ball has an equal chance of being drawn. All balls are replaced after each round. Points depend on your probability answer, not the drawn color. A high probability is not a guarantee.",
+        gotIt:"Close rules",restartTitle:"Ready for a fresh start?",restartNote:"Leave this run and return to player setup. Previously saved results will remain on the leaderboard.",complete:"THREE ROUNDS · COMPLETE",
+        count0:"4 orange / 8 balls",count1:"3 orange / 4 balls",count2:"1 orange / 4 balls",takeaway:"That’s <strong>conditional probability</strong>:<br>count the orange balls among <strong>only the balls that meet the condition</strong>.",
+        playAgain:"Play again ↗",backToGame:"Back to the last round",summaryIntro:"The same bag. Three different probabilities.",
+        summaryTitles:["Every attempt is a chance to learn.","You’ve taken the first step!","So close to a perfect score!","You’ve discovered the power of a clue!"],
+        clues:["Draw from all the balls","Draw only starred balls","Draw only balls without stars"],
+        explanations:["4 of the 8 balls are orange. 4 ÷ 8 = 1/2.","3 of the 4 starred balls are orange. 3 ÷ 4 = 3/4.","1 of the 4 balls without stars is orange. 1 ÷ 4 = 1/4."],
+        choices:["One quarter, 25%","One half, 50%","Three quarters, 75%"],
+        initial:"A correct answer earns 1 point. The drawn color won’t affect your score.",correct:"That’s right! +1 point",wrong:"Not quite. The answer is {fraction}.",celebration:"Great thinking! +1",encouragement:"Keep learning — see why",
+        allCaption:"Every ball has an <strong>equal chance</strong> of being drawn.",filteredCaption:"Only the bright balls count. Each has an <strong>equal chance</strong>.",
+        pool:"{n} eligible balls",drawing:"Shake the bag. Let’s draw a random ball…",drawingButton:"Drawing a ball…",
+        result:"You drew an <strong>{color} ball</strong>",randomNote:"One draw is random. A high probability is not a guarantee.",
+        next:"Next round, new clue",finish:"See my results",closeRules:"Close game rules",closeRestart:"Cancel restart",
+        gameAria:"Ball drawing game",progressAria:"Game progress",ballsAria:"The eight balls in the bag",stampAria:"Three rounds",
+        ballAria:"{color} ball, {star}, {eligible}",hasStar:"starred",noStar:"no star",eligible:"eligible this round",excluded:"excluded this round",orangeShort:"O",blueShort:"B",
+        lessonJump:"Finished playing? See why the odds changed ↓",lessonTitle:"From a bag of balls to a formula.",
+        lessonIntro:"Conditional probability is the chance of an event when we know a condition holds. Start with the picture, then turn what you counted into a formula.",
+        lessonTime:"2 MIN · A VISUAL GUIDE",conditionLabel:"Click to change condition B:",lessonAll:"◎ All balls",lessonStarred:"★ Starred",lessonUnstarred:"○ No stars",
+        lessonStepOne:"01 / LET THE CONDITION SET THE SCOPE",universeTitle:"Start with 8 equally likely balls",universeNote:"Balls outside the condition fade. The bright balls form our new reference group, B.",
+        conditionLegend:"Bright balls: B",overlapLegend:"Orange border: A ∩ B",lessonStepTwo:"02 / COUNT WITHIN THAT GROUP",
+        countTitle:"Target balls ÷ eligible balls",countNote:"Each ball is equally likely, so we can compare counts.",
+        overlapCountLabel:"A ∩ B: orange AND eligible",conditionCountLabel:"B: all eligible balls",
+        lessonNarration:"Orange balls: {overlap} out of {eligible} eligible balls. Probability: {fraction}.",
+        formulaTitle:"03 / Turn the picture into a formula",formulaSubtitle:"The letters describe the balls you just counted.",eventA:"Drawing an orange ball",
+        eventBs:["Drawing any ball (a certain event)","Drawing a starred ball","Drawing a ball without a star"],
+        eventIntersections:["Drawing an orange ball","Drawing an orange AND starred ball","Drawing an orange ball WITHOUT a star"],
+        givenGloss:"<b>|</b>means “given that”",intersectionGloss:"<b>∩</b>means “both events happen”",
+        originalDenominator:"First, use the original 8 balls:",
+        formulaNote:"Dividing by P(B) treats <strong>the group meeting condition B as the new whole</strong>. Here, the two denominators of 8 cancel, leaving <strong>the number of orange eligible balls ÷ the number of eligible balls</strong>.",
+        lessonQuestion:"Think about it: when drawing only starred balls, why not 3/8?",
+        lessonAnswer:"Here, let B mean “starred.” The probability 3/8 describes drawing an orange AND starred ball from all 8 balls: P(A ∩ B). Given that only starred balls can be drawn, the reference group contains 4 balls. So P(A | B) = 3/4.",
+        lessonMemory:"<strong>First find who meets the condition. Then count who also meets the target.</strong><br>For starred balls, the chance of orange is 3/4. A single draw can still be blue.",
+        summaryLesson:"See the visual explanation ↓",lessonDiagramAria:"Eight balls illustrating conditional probability",
+        lessonBallAria:"{color} ball, {star}, {membership}",lessonMembership:["outside condition B","inside condition B","inside the intersection A and B, and inside B"],
+        formulaAria:"P of A given B equals P of A intersection B divided by P of B, where P of B is greater than zero.",
+        workedFormulaAria:"Conditional probability is {overlap}/{total} divided by {eligible}/{total}, giving {fraction}."
+      }
+    };
+  </script>
+  <script src="/PlayGame/classroom.js"></script>
+  <script src="/PlayGame/flow.js"></script>
+  <script>
+    (() => {
+      const $=id=>document.getElementById(id);
+      const choices=[...document.querySelectorAll(".choice")];
+      let state=BallGame.createState();
+      let drawTimer=null;
+      let drawnBall=null;
+      let selectedValue=null;
+      let answerBusy=false;
+      let pendingValue=null;
+      let language="zh";
+      let lessonCondition=1;
+      const conditionButtons=[...document.querySelectorAll(".condition-button")];
+      let effectsFrame=null;
+      let effectsTimer=null;
+      const motionPreference=window.matchMedia("(prefers-reduced-motion: reduce)");
+      try{if(localStorage.getItem("probability-club-language")==="en")language="en";}catch{}
+      const t=(key,values={})=>Object.entries(values).reduce((text,[name,value])=>text.replaceAll(`{${name}}`,value),TRANSLATIONS[language][key]);
+      const flow=new ArcadeFlow({t,clearEffects:clearAnswerEffects,onSession:session=>{
+        state=BallGame.createState();state.score=session.score;state.results=session.results;
+        state.round=Math.min(session.answered,2);state.answered=session.completed;state.ready=session.completed;
+        selectedValue=session.completed?session.answers[2]:null;drawnBall=session.completed?BallGame.draw(2):null;
+        answerBusy=false;pendingValue=null;renderRound();
+      }});
+      const ballHTML=ball=>`<span class="ball ${ball.color}" aria-hidden="true">${ball.star?'<span class="star">★</span>':""}</span>`;
+      const colorName=ball=>t(ball.color);
+      const fractionHTML=(numerator,denominator)=>`<span class="math-frac"><span>${numerator}</span><span>${denominator}</span></span>`;
+      function renderLesson(){
+        const facts=BallGame.explanation(lessonCondition);
+        const eligibleIds=new Set(facts.eligible.map(ball=>ball.id));
+        const overlapIds=new Set(facts.overlap.map(ball=>ball.id));
+        const diagram=$("lesson-balls");
+        diagram.setAttribute("aria-label",t("lessonDiagramAria"));
+        if(!diagram.children.length)diagram.innerHTML=BallGame.balls.map(ball=>`<div class="lesson-ball-cell" data-lesson-ball="${ball.id}" role="listitem">${ballHTML(ball)}<small aria-hidden="true"></small></div>`).join("");
+        BallGame.balls.forEach(ball=>{
+          const eligible=eligibleIds.has(ball.id),overlap=overlapIds.has(ball.id);
+          const cell=diagram.querySelector(`[data-lesson-ball="${ball.id}"]`);
+          cell.classList.toggle("excluded",!eligible);
+          cell.classList.toggle("intersection",overlap);
+          cell.querySelector("small").textContent=colorName(ball);
+          cell.setAttribute("aria-label",t("lessonBallAria",{color:colorName(ball),star:t(ball.star?"hasStar":"noStar"),membership:t("lessonMembership")[overlap?2:eligible?1:0]}));
+        });
+        conditionButtons.forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.condition)===lessonCondition)));
+        $("lesson-overlap-count").textContent=facts.overlap.length;
+        $("lesson-condition-count").textContent=facts.eligible.length;
+        $("lesson-overlap-balls").innerHTML=facts.overlap.map(ballHTML).join("");
+        $("lesson-condition-balls").innerHTML=facts.eligible.map(ballHTML).join("");
+        const fraction=BallGame.rounds[lessonCondition].fraction;
+        $("lesson-result").textContent=fraction;
+        $("lesson-percent").textContent=(BallGame.probability(lessonCondition)*100)+"%";
+        $("lesson-narration").textContent=t("lessonNarration",{eligible:facts.eligible.length,overlap:facts.overlap.length,fraction});
+        $("event-b").textContent=t("eventBs")[lessonCondition];
+        $("event-intersection").textContent=t("eventIntersections")[lessonCondition];
+        $("formula-general").setAttribute("aria-label",t("formulaAria"));
+        $("joint-probability").innerHTML=`<span class="intersection-color">P(A ∩ B) = ${facts.overlap.length}/${facts.total}</span>`;
+        $("condition-probability").textContent=`P(B) = ${facts.eligible.length}/${facts.total}`;
+        const rawFraction=`${facts.overlap.length}/${facts.eligible.length}`;
+        $("formula-numeric").innerHTML=fractionHTML(`${facts.overlap.length}/${facts.total}`,`${facts.eligible.length}/${facts.total}`)+"<span>=</span>"+fractionHTML(facts.overlap.length,facts.eligible.length)+(rawFraction!==fraction?`<span>=</span><strong>${fraction}</strong>`:"");
+        $("formula-numeric").setAttribute("aria-label",t("workedFormulaAria",{overlap:facts.overlap.length,total:facts.total,eligible:facts.eligible.length,fraction}));
+      }
+      function openLesson(){ flow.openLesson(); }
+      function clearAnswerEffects(){
+        if(effectsFrame!==null){cancelAnimationFrame(effectsFrame);effectsFrame=null;}
+        if(effectsTimer!==null){clearTimeout(effectsTimer);effectsTimer=null;}
+        $("answer-confetti").hidden=true;
+        $("answer-toast").hidden=true;
+        choices.forEach(button=>button.classList.remove("effect-correct","effect-wrong"));
+        document.querySelector(".score").classList.remove("effect-score");
+      }
+      function playAnswerEffect(correct,button){
+        clearAnswerEffects();
+        const rect=button.getBoundingClientRect();
+        const width=window.innerWidth,height=window.innerHeight;
+        const toast=$("answer-toast");
+        toast.dataset.kind=correct?"correct":"wrong";
+        toast.querySelector(".answer-toast-icon").textContent=correct?"✦":"↗";
+        $("answer-toast-text").textContent=t(correct?"celebration":"encouragement");
+        toast.style.top=Math.max(16,Math.min(height-70,rect.top-60))+"px";
+        toast.hidden=false;
+        const margin=toast.getBoundingClientRect().width/2+12;
+        toast.style.left=Math.max(margin,Math.min(width-margin,rect.left+rect.width/2))+"px";
+        effectsTimer=setTimeout(clearAnswerEffects,3000);
+        if(motionPreference.matches)return;
+        button.classList.add(correct?"effect-correct":"effect-wrong");
+        if(!correct)return;
+        document.querySelector(".score").classList.add("effect-score");
+        const canvas=$("answer-confetti");
+        const ctx=canvas.getContext("2d");
+        if(!ctx)return;
+        const scale=Math.min(window.devicePixelRatio||1,2);
+        canvas.width=Math.round(width*scale);canvas.height=Math.round(height*scale);
+        ctx.setTransform(scale,0,0,scale,0,0);
+        canvas.hidden=false;
+        const palette=["#e9905f","#edc85d","#7d9fc9","#a8bf78","#dba5b4","#faf7df"];
+        const startY=Math.max(height*.25,Math.min(height*.82,rect.top+rect.height/2));
+        const particles=Array.from({length:width<650?80:120},(_,i)=>{
+          const left=i%2===0;
+          return {x:width*(left?.18:.82),y:startY,vx:(left?1:-1)*(70+Math.random()*290),vy:-380-Math.random()*330,
+            size:4+Math.random()*5,rotation:Math.random()*Math.PI*2,spin:(Math.random()-.5)*12,
+            color:palette[i%palette.length],shape:i%5,delay:Math.random()*.18};
+        });
+        let started=null,previous=null;
+        function animate(now){
+          if(started===null){started=now;previous=now;}
+          const elapsed=(now-started)/1000;
+          const dt=Math.min((now-previous)/1000,.04);previous=now;
+          ctx.clearRect(0,0,width,height);
+          if(elapsed>2.8){canvas.hidden=true;effectsFrame=null;return;}
+          particles.forEach(particle=>{
+            if(elapsed<particle.delay)return;
+            particle.vx*=Math.pow(.986,dt*60);
+            particle.vy+=560*dt;
+            particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.rotation+=particle.spin*dt;
+            if(particle.y>height+30)return;
+            ctx.save();ctx.translate(particle.x,particle.y);ctx.rotate(particle.rotation);
+            ctx.scale(Math.max(.25,Math.abs(Math.cos(elapsed*7+particle.spin))),1);
+            ctx.globalAlpha=Math.min(1,(2.8-elapsed)/.6);ctx.fillStyle=particle.color;
+            if(particle.shape===0){
+              ctx.beginPath();
+              for(let point=0;point<10;point++){
+                const angle=point*Math.PI/5-Math.PI/2,radius=particle.size*(point%2?.45:1);
+                if(point===0)ctx.moveTo(Math.cos(angle)*radius,Math.sin(angle)*radius);
+                else ctx.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);
+              }
+              ctx.closePath();ctx.fill();
+            }else if(particle.shape===1){
+              ctx.beginPath();ctx.arc(0,0,particle.size*.5,0,Math.PI*2);ctx.fill();
+            }else ctx.fillRect(-particle.size/2,-particle.size/3,particle.size,particle.size*.65);
+            ctx.restore();
+          });
+          effectsFrame=requestAnimationFrame(animate);
+        }
+        effectsFrame=requestAnimationFrame(animate);
+      }
+      function translateStatic(){
+        document.documentElement.lang=language==="zh"?"zh-CN":"en";
+        document.title=t("pageTitle");
+        document.querySelectorAll("[data-i18n]").forEach(element=>element.innerHTML=t(element.dataset.i18n));
+        $("language-toggle").textContent=language==="zh"?"EN":"中文";
+        $("language-toggle").setAttribute("aria-label",language==="zh"?"Switch to English":"切换到中文");
+        document.querySelector('.close-dialog[data-close="rules-dialog"]').setAttribute("aria-label",t("closeRules"));
+        document.querySelector('.close-dialog[data-close="restart-dialog"]').setAttribute("aria-label",t("closeRestart"));
+        document.querySelector(".game-layout").setAttribute("aria-label",t("gameAria"));
+        document.querySelector(".steps").setAttribute("aria-label",t("progressAria"));
+        document.querySelector(".intro-stamp").setAttribute("aria-label",t("stampAria"));
+        $("ball-grid").setAttribute("aria-label",t("ballsAria"));
+        choices.forEach((button,index)=>button.setAttribute("aria-label",t("choices")[index]));
+        renderLesson();
+        flow.render();
+      }
+      function renderRound(){
+        const round=BallGame.rounds[state.round];
+        const eligible=BallGame.pool(state.round);
+        $("ball-grid").classList.remove("drawing");
+        $("ball-grid").innerHTML=BallGame.balls.map(ball=>{
+          const active=round.accept(ball);
+          const description=t("ballAria",{color:colorName(ball),star:t(ball.star?"hasStar":"noStar"),eligible:t(active?"eligible":"excluded")});
+          return `<div class="ball-wrap${active?"":" excluded"}" data-id="${ball.id}" role="listitem" aria-label="${description}">${ballHTML(ball)}<span class="ball-name" aria-hidden="true">${t(ball.color+"Short")}</span></div>`;
+        }).join("");
+        $("pool-label").textContent=t("pool",{n:eligible.length});
+        $("lab-caption").innerHTML=t(state.round===0?"allCaption":"filteredCaption");
+        $("lab-caption").hidden=false;
+        $("clue-text").textContent=t("clues")[state.round];
+        $("clue-icon").textContent=round.icon;
+        $("round-number").textContent=`ROUND 0${state.round+1} / 03`;
+        $("score").textContent=state.score;
+        $("feedback").className="feedback";
+        $("feedback").innerHTML=`<div class="initial"><i class="tiny-ring" aria-hidden="true"></i>${t("initial")}</div>`;
+        $("draw-result").hidden=true;
+        $("draw-result").innerHTML="";
+        $("next-button").hidden=true;
+        $("next-button").disabled=false;
+        choices.forEach(button=>{button.disabled=!flow.isPlaying()||answerBusy||pendingValue!==null;button.className="choice";button.removeAttribute("aria-pressed");button.querySelector(".choice-mark").textContent="";});
+        for(let i=0;i<3;i++){
+          const step=$(`step-${i}`);
+          step.className=`step${i===state.round?" active":""}${i<state.round?" complete":""}`;
+          if(i===state.round)step.setAttribute("aria-current","step");else step.removeAttribute("aria-current");
+          step.querySelector("b").textContent=i<state.round?"✓":i+1;
+          step.querySelector("span").textContent=t("step"+i);
+        }
+        if(state.answered)renderAnswer();
+      }
+      function renderAnswer(){
+        const correct=state.results[state.round];
+        const round=BallGame.rounds[state.round];
+        const probability=BallGame.probability(state.round);
+        choices.forEach(button=>{
+          button.disabled=true;
+          const v=Number(button.dataset.answer);
+          if(v===probability){button.classList.add("correct");button.querySelector(".choice-mark").textContent="✓";}
+          else if(v===selectedValue){button.classList.add("wrong");button.querySelector(".choice-mark").textContent="×";}
+          if(v===selectedValue)button.setAttribute("aria-pressed","true");
+        });
+        $("score").textContent=state.score;
+        $("feedback").className=`feedback${correct?"":" incorrect"}`;
+        $("feedback").innerHTML=`<strong>${correct?t("correct"):t("wrong",{fraction:round.fraction})}</strong><p>${t("explanations")[state.round]}</p>`;
+        $("next-button").hidden=false;
+        if(drawnBall){
+          $("ball-grid").classList.remove("drawing");
+          document.querySelector(`[data-id="${drawnBall.id}"]`).classList.add("drawn");
+          $("lab-caption").hidden=true;
+          let drawText=t("result",{color:colorName(drawnBall).toLowerCase()});
+          if(language==="en"&&drawnBall.color==="blue")drawText=drawText.replace("an <strong>","a <strong>");
+          $("draw-result").innerHTML=`<span class="ball mini-ball ${drawnBall.color}" aria-hidden="true">${drawnBall.star?"★":""}</span><p>${drawText}${drawnBall.star?" ★":""}<small>${t("randomNote")}</small></p>`;
+          $("draw-result").hidden=false;
+          $("next-button").disabled=false;
+          $("next-label").textContent=t(state.round===2?"finish":"next");
+        }else{
+          $("ball-grid").classList.add("drawing");
+          $("lab-caption").textContent=t("drawing");
+          $("next-button").disabled=true;
+          $("next-label").textContent=t("drawingButton");
+        }
+      }
+      async function choose(value){
+        if(!flow.isPlaying()||answerBusy||state.answered||(pendingValue!==null&&value!==pendingValue))return;
+        answerBusy=true;pendingValue=value;
+        $("restart-open").disabled=true;
+        choices.forEach(button=>button.disabled=true);
+        $("answer-error").hidden=true;$("answer-retry").hidden=true;
+        $("feedback").textContent=t("answerSaving");
+        try{
+          const session=await flow.submit(state.round,value);
+          if(session.answered>state.round+1){
+            answerBusy=false;pendingValue=null;$("restart-open").disabled=false;
+            flow.onSession(session);
+            if(session.completed)flow.finish();
+            return;
+          }
+          selectedValue=session.answers[state.round];
+          state.answered=true;state.score=session.score;state.results=session.results;
+          pendingValue=null;answerBusy=false;
+          $("restart-open").disabled=false;
+          renderAnswer();
+          playAnswerEffect(state.results[state.round],choices.find(button=>Number(button.dataset.answer)===selectedValue));
+          drawTimer=setTimeout(()=>{
+            drawTimer=null;drawnBall=BallGame.draw(state.round);state.ready=true;renderAnswer();
+            if(state.round===2)flow.finish();
+            else if(!document.querySelector("dialog[open]"))$("next-button").focus({preventScroll:true});
+          },motionPreference.matches?80:1100);
+        }catch{
+          answerBusy=false;
+          $("restart-open").disabled=false;
+          $("answer-error").textContent=t("answerError");$("answer-error").hidden=false;
+          $("answer-retry").hidden=false;$("answer-retry").focus();
+        }
+      }
+      function reset(){
+        clearAnswerEffects();
+        if(drawTimer!==null){clearTimeout(drawTimer);drawTimer=null;}
+        document.querySelectorAll("dialog[open]").forEach(dialog=>dialog.close());
+        state=BallGame.createState();
+        drawnBall=null;selectedValue=null;
+        answerBusy=false;pendingValue=null;
+        $("answer-error").hidden=true;$("answer-retry").hidden=true;
+        flow.prepare();renderRound();
+      }
+      choices.forEach(button=>button.addEventListener("click",()=>choose(Number(button.dataset.answer))));
+      $("next-button").addEventListener("click",()=>{
+        if(!state.answered||!state.ready)return;
+        clearAnswerEffects();
+        if(state.round===2){
+          flow.finish();
+          return;
+        }
+        state.round++;state.answered=false;state.ready=false;drawnBall=null;selectedValue=null;
+        renderRound();
+        choices[0].focus({preventScroll:true});
+        if(window.innerWidth<=650)document.querySelector(".game-bar").scrollIntoView({behavior:"smooth",block:"start"});
+      });
+      $("rules-open").addEventListener("click",()=>$("rules-dialog").showModal());
+      $("restart-open").addEventListener("click",()=>$("restart-dialog").showModal());
+      $("restart-confirm").addEventListener("click",reset);
+      $("play-again").addEventListener("click",reset);
+      $("answer-retry").addEventListener("click",()=>choose(pendingValue));
+      $("summary-lesson").addEventListener("click",openLesson);
+      document.addEventListener("classroom-answer",event=>playAnswerEffect(event.detail.correct,event.detail.button));
+      conditionButtons.forEach(button=>button.addEventListener("click",()=>{
+        lessonCondition=Number(button.dataset.condition);
+        renderLesson();
+      }));
+      $("language-toggle").addEventListener("click",()=>{
+        clearAnswerEffects();
+        language=language==="zh"?"en":"zh";
+        try{localStorage.setItem("probability-club-language",language);}catch{}
+        translateStatic();
+        renderRound();
+        if(pendingValue!==null&&!answerBusy)$("answer-error").textContent=t("answerError");
+      });
+      document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
+      document.querySelectorAll("dialog").forEach(dialog=>dialog.addEventListener("click",event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
+      window.addEventListener("resize",clearAnswerEffects);
+      motionPreference.addEventListener("change",clearAnswerEffects);
+      document.addEventListener("visibilitychange",()=>{if(document.hidden)clearAnswerEffects();});
+      translateStatic();renderRound();flow.init();
+    })();
+  </script>
+</body>
+</html>

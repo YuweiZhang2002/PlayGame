@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
-import { handleGameRequest, getAttempt } from "./server/game.mjs";
+import { handleGameRequest, getAttempt, PAGES_ORIGIN } from "./server/game.mjs";
 
 // Run the actual D1 queries against SQLite, including ranking windows and CAS updates.
 const sqlite = new DatabaseSync(":memory:");
@@ -97,5 +97,44 @@ assert.equal(concurrentState.answers.length, 1);
 assert.equal(concurrentState.score, 1);
 assert.equal((await request("/api/answer", {round:1,value:0.75}, concurrent.cookie, 86401001)).response.status, 410);
 assert.equal((await request("/api/leaderboard?mode=invalid")).response.status, 400);
+
+// Pages uses an explicit attempt token, so browsers can block third-party cookies.
+const preflight = await handleGameRequest(new Request("https://example.test/api/start", {
+  method:"OPTIONS",
+  headers:{origin:PAGES_ORIGIN,"access-control-request-method":"POST","access-control-request-headers":"authorization,content-type"},
+}), db);
+assert.equal(preflight.status, 204);
+assert.equal(preflight.headers.get("access-control-allow-origin"), PAGES_ORIGIN);
+assert.equal(preflight.headers.get("access-control-allow-credentials"), null);
+const blocked = await handleGameRequest(new Request("https://example.test/api/session", {
+  headers:{origin:"https://untrusted.example",authorization:"Bearer "+first.id},
+}), db);
+assert.equal(blocked.status, 403);
+assert.equal(blocked.headers.get("access-control-allow-origin"), null);
+const pageId = crypto.randomUUID();
+async function pagesRequest(path, input, now = 5000, token = pageId) {
+  const response = await handleGameRequest(new Request("https://example.test" + path, {
+    method:input ? "POST" : "GET",
+    headers:{origin:PAGES_ORIGIN,"content-type":"application/json",authorization:"Bearer "+token},
+    body:input ? JSON.stringify(input) : undefined,
+  }), db, now);
+  assert.equal(response.headers.get("access-control-allow-origin"), PAGES_ORIGIN);
+  return {response,data:await response.json()};
+}
+const pageStart = await pagesRequest("/api/start", {startId:pageId,name:"Pages player",avatar:4,rulesAccepted:true});
+assert.equal(pageStart.response.status, 200);
+assert.equal((await pagesRequest("/api/session", null, 5500)).data.session.elapsedMs, 500);
+assert.equal((await pagesRequest("/api/session", null, 5500, "invalid")).data.session, null);
+for (const [round,value] of [0.5,0.75,0.25].entries()) {
+  const result = await pagesRequest("/api/answer", {round,value}, 6000 + round * 100);
+  assert.equal(result.response.status, 200);
+  assert.equal(result.data.session.answered, round + 1);
+}
+const pageBoard = (await pagesRequest("/api/leaderboard", null, 7000)).data;
+assert.equal(pageBoard.own.publicId, pageStart.data.session.publicId);
+assert.equal(pageBoard.own.score, 3);
+assert.equal(pageBoard.own.elapsedMs, 1200);
+assert.ok(!JSON.stringify(pageBoard).includes(pageId));
+assert.equal((await pagesRequest("/api/answer", {round:2,value:0.5}, 8000)).data.session.score, 3);
 sqlite.close();
-console.log("PASS: server scoring, timer integrity, session resume, idempotency, concurrent answers, validation, completed-only rankings, sorting and ties.");
+console.log("PASS: scoring, timing, sessions, idempotency, concurrency, rankings, ties, GitHub Pages CORS and cookie-free session recovery.");

@@ -4,9 +4,13 @@
 
 ## Play / 开始游戏
 
-Public site: https://probability-detective-20261020.yuweizhang2002.chatgpt.site/
+Public game / 游戏网址: https://yuweizhang2002.github.io/PlayGame/
 
-The bilingual game now uses a shared D1 database and a Vinext/Cloudflare Worker backend. Open the hosted site to play; opening the HTML file directly does not provide sessions or rankings.
+The website is served by **GitHub Pages** from `main` → `/docs`. It uses the existing shared D1 database and Vinext/Cloudflare Worker API for server scoring, timing and live rankings. GitHub Pages does not run a database or backend.
+
+网页由 GitHub Pages 托管，访问者无需登录 GitHub 或 ChatGPT。计分、计时与共享排行榜继续使用现有服务器和数据库，因此保留跨设备实时排名。网站直接在 GitHub 网址内运行，不通过 iframe 或跳转显示旧网页。
+
+API service: `https://probability-detective-20261020.yuweizhang2002.chatgpt.site`
 
 游戏流程：阅读并确认规则 → 自选 12 个头像之一、输入昵称 → 点击开始并计时 → 完成三题 → 查看成绩和共享排行榜 → 解锁独立讲解页。
 
@@ -22,7 +26,9 @@ Each completed run is a separate entry. The top 50 are shown, plus the current p
 
 计时由服务器记录：从创建游戏到服务器收到最后一题，包含抽球展示、两题间切换和网络传输时间。每题平均用时 = 总用时 ÷ 3。正确率按首次提交的答案计算；重复提交不会重复计分或改变完成时间。
 
-`/lesson` checks for a completed attempt on the server before displaying the visual explanation. This is a casual classroom activity with player nicknames, not a verified-identity examination system. Each browser's current game is stored in an HttpOnly, SameSite session cookie (24-hour lifetime); language preference stays in local storage.
+The GitHub Pages `/PlayGame/lesson/` route checks the session API before showing the explanation and sends unfinished players back to the game. On the original server, `/lesson` also checks completion before returning HTML. This is a casual classroom activity with player nicknames, not a verified-identity examination system.
+
+GitHub Pages keeps a private attempt token in the browser's local storage and sends it in an Authorization header, so gameplay does not depend on third-party cookies. The API only allows browser requests from its own origin and `https://yuweizhang2002.github.io`. The original site continues to use its HttpOnly, SameSite cookie. Nicknames and completed scores are shared; private attempt tokens never appear in leaderboard responses. Each origin has its own current game and language preference.
 
 ## Rules / 游戏规则
 
@@ -46,7 +52,7 @@ The final recap explains the key idea: calculate the proportion of orange balls 
 
 ## Visual explanation / 可视化讲解
 
-After completing the game, open the independent `/lesson` page and switch between the three conditions to see the eligible set **B** and the orange intersection **A ∩ B**. The ball diagram, numerator, denominator, and worked formula update together. This exploration does not change the game score.
+After completing the game, open the independent lesson page and switch between the three conditions to see the eligible set **B** and the orange intersection **A ∩ B**. The ball diagram, numerator, denominator, and worked formula update together. This exploration does not change the game score.
 
 通关后解锁中英文可视化讲解：切换条件，观察范围 B 和交集 A ∩ B，并把球数对应到条件概率公式：
 
@@ -71,6 +77,21 @@ Revealing that solution unlocks the weather check, using hypothetical data `P(C)
 The English speech and slide deck are separate teaching documents, not website routes or public assets.
 
 ## Local development / 本地运行
+
+### GitHub Pages publishing
+
+After editing `web/index.html` or `public/`, regenerate the static pages and commit the updated `docs/` files:
+
+```sh
+npm run build:pages
+git add docs web public scripts
+git commit -m "Update classroom game"
+git push github main
+```
+
+GitHub publishes `docs/` automatically. Its `.nojekyll` file preserves these buildless assets. The generator adds `/PlayGame/` asset and navigation paths and the API base URL to both entry pages. Changes to `server/` or API routes also require publishing the Worker backend through Sites.
+
+### Full local server
 
 Requires Node.js 22.13+ and npm.
 
@@ -104,3 +125,5 @@ Tests cover conditional probabilities and formula derivations, uniform draws, tr
 - `db/schema.ts`, `drizzle/`: durable database schema and migrations.
 - `.openai/hosting.json`: original Site identity and D1 binding.
 - `dist/`: generated Worker deployment, excluded from source control.
+- `docs/`: generated GitHub Pages website, committed for branch publishing.
+- `scripts/build-pages.mjs`: regenerates the GitHub Pages website from the same source.

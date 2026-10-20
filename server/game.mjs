@@ -3,6 +3,7 @@ export const AVATAR_COUNT = 12;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const COOKIE = "probability_attempt";
 const MAX_AGE = 24 * 60 * 60 * 1000;
+export const PAGES_ORIGIN = "https://yuweizhang2002.github.io";
 
 function json(value, status = 200, extra = {}) {
   return Response.json(value, {
@@ -12,6 +13,11 @@ function json(value, status = 200, extra = {}) {
 }
 
 export function sessionId(request) {
+  const authorization = request.headers.get("authorization");
+  if (authorization) {
+    const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
+    return UUID.test(token) ? token : null;
+  }
   const value = request.headers.get("cookie")?.split(";").map(s => s.trim()).find(s => s.startsWith(COOKIE + "="))?.slice(COOKIE.length + 1);
   return UUID.test(value ?? "") ? value : null;
 }
@@ -44,10 +50,36 @@ async function body(request) {
 }
 
 export async function handleGameRequest(request, db, now = Date.now()) {
+  const origin = request.headers.get("origin");
+  const crossOrigin = origin && origin !== new URL(request.url).origin;
+  if (crossOrigin && origin !== PAGES_ORIGIN) return json({ error: "wrong_origin" }, 403);
+  let response;
+  if (request.method === "OPTIONS") {
+    const method = request.headers.get("access-control-request-method");
+    const headers = (request.headers.get("access-control-request-headers") || "")
+      .toLowerCase().split(",").map(value => value.trim()).filter(Boolean);
+    if (!["GET", "POST"].includes(method) ||
+        headers.some(value => !["authorization", "content-type"].includes(value))) {
+      response = json({ error: "invalid_preflight" }, 400);
+    } else {
+      response = new Response(null, { status: 204 });
+    }
+  } else {
+    response = await handleGameAction(request, db, now);
+  }
+  if (origin === PAGES_ORIGIN) {
+    response.headers.set("Access-Control-Allow-Origin", PAGES_ORIGIN);
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+    response.headers.set("Access-Control-Max-Age", "600");
+    response.headers.set("Vary", "Origin");
+  }
+  return response;
+}
+
+async function handleGameAction(request, db, now) {
   const url = new URL(request.url);
   if (request.method === "POST") {
-    const origin = request.headers.get("origin");
-    if (origin && origin !== url.origin) return json({ error: "wrong_origin" }, 403);
     if (!request.headers.get("content-type")?.startsWith("application/json")) return json({ error: "invalid_input" }, 415);
   }
   if (!db) return json({ error: "unavailable" }, 503);
