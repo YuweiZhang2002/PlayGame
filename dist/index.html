@@ -22,7 +22,19 @@
     @media(min-width:1400px){.shell{max-width:1260px}.intro{padding-top:45px;padding-bottom:35px}.game-layout{min-height:455px}.bag{max-width:390px;padding-top:35px;padding-bottom:30px}.ball{width:64px;height:64px}.ball-grid{gap:25px 18px}.play{padding:31px 35px}.lab{padding:29px 35px}h1{font-size:46px}.intro-stamp{margin-right:27px}}
     @media(max-width:850px){.shell{padding:0 25px}.classroom{display:none}.intro-stamp{width:80px;height:80px;margin-right:2px}.intro-stamp strong{font-size:20px}h1{font-size:35px}.lab{padding:24px 17px}.play{padding:24px 22px}.bag{padding:27px 14px 22px}.ball{width:50px;height:50px}.ball-grid{gap:21px 10px}.prompt{font-size:19px}.clue{padding:11px}.clue strong{font-size:15px}.choice{min-height:100px}.step-line{width:18px}}
     @media(max-width:650px){.shell{padding:0 19px}.topbar{min-height:70px}.brand{font-size:16px}.brand-mark{width:29px;height:29px;border-radius:9px}.top-tools{gap:12px}.intro{padding:29px 0 23px;align-items:flex-start}.intro-stamp{display:none}h1{font-size:34px;margin-bottom:9px}.intro p{font-size:12px;max-width:260px}.eyebrow{font-size:9px;margin-bottom:11px}.game-bar{padding-bottom:15px}.step{font-size:10px;gap:5px}.step b{width:22px;height:22px;font-size:10px}.steps{gap:6px}.step-line{width:12px}.score{font-size:10px;gap:5px}.score strong{font-size:15px}.game-layout{grid-template-columns:1fr;border-radius:17px}.lab{min-height:0;padding:17px 22px 15px}.bag{max-width:320px;margin:22px auto 12px;padding:23px 26px 19px;border-radius:16px 16px 43px 43px}.ball{width:49px;height:49px}.ball-grid{gap:12px 13px}.star{font-size:23px}.ball-name{font-size:8px}.legend{margin:0 0 7px;font-size:10px}.lab-caption{font-size:11px;min-height:0;max-width:100%}.lab-head .label{font-size:10px}.pool-label{font-size:10px;padding:3px 8px}.play{padding:20px 21px}.round-top{margin-bottom:12px}.round-number{font-size:11px}.clue{padding:10px 13px}.clue small{font-size:9px}.clue strong{font-size:14px}.prompt{margin-top:18px;margin-bottom:2px;font-size:21px}.prompt-note{font-size:11px}.choices{margin:16px 0 13px;gap:10px}.choice{min-height:95px}.fraction{font-size:23px}.feedback{min-height:47px;padding-top:10px}.feedback .initial{padding-top:3px}.next-button{padding:11px 15px}.underboard{padding:14px 0;align-items:flex-start}.underboard p{font-size:10px;max-width:230px}.underboard .text-button{flex-shrink:0;padding:0}.footer{margin-top:7px;font-size:9px}.footer-note{display:none}.dialog-body{padding:25px}.summary{padding:28px 24px}.draw-result{min-height:45px;padding-top:10px;margin-top:5px}.draw-result small{font-size:9px}}
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+    .answer-confetti{position:fixed;inset:0;width:100%;height:100%;z-index:900;pointer-events:none}
+    .answer-toast{position:fixed;z-index:901;pointer-events:none;display:flex;align-items:center;gap:9px;padding:11px 18px;border-radius:30px;background:#fcfff4;border:1px solid #a8bf8d;box-shadow:0 8px 26px #244e4224;color:#3f6532;font-size:14px;font-weight:700;white-space:nowrap;transform:translateX(-50%);animation:answer-toast-in .45s cubic-bezier(.2,.8,.3,1.2) both}
+    .answer-toast[data-kind="wrong"]{background:#fff5ea;border-color:#dfb794;color:#9b623b}
+    .answer-toast-icon{display:grid;place-items:center;width:25px;height:25px;background:#e1edce;border-radius:50%;font-size:16px}.answer-toast[data-kind="wrong"] .answer-toast-icon{background:#f4dfc8}
+    .choice.effect-correct{animation:answer-glow .85s ease-out}.choice.effect-wrong{animation:answer-shake .5s ease-in-out}
+    .choice.effect-wrong:after{content:"";position:absolute;inset:-3px;border:2px solid #d79b6b;border-radius:13px;pointer-events:none;animation:answer-ripple .85s ease-out both}
+    .score.effect-score{animation:score-bounce .65s cubic-bezier(.2,.8,.3,1.2)}
+    @keyframes answer-toast-in{from{opacity:0;transform:translate(-50%,14px) scale(.87)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+    @keyframes answer-glow{0%{box-shadow:0 0 0 0 #8aa66a66;transform:scale(1)}38%{box-shadow:0 0 0 9px #8aa66a22;transform:scale(1.055)}100%{box-shadow:0 0 0 16px #8aa66a00;transform:scale(1)}}
+    @keyframes answer-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px) rotate(-1deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+    @keyframes answer-ripple{from{opacity:.8;transform:scale(.98)}to{opacity:0;transform:scale(1.22)}}
+    @keyframes score-bounce{0%,100%{transform:scale(1)}40%{transform:scale(1.2);color:#50773d}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.choice.effect-wrong:after{display:none}}
   </style>
 </head>
 <body>
@@ -96,6 +108,8 @@
       <button class="text-button" data-close="summary-dialog" data-i18n="backToGame">返回查看最后一轮</button>
     </div>
   </dialog>
+  <canvas id="answer-confetti" class="answer-confetti" aria-hidden="true" hidden></canvas>
+  <div id="answer-toast" class="answer-toast" aria-hidden="true" hidden><span class="answer-toast-icon"></span><span id="answer-toast-text"></span></div>
   <noscript><p style="padding:20px;text-align:center">请开启浏览器的 JavaScript，即可开始抽球小游戏。</p></noscript>
   <script id="game-engine">
     const BallGame = (() => {
@@ -138,7 +152,7 @@
         clues:["所有球都可以抽","只抽带星星的球","只抽不带星星的球"],
         explanations:["8 颗球中，有 4 颗橙色球。4 ÷ 8 = 1/2。","4 颗带星星的球中，有 3 颗橙色球。3 ÷ 4 = 3/4。","4 颗不带星星的球中，有 1 颗橙色球。1 ÷ 4 = 1/4。"],
         choices:["四分之一，25%","二分之一，50%","四分之三，75%"],
-        initial:"答对得 1 分，实际抽到什么颜色不影响得分。",correct:"答对了！+1 分",wrong:"再想一想，正确答案是 {fraction}。",
+        initial:"答对得 1 分，实际抽到什么颜色不影响得分。",correct:"答对了！+1 分",wrong:"再想一想，正确答案是 {fraction}。",celebration:"好判断！+1",encouragement:"没关系，看看解析",
         allCaption:"每颗球都有<strong>同样的机会</strong>被抽中。",filteredCaption:"只看亮起的球，它们都有<strong>同样的机会</strong>被抽中。",
         pool:"{n} 颗球参与抽取",drawing:"摇一摇球袋，随机抽取一颗……",drawingButton:"正在抽球…",
         result:"这次抽到了<strong>{color}球</strong>",randomNote:"单次结果有随机性，概率高也不保证抽中。",
@@ -164,7 +178,7 @@
         clues:["Draw from all the balls","Draw only starred balls","Draw only balls without stars"],
         explanations:["4 of the 8 balls are orange. 4 ÷ 8 = 1/2.","3 of the 4 starred balls are orange. 3 ÷ 4 = 3/4.","1 of the 4 balls without stars is orange. 1 ÷ 4 = 1/4."],
         choices:["One quarter, 25%","One half, 50%","Three quarters, 75%"],
-        initial:"A correct answer earns 1 point. The drawn color won’t affect your score.",correct:"That’s right! +1 point",wrong:"Not quite. The answer is {fraction}.",
+        initial:"A correct answer earns 1 point. The drawn color won’t affect your score.",correct:"That’s right! +1 point",wrong:"Not quite. The answer is {fraction}.",celebration:"Great thinking! +1",encouragement:"Keep learning — see why",
         allCaption:"Every ball has an <strong>equal chance</strong> of being drawn.",filteredCaption:"Only the bright balls count. Each has an <strong>equal chance</strong>.",
         pool:"{n} eligible balls",drawing:"Shake the bag. Let’s draw a random ball…",drawingButton:"Drawing a ball…",
         result:"You drew an <strong>{color} ball</strong>",randomNote:"One draw is random. A high probability is not a guarantee.",
@@ -183,10 +197,86 @@
       let drawnBall=null;
       let selectedValue=null;
       let language="zh";
+      let effectsFrame=null;
+      let effectsTimer=null;
+      const motionPreference=window.matchMedia("(prefers-reduced-motion: reduce)");
       try{if(localStorage.getItem("probability-club-language")==="en")language="en";}catch{}
       const t=(key,values={})=>Object.entries(values).reduce((text,[name,value])=>text.replaceAll(`{${name}}`,value),TRANSLATIONS[language][key]);
       const ballHTML=ball=>`<span class="ball ${ball.color}" aria-hidden="true">${ball.star?'<span class="star">★</span>':""}</span>`;
       const colorName=ball=>t(ball.color);
+      function clearAnswerEffects(){
+        if(effectsFrame!==null){cancelAnimationFrame(effectsFrame);effectsFrame=null;}
+        if(effectsTimer!==null){clearTimeout(effectsTimer);effectsTimer=null;}
+        $("answer-confetti").hidden=true;
+        $("answer-toast").hidden=true;
+        choices.forEach(button=>button.classList.remove("effect-correct","effect-wrong"));
+        document.querySelector(".score").classList.remove("effect-score");
+      }
+      function playAnswerEffect(correct,button){
+        clearAnswerEffects();
+        const rect=button.getBoundingClientRect();
+        const width=window.innerWidth,height=window.innerHeight;
+        const toast=$("answer-toast");
+        toast.dataset.kind=correct?"correct":"wrong";
+        toast.querySelector(".answer-toast-icon").textContent=correct?"✦":"↗";
+        $("answer-toast-text").textContent=t(correct?"celebration":"encouragement");
+        toast.style.top=Math.max(16,Math.min(height-70,rect.top-60))+"px";
+        toast.hidden=false;
+        const margin=toast.getBoundingClientRect().width/2+12;
+        toast.style.left=Math.max(margin,Math.min(width-margin,rect.left+rect.width/2))+"px";
+        effectsTimer=setTimeout(clearAnswerEffects,3000);
+        if(motionPreference.matches)return;
+        button.classList.add(correct?"effect-correct":"effect-wrong");
+        if(!correct)return;
+        document.querySelector(".score").classList.add("effect-score");
+        const canvas=$("answer-confetti");
+        const ctx=canvas.getContext("2d");
+        if(!ctx)return;
+        const scale=Math.min(window.devicePixelRatio||1,2);
+        canvas.width=Math.round(width*scale);canvas.height=Math.round(height*scale);
+        ctx.setTransform(scale,0,0,scale,0,0);
+        canvas.hidden=false;
+        const palette=["#e9905f","#edc85d","#7d9fc9","#a8bf78","#dba5b4","#faf7df"];
+        const startY=Math.max(height*.25,Math.min(height*.82,rect.top+rect.height/2));
+        const particles=Array.from({length:width<650?80:120},(_,i)=>{
+          const left=i%2===0;
+          return {x:width*(left?.18:.82),y:startY,vx:(left?1:-1)*(70+Math.random()*290),vy:-380-Math.random()*330,
+            size:4+Math.random()*5,rotation:Math.random()*Math.PI*2,spin:(Math.random()-.5)*12,
+            color:palette[i%palette.length],shape:i%5,delay:Math.random()*.18};
+        });
+        let started=null,previous=null;
+        function animate(now){
+          if(started===null){started=now;previous=now;}
+          const elapsed=(now-started)/1000;
+          const dt=Math.min((now-previous)/1000,.04);previous=now;
+          ctx.clearRect(0,0,width,height);
+          if(elapsed>2.8){canvas.hidden=true;effectsFrame=null;return;}
+          particles.forEach(particle=>{
+            if(elapsed<particle.delay)return;
+            particle.vx*=Math.pow(.986,dt*60);
+            particle.vy+=560*dt;
+            particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.rotation+=particle.spin*dt;
+            if(particle.y>height+30)return;
+            ctx.save();ctx.translate(particle.x,particle.y);ctx.rotate(particle.rotation);
+            ctx.scale(Math.max(.25,Math.abs(Math.cos(elapsed*7+particle.spin))),1);
+            ctx.globalAlpha=Math.min(1,(2.8-elapsed)/.6);ctx.fillStyle=particle.color;
+            if(particle.shape===0){
+              ctx.beginPath();
+              for(let point=0;point<10;point++){
+                const angle=point*Math.PI/5-Math.PI/2,radius=particle.size*(point%2?.45:1);
+                if(point===0)ctx.moveTo(Math.cos(angle)*radius,Math.sin(angle)*radius);
+                else ctx.lineTo(Math.cos(angle)*radius,Math.sin(angle)*radius);
+              }
+              ctx.closePath();ctx.fill();
+            }else if(particle.shape===1){
+              ctx.beginPath();ctx.arc(0,0,particle.size*.5,0,Math.PI*2);ctx.fill();
+            }else ctx.fillRect(-particle.size/2,-particle.size/3,particle.size,particle.size*.65);
+            ctx.restore();
+          });
+          effectsFrame=requestAnimationFrame(animate);
+        }
+        effectsFrame=requestAnimationFrame(animate);
+      }
       function translateStatic(){
         document.documentElement.lang=language==="zh"?"zh-CN":"en";
         document.title=t("pageTitle");
@@ -272,18 +362,21 @@
         }
       }
       function choose(value){
-        if(BallGame.answer(state,value)===null)return;
+        const correct=BallGame.answer(state,value);
+        if(correct===null)return;
         selectedValue=value;
         renderAnswer();
+        playAnswerEffect(correct,choices.find(button=>Number(button.dataset.answer)===value));
         drawTimer=setTimeout(()=>{
           drawTimer=null;
           drawnBall=BallGame.draw(state.round);
           state.ready=true;
           renderAnswer();
           if(!document.querySelector("dialog[open]"))$("next-button").focus({preventScroll:true});
-        },window.matchMedia("(prefers-reduced-motion: reduce)").matches?80:1100);
+        },motionPreference.matches?80:1100);
       }
       function reset(){
+        clearAnswerEffects();
         if(drawTimer!==null){clearTimeout(drawTimer);drawTimer=null;}
         document.querySelectorAll("dialog[open]").forEach(dialog=>dialog.close());
         state=BallGame.createState();
@@ -295,6 +388,7 @@
       choices.forEach(button=>button.addEventListener("click",()=>choose(Number(button.dataset.answer))));
       $("next-button").addEventListener("click",()=>{
         if(!state.answered||!state.ready)return;
+        clearAnswerEffects();
         if(state.round===2){
           renderSummary();
           $("summary-dialog").showModal();
@@ -310,6 +404,7 @@
       $("restart-confirm").addEventListener("click",reset);
       $("play-again").addEventListener("click",reset);
       $("language-toggle").addEventListener("click",()=>{
+        clearAnswerEffects();
         language=language==="zh"?"en":"zh";
         try{localStorage.setItem("probability-club-language",language);}catch{}
         translateStatic();
@@ -317,6 +412,9 @@
       });
       document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
       document.querySelectorAll("dialog").forEach(dialog=>dialog.addEventListener("click",event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
+      window.addEventListener("resize",clearAnswerEffects);
+      motionPreference.addEventListener("change",clearAnswerEffects);
+      document.addEventListener("visibilitychange",()=>{if(document.hidden)clearAnswerEffects();});
       translateStatic();renderRound();
     })();
   </script>

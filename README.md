@@ -30,6 +30,10 @@ Choose one of three probabilities each round. A correct first answer earns 1 poi
 
 每轮选择一个概率，答对得 1 分，满分 3 分。作答后从符合条件的球中等概率抽取一颗，抽取结果不影响得分。每轮放回全部球。
 
+Correct answers trigger colorful confetti, a soft glow, and a +1 badge. Incorrect answers trigger a gentle card shake, an amber ripple, and an encouraging prompt. Effects do not block interaction and respect the system's reduced-motion preference.
+
+答对时会撒下彩纸、亮起柔和光晕并显示 +1；答错时答案卡会轻晃，出现橙色波纹和鼓励提示。特效不阻挡操作，并遵循系统的减少动态效果设置。
+
 The final recap explains the key idea: calculate the proportion of orange balls **among only the balls that meet the condition**.
 
 ## Checks / 检查
