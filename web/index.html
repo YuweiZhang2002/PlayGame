@@ -48,6 +48,7 @@
     @media(max-width:650px){.lesson{padding-top:29px;margin-top:12px}.lesson-heading h2{font-size:25px}.lesson-heading p{font-size:12px}.lesson-time{display:none}.condition-controls{gap:7px;margin-top:19px}.condition-controls>span{width:100%;margin-bottom:2px}.condition-button{padding:8px 13px;font-size:11px}.lesson-explorer{grid-template-columns:1fr}.lesson-universe,.lesson-count{padding:21px}.lesson-balls{max-width:340px;margin:19px auto 15px;gap:9px}.lesson-ball-cell .ball{width:43px;height:43px}.lesson-ball-cell .star{font-size:20px}.lesson-count{border-top:1px solid #dbe3d0}.lesson-narration{min-height:0}.formula-section{padding:22px 18px}.formula-heading h3{font-size:18px}.event-definitions{gap:8px}.event-definition{padding:10px;font-size:10px}.event-symbol{font-size:20px}.formula-general{font-size:23px;gap:9px}.formula-general .formula-precondition{font-size:12px;flex-basis:100%;text-align:center;margin:5px 0 0}.formula-gloss{gap:9px 17px;font-size:10px}.formula-worked{grid-template-columns:1fr;gap:18px;padding:16px}.formula-numeric{padding-top:14px;border-top:1px solid #d6dfc9}.formula-numeric>strong{font-size:30px}.lesson-think summary{font-size:11px;padding:13px 15px}.lesson-memory{font-size:11px}.lesson-jump{padding-bottom:8px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.choice.effect-wrong:after{display:none}}
   </style>
+  <link rel="stylesheet" href="/arcade.css">
 </head>
 <body>
   <div class="shell">
@@ -60,6 +61,22 @@
         <div><div class="eyebrow">THE LITTLE PROBABILITY CLUB <span data-i18n="topic">条件概率</span></div><h1 id="game-title" data-i18n="title">抽球，猜<em>颜色。</em></h1><p data-i18n="subtitle">球还是那些球。换一条线索，胜算会改变吗？</p></div>
         <div class="intro-stamp" aria-label="三轮小游戏"><span>PLAY & DISCOVER</span><strong>3 rounds</strong><span data-i18n="stamp">让直觉遇见概率</span></div>
       </section>
+      <div id="boot-screen" class="boot-screen"><div class="boot-ring" aria-hidden="true"></div><p id="boot-text" role="status" data-i18n="loadingGame">正在连接游戏…</p><button id="boot-retry" class="secondary-button" data-i18n="retry" hidden>重新连接</button></div>
+      <nav id="flow-track" class="flow-track" aria-label="Game flow" hidden><span data-flow-step="0" data-i18n="flowRules">01 阅读规则</span><i>→</i><span data-flow-step="1" data-i18n="flowPlayer">02 玩家就位</span><i>→</i><span data-flow-step="2" data-i18n="flowPlay">03 计时挑战</span><i>→</i><span data-flow-step="3" data-i18n="flowRank">04 成绩排名</span></nav>
+      <section id="onboarding" class="entry-card" hidden>
+        <div class="entry-rules"><p class="section-kicker">MISSION BRIEFING</p><h2 data-i18n="entryTitle">挑战前，先了解规则。</h2><p class="rules-lead" data-i18n="rulesLead"></p>
+          <ol class="rules-list"><li><span class="rule-n">1</span><div data-i18n="rule1"></div></li><li><span class="rule-n">2</span><div data-i18n="rule2"></div></li><li><span class="rule-n">3</span><div data-i18n="timedRule"></div></li></ol>
+          <p class="rule-note" data-i18n="rankingRule"></p><button class="next-button" id="rules-accept" data-i18n="acceptRules">我已阅读并了解</button><div id="rules-confirmed" class="entry-confirmed" data-i18n="rulesConfirmed" hidden>✓ 已阅读并了解规则</div>
+        </div>
+        <div class="entry-profile"><div id="profile-locked" class="profile-locked"><span class="lock-symbol" aria-hidden="true">◇</span><strong data-i18n="profileLockedTitle">你的玩家身份，即将上线</strong><p data-i18n="profileLockedNote">确认左侧规则后，选择头像并输入昵称。</p></div>
+          <form id="profile-form" hidden><p class="section-kicker">PLAYER SELECT</p><div class="profile-preview"><span class="avatar-icon" id="profile-avatar" aria-hidden="true"></span><div><strong id="profile-preview-name"></strong><small data-i18n="playerReady">准备好，来一场概率挑战。</small></div></div>
+          <label for="player-name" class="field-label" data-i18n="nameLabel">玩家昵称</label><input id="player-name" class="name-input" name="nickname" maxlength="40" autocomplete="off" required aria-describedby="profile-note profile-error">
+          <div class="avatar-label"><span id="avatar-label" data-i18n="chooseAvatar">选择游戏头像</span><button id="random-avatar" type="button" class="text-button" data-i18n="randomAvatar">⚄ 随机选一个</button></div><div id="avatar-grid" class="avatar-grid" role="group" aria-labelledby="avatar-label"></div>
+          <p id="profile-note" class="profile-note" data-i18n="profileNote">1–20 字。昵称、头像和完成成绩会公开显示在排行榜。</p><p id="profile-error" class="inline-error" role="alert"></p><button type="submit" id="start-game" class="next-button" disabled data-i18n="startGame">开始游戏 · 开始计时 →</button></form>
+        </div>
+      </section>
+      <div id="game-stage" hidden>
+      <div class="player-hud"><div class="hud-player"><span class="avatar-icon" id="hud-avatar" aria-hidden="true"></span><div><small data-i18n="activePlayer">挑战进行中</small><strong id="hud-name"></strong></div></div><div class="timer-block"><small data-i18n="elapsedLabel">本局用时</small><output id="game-timer" aria-live="off">0.00 s</output></div></div>
       <div class="game-bar">
         <div class="steps" aria-label="游戏进度">
           <div class="step active" id="step-0" aria-current="step"><b>1</b><span>所有球</span></div><div class="step-line" aria-hidden="true"></div>
@@ -87,12 +104,26 @@
             <button class="choice" data-answer="0.75" aria-label="四分之三，75%"><span class="fraction" aria-hidden="true"><span class="num">3</span><span class="den">4</span></span><span class="percent" aria-hidden="true">75%</span><span class="choice-mark" aria-hidden="true"></span></button>
           </div>
           <div class="feedback" id="feedback" role="status" aria-live="polite"><div class="initial"><i class="tiny-ring" aria-hidden="true"></i>答对得 1 分，实际抽到什么颜色不影响得分。</div></div>
+          <p id="answer-error" class="inline-error" role="alert" hidden></p><button id="answer-retry" class="secondary-button" data-i18n="retryAnswer" hidden>重试提交此答案</button>
           <button class="next-button" id="next-button" hidden><span id="next-label">下一轮</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </section>
       <div class="underboard"><p data-i18n="tip">小提示：变淡的球不参与本轮抽取；每轮都会放回全部球。</p><button id="restart-open" class="text-button"><span class="reset-icon" aria-hidden="true">↻</span><span data-i18n="restart">重新开始</span></button></div>
-      <div class="lesson-jump"><button class="lesson-link" id="lesson-jump" data-i18n="lessonJump">玩完后，看看概率为什么会变 ↓</button></div>
-      <section class="lesson" id="conditional-lesson" aria-labelledby="lesson-title">
+      </div>
+      <section id="results-screen" class="results-screen" hidden>
+        <div class="result-banner"><div class="result-identity"><span class="avatar-icon" id="result-avatar" aria-hidden="true"></span><div><p class="section-kicker" data-i18n="missionComplete">MISSION COMPLETE · 挑战完成</p><h2 id="result-title" tabindex="-1"><span id="result-name"></span><span data-i18n="completedSuffix">，漂亮完赛！</span></h2><p data-i18n="resultSaved">成绩已保存，正在加入实时排行榜。</p></div></div>
+          <div class="result-metrics"><div><small data-i18n="accuracyLabel">正确率</small><strong id="result-accuracy"></strong><small id="result-score"></small></div><div><small data-i18n="totalTimeLabel">总用时</small><strong id="result-time"></strong><small><span data-i18n="averageLabel">每题平均</span> <span id="result-average"></span></small></div></div></div>
+        <div class="result-actions"><button class="next-button" id="summary-lesson" data-i18n="unlockLesson">已解锁 · 查看条件概率讲解 →</button><button class="secondary-button" id="play-again" data-i18n="playAgain">再玩一局 ↗</button></div><p class="result-note" data-i18n="resultTimingNote">总用时从开始游戏到最后一题提交成功；每题平均 = 总用时 ÷ 3。</p>
+      </section>
+      <section id="leaderboard" class="leaderboard" aria-labelledby="board-title" hidden>
+        <div class="board-heading"><div><p class="section-kicker">THE PROBABILITY LEAGUE</p><h2 id="board-title" data-i18n="leaderboardTitle">实时排行榜</h2><p data-i18n="leaderboardIntro">和其他玩家一起，挑战又准又快。</p></div><span id="board-status" class="live-pill" role="status"></span></div>
+        <div class="board-tabs" role="group" aria-label="Leaderboard ranking"><button data-board-mode="overall" aria-pressed="true" data-i18n="boardOverall">✦ 综合榜</button><button data-board-mode="accuracy" aria-pressed="false" data-i18n="boardAccuracy">◎ 正确率榜</button><button data-board-mode="speed" aria-pressed="false" data-i18n="boardSpeed">ϟ 速度榜</button></div>
+        <p id="board-rule" class="board-rule"></p><div id="podium" class="podium" hidden></div><div id="board-empty" class="board-empty" role="status"></div>
+        <div id="board-table-wrap" class="board-table-wrap" hidden><table class="board-table"><thead><tr><th scope="col" data-i18n="rankColumn">名次</th><th scope="col" data-i18n="playerColumn">玩家</th><th scope="col" data-i18n="accuracyLabel">正确率</th><th scope="col" data-i18n="totalTimeLabel">总用时</th><th scope="col" data-i18n="averageLabel">每题平均</th></tr></thead><tbody id="board-rows"></tbody></table></div><div id="own-rank" class="own-rank" hidden></div>
+        <div class="board-meta"><div><span id="board-total"></span><br><span id="board-updated"></span></div><button id="board-refresh" class="text-button" data-i18n="refreshBoard">↻ 刷新排名</button></div><p class="profile-note" data-i18n="boardFootnote">只记录完成的挑战；每次完整挑战独立上榜，展示前 50 名。</p>
+      </section>
+      <nav id="lesson-nav" class="lesson-nav" hidden><a href="/" data-i18n="backToResults">← 返回成绩与排行榜</a><span data-i18n="lessonUnlocked">✓ 通关后解锁</span></nav>
+      <section class="lesson" id="conditional-lesson" aria-labelledby="lesson-title" hidden>
         <div class="lesson-heading"><div><div class="eyebrow">THE WHY BEHIND THE GAME</div><h2 id="lesson-title" tabindex="-1" data-i18n="lessonTitle">从这袋球，走到条件概率。</h2><p data-i18n="lessonIntro">条件概率，就是知道一个条件成立后，重新计算目标事件的概率。先看图，再把刚才的动作写成公式。</p></div><span class="lesson-time" data-i18n="lessonTime">2 分钟 · 看图理解</span></div>
         <div class="condition-controls" role="group" aria-labelledby="condition-label"><span id="condition-label" data-i18n="conditionLabel">点击，换一个条件 B：</span>
           <button class="condition-button" data-condition="0" aria-pressed="false" data-i18n="lessonAll">◎ 所有球</button>
@@ -150,19 +181,6 @@
     </div>
   </dialog>
   <dialog id="restart-dialog" aria-labelledby="restart-title"><div class="dialog-body"><div class="dialog-top"><h2 id="restart-title" data-i18n="restartTitle">再来一局？</h2><button class="close-dialog" data-close="restart-dialog" aria-label="取消重新开始">×</button></div><p class="rules-lead" data-i18n="restartNote">本局得分将清零，从第一轮重新开始。</p><button class="next-button" id="restart-confirm" data-i18n="restart">重新开始</button></div></dialog>
-  <dialog id="summary-dialog" aria-labelledby="summary-title">
-    <div class="summary">
-      <div class="summary-eyebrow" data-i18n="complete">三轮挑战 · 完成</div>
-      <div class="summary-score"><strong id="final-score">3</strong><span>/ 3</span></div>
-      <h2 id="summary-title">你发现了线索的力量！</h2>
-      <p class="summary-intro" id="summary-intro">同样一袋球，三个不同的概率。</p>
-      <div class="recap"><div><span data-i18n="step0">所有球</span><strong>1/2</strong><small data-i18n="count0">4 橙 / 8 颗</small></div><div><span data-i18n="step1">带星星</span><strong>3/4</strong><small data-i18n="count1">3 橙 / 4 颗</small></div><div><span data-i18n="step2">无星星</span><strong>1/4</strong><small data-i18n="count2">1 橙 / 4 颗</small></div></div>
-      <p class="takeaway" data-i18n="takeaway">这就是<strong>条件概率</strong>：<br>在<strong>符合条件的球</strong>中，重新计算橙色球的比例。</p>
-      <button class="next-button" id="summary-lesson" data-i18n="summaryLesson">看图理解条件概率 ↓</button>
-      <button class="lesson-secondary" id="play-again" data-i18n="playAgain">再玩一局 ↗</button>
-      <button class="text-button" data-close="summary-dialog" data-i18n="backToGame">返回查看最后一轮</button>
-    </div>
-  </dialog>
   <canvas id="answer-confetti" class="answer-confetti" aria-hidden="true" hidden></canvas>
   <div id="answer-toast" class="answer-toast" aria-hidden="true" hidden><span class="answer-toast-icon"></span><span id="answer-toast-text"></span></div>
   <noscript><p style="padding:20px;text-align:center">请开启浏览器的 JavaScript，即可开始抽球小游戏。</p></noscript>
@@ -194,6 +212,70 @@
   <script id="translations">
     const TRANSLATIONS = {
       zh: {
+        "loadingGame":"正在连接游戏…",
+        "retry":"重新连接",
+        "flowRules":"01 阅读规则",
+        "flowPlayer":"02 玩家就位",
+        "flowPlay":"03 计时挑战",
+        "flowRank":"04 成绩排名",
+        "entryTitle":"挑战前，先了解规则。",
+        "acceptRules":"我已阅读并了解",
+        "rulesConfirmed":"✓ 已阅读并了解规则",
+        "timedRule":"<b>计时挑战</b>点击开始游戏后计时，三题各答一次。答完最后一题自动停止计时、保存成绩。",
+        "rankingRule":"综合榜先比正确率，同正确率时用时越短排名越高。每轮随机抽到的球不影响得分；完成三题后解锁公式讲解。",
+        "profileLockedTitle":"你的玩家身份，即将上线",
+        "profileLockedNote":"确认规则后，选择头像并输入昵称。",
+        "playerReady":"准备好，来一场概率挑战。",
+        "nameLabel":"玩家昵称",
+        "chooseAvatar":"选择游戏头像",
+        "randomAvatar":"⚄ 随机选一个",
+        "profileNote":"1–20 字。昵称、头像和完成成绩会公开显示在排行榜。",
+        "startGame":"开始游戏 · 开始计时 →",
+        "activePlayer":"挑战进行中",
+        "elapsedLabel":"本局用时",
+        "missionComplete":"MISSION COMPLETE · 挑战完成",
+        "completedSuffix":"，漂亮完赛！",
+        "resultSaved":"成绩已保存，已加入共享排行榜。",
+        "accuracyLabel":"正确率",
+        "totalTimeLabel":"总用时",
+        "averageLabel":"每题平均",
+        "unlockLesson":"已解锁 · 查看条件概率讲解 →",
+        "resultTimingNote":"总用时从开始游戏到最后一题提交成功，包含两题之间的抽球展示和切题时间；每题平均 = 总用时 ÷ 3。",
+        "leaderboardTitle":"实时排行榜",
+        "leaderboardIntro":"和其他玩家一起，挑战又准又快。",
+        "boardOverall":"✦ 综合榜",
+        "boardAccuracy":"◎ 正确率榜",
+        "boardSpeed":"ϟ 速度榜",
+        "rankColumn":"名次",
+        "playerColumn":"玩家",
+        "refreshBoard":"↻ 刷新排名",
+        "boardFootnote":"只记录完成的挑战；每次完整挑战独立上榜，展示前 50 名。",
+        "backToResults":"← 返回成绩与排行榜",
+        "lessonUnlocked":"✓ 通关后解锁",
+        "yourNickname":"你的昵称",
+        "namePlaceholder":"输入你的玩家昵称",
+        "startingGame":"正在连接并开始…",
+        "connectionError":"暂时无法连接游戏，请检查网络后重试。",
+        "startError":"开始连接未确认，请重试。重复点击不会创建重复挑战。",
+        "retryAnswer":"重试提交此答案",
+        "answerSaving":"正在提交答案…",
+        "answerError":"答案提交未确认，计时仍在继续。请重试提交同一个答案。",
+        "avatarNames":["星际猫咪", "灵巧狐狸", "宇宙熊猫", "幸运青蛙", "智慧猫头鹰", "元气小狗", "电子机器人", "外星访客", "幽灵队长", "太空探索者", "梦幻独角兽", "八爪高手"],
+        "boardRule_overall":"先比正确率，再比总用时；正确率和用时都相同则并列。",
+        "boardRule_accuracy":"按正确率从高到低排名；相同正确率并列，较快者先展示。",
+        "boardRule_speed":"按总用时从短到长排名；用时相同则并列，请同时留意正确率。",
+        "boardLive":"LIVE · 每 5 秒更新",
+        "boardOffline":"连接中断 · 可重试",
+        "boardError":"排行榜暂时无法连接，请点击刷新排名。你的已完成成绩仍已保存。",
+        "boardEmpty":"还没有完成的挑战。第一位上榜的会是你吗？",
+        "boardLoading":"正在获取共享排行榜…",
+        "boardCount":"共 {n} 次完整挑战",
+        "boardUpdated":"最近更新 {time}",
+        "boardStale":"显示上次成功更新的数据 · {time}",
+        "rankLabel":"第 {n} 名",
+        "correctCount":"答对 {n} / 3 题",
+        "yourRun":"本局",
+        "yourRanking":"你的本局排名：第 {n} 名 · 共 {total} 次完整挑战",
         pageTitle:"抽球猜颜色 · 概率游乐场",brand:"概率游乐场",tagline:"一点好奇，一点概率",howTo:"怎么玩",topic:"条件概率",
         title:"抽球，猜<em>颜色。</em>",subtitle:"球还是那些球。换一条线索，胜算会改变吗？",stamp:"让直觉遇见概率",
         step0:"所有球",step1:"带星星",step2:"无星星",score:"得分",observe:"01 — 观察球袋",orange:"橙色",blue:"蓝色",starred:"带星星",
@@ -204,7 +286,7 @@
         rule2:"<b>选概率</b>只看本轮参与的球，判断橙色球占多少。从三个答案里选一个。",
         rule3:"<b>抽球揭晓</b>答对得 1 分，满分 3 分。选完后随机抽一颗球，看结果！",
         ruleNote:"每个符合规则的球被抽中的机会相同，每轮结束后放回。分数只看概率判断，随机抽到的颜色不影响得分。概率高，也不代表每次都会发生。",
-        gotIt:"知道了，开始玩",restartTitle:"再来一局？",restartNote:"本局得分将清零，从第一轮重新开始。",complete:"三轮挑战 · 完成",
+        gotIt:"关闭规则",restartTitle:"再来一局？",restartNote:"退出当前挑战并返回玩家准备页。已保存的历史成绩会保留。",complete:"三轮挑战 · 完成",
         count0:"4 橙 / 8 颗",count1:"3 橙 / 4 颗",count2:"1 橙 / 4 颗",takeaway:"这就是<strong>条件概率</strong>：<br>在<strong>符合条件的球</strong>中，重新计算橙色球的比例。",
         playAgain:"再玩一局 ↗",backToGame:"返回查看最后一轮",summaryIntro:"同样一袋球，三个不同的概率。",
         summaryTitles:["每一次思考，都有收获。","你已经迈出了第一步！","离满分，只差一点点！","你发现了线索的力量！"],
@@ -241,6 +323,70 @@
         workedFormulaAria:"条件概率等于 {overlap}/{total} 除以 {eligible}/{total}，结果为 {fraction}。"
       },
       en: {
+        "loadingGame":"Connecting to the game…",
+        "retry":"Reconnect",
+        "flowRules":"01 Read the rules",
+        "flowPlayer":"02 Choose your player",
+        "flowPlay":"03 Timed challenge",
+        "flowRank":"04 Results & ranks",
+        "entryTitle":"Your mission starts here.",
+        "acceptRules":"I have read and understood",
+        "rulesConfirmed":"✓ Rules read and understood",
+        "timedRule":"<b>Race the clock</b>The timer starts when the game begins. Answer each of the 3 questions once. Your final answer stops the timer and saves your result.",
+        "rankingRule":"Overall ranking prioritizes accuracy, then the fastest time. The random draw does not affect your score. Finish all 3 questions to unlock the formula guide.",
+        "profileLockedTitle":"Your player identity is waiting",
+        "profileLockedNote":"Confirm the rules, then choose an avatar and enter your nickname.",
+        "playerReady":"Ready for a probability challenge?",
+        "nameLabel":"Player nickname",
+        "chooseAvatar":"Choose your avatar",
+        "randomAvatar":"⚄ Pick at random",
+        "profileNote":"1–20 characters. Your nickname, avatar and completed result will appear on the public leaderboard.",
+        "startGame":"Start game · Start timer →",
+        "activePlayer":"CHALLENGE IN PROGRESS",
+        "elapsedLabel":"ELAPSED TIME",
+        "missionComplete":"MISSION COMPLETE",
+        "completedSuffix":", challenge complete!",
+        "resultSaved":"Your result is saved to the shared leaderboard.",
+        "accuracyLabel":"Accuracy",
+        "totalTimeLabel":"Total time",
+        "averageLabel":"Average / question",
+        "unlockLesson":"Unlocked · Explore conditional probability →",
+        "resultTimingNote":"Total time runs from game start to acceptance of your final answer, including draws and transitions between questions. Average = total time ÷ 3.",
+        "leaderboardTitle":"Live leaderboard",
+        "leaderboardIntro":"Think clearly. Answer quickly. See where you stand.",
+        "boardOverall":"✦ Overall",
+        "boardAccuracy":"◎ Accuracy",
+        "boardSpeed":"ϟ Speed",
+        "rankColumn":"Rank",
+        "playerColumn":"Player",
+        "refreshBoard":"↻ Refresh rankings",
+        "boardFootnote":"Completed runs only. Each completed attempt is a separate entry. Showing the top 50.",
+        "backToResults":"← Back to results & leaderboard",
+        "lessonUnlocked":"✓ Unlocked by completing the game",
+        "yourNickname":"Your nickname",
+        "namePlaceholder":"Enter your player nickname",
+        "startingGame":"Connecting and starting…",
+        "connectionError":"Unable to connect. Check your network and try again.",
+        "startError":"The start was not confirmed. Retry safely; it will not create a duplicate game.",
+        "retryAnswer":"Retry the same answer",
+        "answerSaving":"Submitting your answer…",
+        "answerError":"Submission was not confirmed; the timer is still running. Retry the same answer.",
+        "avatarNames":["Cosmic cat", "Clever fox", "Space panda", "Lucky frog", "Wise owl", "Happy pup", "Circuit robot", "Alien explorer", "Ghost captain", "Astronaut", "Dream unicorn", "Octopus ace"],
+        "boardRule_overall":"Highest accuracy first, then shortest total time. Identical accuracy and time share a rank.",
+        "boardRule_accuracy":"Highest accuracy first. Equal accuracy shares a rank; faster runs are displayed first.",
+        "boardRule_speed":"Shortest total time first. Equal times share a rank. Check accuracy alongside speed.",
+        "boardLive":"LIVE · UPDATES EVERY 5s",
+        "boardOffline":"OFFLINE · RETRY",
+        "boardError":"Unable to load the leaderboard. Refresh to retry. Your completed result is still saved.",
+        "boardEmpty":"No completed runs yet. Who will take the first spot?",
+        "boardLoading":"Loading shared rankings…",
+        "boardCount":"{n} completed runs",
+        "boardUpdated":"Last updated {time}",
+        "boardStale":"Showing the last successful update · {time}",
+        "rankLabel":"RANK {n}",
+        "correctCount":"{n} / 3 correct",
+        "yourRun":"YOU",
+        "yourRanking":"Your run: rank {n} out of {total} completed runs",
         pageTitle:"Pick a Ball · Probability Playground",brand:"Probability Club",tagline:"A little curiosity. A little probability.",howTo:"How to play",topic:"CONDITIONAL PROBABILITY",
         title:"Pick a ball.<br>Guess the <em>odds.</em>",subtitle:"Same balls. A new clue. Will the chance of drawing orange change?",stamp:"INTUITION MEETS CHANCE",
         step0:"All balls",step1:"Starred",step2:"No stars",score:"Score",observe:"01 — EXPLORE THE BAG",orange:"Orange",blue:"Blue",starred:"Starred",
@@ -251,7 +397,7 @@
         rule2:"<b>Choose the probability</b>Look only at eligible balls. What fraction are orange? Pick one of three answers.",
         rule3:"<b>Reveal the draw</b>Earn 1 point for each correct answer, up to 3 points. Then see a randomly drawn ball!",
         ruleNote:"Every eligible ball has an equal chance of being drawn. All balls are replaced after each round. Points depend on your probability answer, not the drawn color. A high probability is not a guarantee.",
-        gotIt:"Got it. Let’s play!",restartTitle:"Ready for a fresh start?",restartNote:"Your score will reset and the game will return to round one.",complete:"THREE ROUNDS · COMPLETE",
+        gotIt:"Close rules",restartTitle:"Ready for a fresh start?",restartNote:"Leave this run and return to player setup. Previously saved results will remain on the leaderboard.",complete:"THREE ROUNDS · COMPLETE",
         count0:"4 orange / 8 balls",count1:"3 orange / 4 balls",count2:"1 orange / 4 balls",takeaway:"That’s <strong>conditional probability</strong>:<br>count the orange balls among <strong>only the balls that meet the condition</strong>.",
         playAgain:"Play again ↗",backToGame:"Back to the last round",summaryIntro:"The same bag. Three different probabilities.",
         summaryTitles:["Every attempt is a chance to learn.","You’ve taken the first step!","So close to a perfect score!","You’ve discovered the power of a clue!"],
@@ -289,6 +435,7 @@
       }
     };
   </script>
+  <script src="/flow.js"></script>
   <script>
     (() => {
       const $=id=>document.getElementById(id);
@@ -297,6 +444,8 @@
       let drawTimer=null;
       let drawnBall=null;
       let selectedValue=null;
+      let answerBusy=false;
+      let pendingValue=null;
       let language="zh";
       let lessonCondition=1;
       const conditionButtons=[...document.querySelectorAll(".condition-button")];
@@ -305,6 +454,12 @@
       const motionPreference=window.matchMedia("(prefers-reduced-motion: reduce)");
       try{if(localStorage.getItem("probability-club-language")==="en")language="en";}catch{}
       const t=(key,values={})=>Object.entries(values).reduce((text,[name,value])=>text.replaceAll(`{${name}}`,value),TRANSLATIONS[language][key]);
+      const flow=new ArcadeFlow({t,clearEffects:clearAnswerEffects,onSession:session=>{
+        state=BallGame.createState();state.score=session.score;state.results=session.results;
+        state.round=Math.min(session.answered,2);state.answered=session.completed;state.ready=session.completed;
+        selectedValue=session.completed?session.answers[2]:null;drawnBall=session.completed?BallGame.draw(2):null;
+        answerBusy=false;pendingValue=null;renderRound();
+      }});
       const ballHTML=ball=>`<span class="ball ${ball.color}" aria-hidden="true">${ball.star?'<span class="star">★</span>':""}</span>`;
       const colorName=ball=>t(ball.color);
       const fractionHTML=(numerator,denominator)=>`<span class="math-frac"><span>${numerator}</span><span>${denominator}</span></span>`;
@@ -341,12 +496,7 @@
         $("formula-numeric").innerHTML=fractionHTML(`${facts.overlap.length}/${facts.total}`,`${facts.eligible.length}/${facts.total}`)+"<span>=</span>"+fractionHTML(facts.overlap.length,facts.eligible.length)+(rawFraction!==fraction?`<span>=</span><strong>${fraction}</strong>`:"");
         $("formula-numeric").setAttribute("aria-label",t("workedFormulaAria",{overlap:facts.overlap.length,total:facts.total,eligible:facts.eligible.length,fraction}));
       }
-      function openLesson(){
-        clearAnswerEffects();
-        if($("summary-dialog").open)$("summary-dialog").close();
-        $("lesson-title").focus({preventScroll:true});
-        $("conditional-lesson").scrollIntoView({behavior:motionPreference.matches?"auto":"smooth",block:"start"});
-      }
+      function openLesson(){ flow.openLesson(); }
       function clearAnswerEffects(){
         if(effectsFrame!==null){cancelAnimationFrame(effectsFrame);effectsFrame=null;}
         if(effectsTimer!==null){clearTimeout(effectsTimer);effectsTimer=null;}
@@ -433,13 +583,8 @@
         document.querySelector(".intro-stamp").setAttribute("aria-label",t("stampAria"));
         $("ball-grid").setAttribute("aria-label",t("ballsAria"));
         choices.forEach((button,index)=>button.setAttribute("aria-label",t("choices")[index]));
-        renderSummary();
         renderLesson();
-      }
-      function renderSummary(){
-        $("final-score").textContent=state.score;
-        $("summary-title").textContent=t("summaryTitles")[state.score];
-        $("summary-intro").textContent=t("summaryIntro");
+        flow.render();
       }
       function renderRound(){
         const round=BallGame.rounds[state.round];
@@ -463,7 +608,7 @@
         $("draw-result").innerHTML="";
         $("next-button").hidden=true;
         $("next-button").disabled=false;
-        choices.forEach(button=>{button.disabled=false;button.className="choice";button.removeAttribute("aria-pressed");button.querySelector(".choice-mark").textContent="";});
+        choices.forEach(button=>{button.disabled=!flow.isPlaying()||answerBusy||pendingValue!==null;button.className="choice";button.removeAttribute("aria-pressed");button.querySelector(".choice-mark").textContent="";});
         for(let i=0;i<3;i++){
           const step=$(`step-${i}`);
           step.className=`step${i===state.round?" active":""}${i<state.round?" complete":""}`;
@@ -505,19 +650,38 @@
           $("next-label").textContent=t("drawingButton");
         }
       }
-      function choose(value){
-        const correct=BallGame.answer(state,value);
-        if(correct===null)return;
-        selectedValue=value;
-        renderAnswer();
-        playAnswerEffect(correct,choices.find(button=>Number(button.dataset.answer)===value));
-        drawTimer=setTimeout(()=>{
-          drawTimer=null;
-          drawnBall=BallGame.draw(state.round);
-          state.ready=true;
+      async function choose(value){
+        if(!flow.isPlaying()||answerBusy||state.answered||(pendingValue!==null&&value!==pendingValue))return;
+        answerBusy=true;pendingValue=value;
+        $("restart-open").disabled=true;
+        choices.forEach(button=>button.disabled=true);
+        $("answer-error").hidden=true;$("answer-retry").hidden=true;
+        $("feedback").textContent=t("answerSaving");
+        try{
+          const session=await flow.submit(state.round,value);
+          if(session.answered>state.round+1){
+            answerBusy=false;pendingValue=null;$("restart-open").disabled=false;
+            flow.onSession(session);
+            if(session.completed)flow.finish();
+            return;
+          }
+          selectedValue=session.answers[state.round];
+          state.answered=true;state.score=session.score;state.results=session.results;
+          pendingValue=null;answerBusy=false;
+          $("restart-open").disabled=false;
           renderAnswer();
-          if(!document.querySelector("dialog[open]"))$("next-button").focus({preventScroll:true});
-        },motionPreference.matches?80:1100);
+          playAnswerEffect(state.results[state.round],choices.find(button=>Number(button.dataset.answer)===selectedValue));
+          drawTimer=setTimeout(()=>{
+            drawTimer=null;drawnBall=BallGame.draw(state.round);state.ready=true;renderAnswer();
+            if(state.round===2)flow.finish();
+            else if(!document.querySelector("dialog[open]"))$("next-button").focus({preventScroll:true});
+          },motionPreference.matches?80:1100);
+        }catch{
+          answerBusy=false;
+          $("restart-open").disabled=false;
+          $("answer-error").textContent=t("answerError");$("answer-error").hidden=false;
+          $("answer-retry").hidden=false;$("answer-retry").focus();
+        }
       }
       function reset(){
         clearAnswerEffects();
@@ -525,17 +689,16 @@
         document.querySelectorAll("dialog[open]").forEach(dialog=>dialog.close());
         state=BallGame.createState();
         drawnBall=null;selectedValue=null;
-        renderRound();
-        choices[0].focus({preventScroll:true});
-        window.scrollTo({top:0,behavior:"smooth"});
+        answerBusy=false;pendingValue=null;
+        $("answer-error").hidden=true;$("answer-retry").hidden=true;
+        flow.prepare();renderRound();
       }
       choices.forEach(button=>button.addEventListener("click",()=>choose(Number(button.dataset.answer))));
       $("next-button").addEventListener("click",()=>{
         if(!state.answered||!state.ready)return;
         clearAnswerEffects();
         if(state.round===2){
-          renderSummary();
-          $("summary-dialog").showModal();
+          flow.finish();
           return;
         }
         state.round++;state.answered=false;state.ready=false;drawnBall=null;selectedValue=null;
@@ -547,7 +710,7 @@
       $("restart-open").addEventListener("click",()=>$("restart-dialog").showModal());
       $("restart-confirm").addEventListener("click",reset);
       $("play-again").addEventListener("click",reset);
-      $("lesson-jump").addEventListener("click",openLesson);
+      $("answer-retry").addEventListener("click",()=>choose(pendingValue));
       $("summary-lesson").addEventListener("click",openLesson);
       conditionButtons.forEach(button=>button.addEventListener("click",()=>{
         lessonCondition=Number(button.dataset.condition);
@@ -559,13 +722,14 @@
         try{localStorage.setItem("probability-club-language",language);}catch{}
         translateStatic();
         renderRound();
+        if(pendingValue!==null&&!answerBusy)$("answer-error").textContent=t("answerError");
       });
       document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>$(button.dataset.close).close()));
       document.querySelectorAll("dialog").forEach(dialog=>dialog.addEventListener("click",event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
       window.addEventListener("resize",clearAnswerEffects);
       motionPreference.addEventListener("change",clearAnswerEffects);
       document.addEventListener("visibilitychange",()=>{if(document.hidden)clearAnswerEffects();});
-      translateStatic();renderRound();
+      translateStatic();renderRound();flow.init();
     })();
   </script>
 </body>

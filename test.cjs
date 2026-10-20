@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
-const html = fs.readFileSync("dist/index.html", "utf8");
+const html = fs.readFileSync("web/index.html", "utf8");
 const context = {};
 vm.createContext(context);
 vm.runInContext(html.match(/<script id="game-engine">([\s\S]*?)<\/script>/)[1] + "\nglobalThis.game = BallGame;", context);
@@ -55,6 +55,9 @@ assert.equal(fresh.score, 0);
 assert.equal(fresh.answered, false);
 assert.equal(game.answer(fresh, 0.9), null);
 for (const script of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)) new vm.Script(script[1]);
+new vm.Script(fs.readFileSync("public/flow.js", "utf8"));
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(ids.length, new Set(ids).size, "Every UI element must have a unique ID");
 vm.runInContext(html.match(/<script id="translations">([\s\S]*?)<\/script>/)[1] + "\nglobalThis.copy = TRANSLATIONS;", context);
 assert.deepEqual(Object.keys(context.copy.zh).sort(), Object.keys(context.copy.en).sort());
 for (const match of html.matchAll(/data-i18n="([^"]+)"/g)) {
@@ -68,5 +71,6 @@ for (const locale of ["zh", "en"]) {
   assert.equal(context.copy[locale].eventBs.length, 3);
   assert.equal(context.copy[locale].eventIntersections.length, 3);
   assert.equal(context.copy[locale].lessonMembership.length, 3);
+  assert.equal(context.copy[locale].avatarNames.length, 12);
 }
 console.log("PASS: ball counts, conditional probabilities and illustrated derivations, uniform eligible draws, score locking, reset, translation coverage, and JavaScript syntax.");
