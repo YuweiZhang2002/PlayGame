@@ -1,0 +1,50 @@
+# 抽球猜颜色 · Probability Club
+
+一个可直接玩的中英文条件概率课堂小游戏。A small, bilingual classroom game about conditional probability.
+
+## Play / 开始游戏
+
+Open `dist/index.html` in a modern browser. No installation, build step, external libraries, or network connection is required.
+
+直接用浏览器打开 `dist/index.html` 即可。右上角的 **EN / 中文** 按钮切换语言，保留本轮答案、抽球结果和分数。浏览器只在本地保存语言偏好；刷新页面会重新开始游戏。
+
+For a local web server / 本地预览：
+
+```sh
+python3 -m http.server 8765 --directory dist
+```
+
+Then open `http://localhost:8765`.
+
+## Rules / 游戏规则
+
+The bag contains 8 balls: 4 orange and 4 blue. Three orange balls and one blue ball have a star.
+
+| Round / 轮次 | Eligible balls / 参与抽取的球 | P(orange) / 橙色概率 |
+| --- | --- | --- |
+| 1 | All balls / 所有球 | 4/8 = 1/2 |
+| 2 | Starred balls / 带星星 | 3/4 |
+| 3 | Balls without stars / 不带星星 | 1/4 |
+
+Choose one of three probabilities each round. A correct first answer earns 1 point; the maximum score is 3. After answering, one eligible ball is sampled uniformly at random. The drawn color does not affect the score. Every round starts with the full bag.
+
+每轮选择一个概率，答对得 1 分，满分 3 分。作答后从符合条件的球中等概率抽取一颗，抽取结果不影响得分。每轮放回全部球。
+
+The final recap explains the key idea: calculate the proportion of orange balls **among only the balls that meet the condition**.
+
+## Checks / 检查
+
+```sh
+node test.cjs
+```
+
+Tests cover ball counts, all three probabilities, eligible draw intervals, duplicate-answer protection, scoring, reset state, language-key parity, and JavaScript syntax.
+
+Browser checks cover correct and incorrect answers, all three rounds, mid-game language switching, translated instructions, the results screen, and replay.
+
+## Files / 文件
+
+- `dist/index.html`: self-contained game, styles, and both languages.
+- `test.cjs`: dependency-free Node.js tests.
+
+Publish the contents of `dist/` using any static hosting service. The game does not require a backend.
