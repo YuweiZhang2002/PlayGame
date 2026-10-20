@@ -1,0 +1,23 @@
+default:
+  image: node:24-bookworm-slim
+
+test-game:
+  stage: test
+  script:
+    - node test.cjs
+    - node test-server.mjs
+    - node test-standalone.mjs
+    - node test-pages.mjs
+
+deploy-pages:
+  stage: deploy
+  needs: [test-game]
+  variables:
+    PAGES_TARGET: gitlab
+  script:
+    - node scripts/build-pages.mjs
+  pages:
+    publish: gitlab-pages
+    expire_in: never
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $GAME_API_URL

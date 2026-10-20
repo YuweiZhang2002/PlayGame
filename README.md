@@ -78,6 +78,18 @@ The English speech and slide deck are separate teaching documents, not website r
 
 ## Local development / 本地运行
 
+### GitLab migration preparation
+
+The GitLab CI configuration, portable Pages builder and independent Node.js
+backend are described in [`GITLAB-DEPLOYMENT.md`](GITLAB-DEPLOYMENT.md). Deployment
+to a new backend and GitLab Pages is required before the live game can operate
+independently of `chatgpt.site`.
+
+The standalone server runs on Node.js 24 and persists results in SQLite. It
+serves the game, lesson and API together, and can also accept the configured
+GitLab Pages origin. Run `npm run start:standalone` for local use; attach durable
+storage for production.
+
 ### GitHub Pages publishing
 
 After editing `web/index.html` or `public/`, regenerate the static pages and commit the updated `docs/` files:

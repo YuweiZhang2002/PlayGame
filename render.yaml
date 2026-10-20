@@ -1,0 +1,24 @@
+# Paid resources: review Render's displayed estimate before applying this Blueprint.
+services:
+  - type: web
+    name: group12-probability-game
+    runtime: node
+    region: singapore
+    plan: 0.5c-512mb
+    buildCommand: node --version
+    startCommand: node server/standalone.mjs
+    healthCheckPath: /healthz
+    numInstances: 1
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /var/data/game.sqlite
+      - key: GAME_ALLOWED_ORIGINS
+        sync: false
+    disk:
+      name: game-results
+      mountPath: /var/data
+      sizeGB: 1

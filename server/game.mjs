@@ -49,10 +49,10 @@ async function body(request) {
   try { return JSON.parse(text); } catch { throw new Error("invalid_input"); }
 }
 
-export async function handleGameRequest(request, db, now = Date.now()) {
+export async function handleGameRequest(request, db, now = Date.now(), allowedOrigins = [PAGES_ORIGIN]) {
   const origin = request.headers.get("origin");
   const crossOrigin = origin && origin !== new URL(request.url).origin;
-  if (crossOrigin && origin !== PAGES_ORIGIN) return json({ error: "wrong_origin" }, 403);
+  if (crossOrigin && !allowedOrigins.includes(origin)) return json({ error: "wrong_origin" }, 403);
   let response;
   if (request.method === "OPTIONS") {
     const method = request.headers.get("access-control-request-method");
@@ -67,8 +67,8 @@ export async function handleGameRequest(request, db, now = Date.now()) {
   } else {
     response = await handleGameAction(request, db, now);
   }
-  if (origin === PAGES_ORIGIN) {
-    response.headers.set("Access-Control-Allow-Origin", PAGES_ORIGIN);
+  if (origin && allowedOrigins.includes(origin)) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
     response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     response.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
     response.headers.set("Access-Control-Max-Age", "600");
