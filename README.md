@@ -36,6 +36,22 @@ Correct answers trigger colorful confetti, a soft glow, and a +1 badge. Incorrec
 
 The final recap explains the key idea: calculate the proportion of orange balls **among only the balls that meet the condition**.
 
+## Visual explanation / 可视化讲解
+
+Below the game, switch between the three conditions to see the eligible set **B** and the orange intersection **A ∩ B**. The ball diagram, numerator, denominator, and worked formula update together. This exploration does not change the game score.
+
+游戏下方提供中英文可视化讲解：切换条件，观察范围 B 和交集 A ∩ B，并把球数对应到条件概率公式：
+
+```text
+P(A | B) = P(A ∩ B) / P(B), where P(B) > 0
+
+All balls / 所有球:     (4/8) / (8/8) = 1/2
+Starred / 带星星:       (3/8) / (4/8) = 3/4
+No stars / 不带星星:    (1/8) / (4/8) = 1/4
+```
+
+The guide explains why probabilities are first calculated over the original eight equally likely balls, why the denominator changes after conditioning, and how joint probability differs from conditional probability.
+
 ## Checks / 检查
 
 ```sh

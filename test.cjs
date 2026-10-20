@@ -11,8 +11,20 @@ assert.equal(game.balls.filter(b => b.color === "orange").length, 4);
 assert.equal(game.balls.filter(b => b.star && b.color === "orange").length, 3);
 assert.equal(game.balls.filter(b => b.star && b.color === "blue").length, 1);
 const expected = [0.5, 0.75, 0.25];
+const explanationCases = [
+  {eligible:8,overlap:4,joint:0.5,condition:1},
+  {eligible:4,overlap:3,joint:0.375,condition:0.5},
+  {eligible:4,overlap:1,joint:0.125,condition:0.5}
+];
 expected.forEach((probability, round) => {
   assert.equal(game.probability(round), probability);
+  const explanation=game.explanation(round),expectedExplanation=explanationCases[round];
+  assert.equal(explanation.total,8);
+  assert.equal(explanation.eligible.length,expectedExplanation.eligible);
+  assert.equal(explanation.overlap.length,expectedExplanation.overlap);
+  assert.equal(explanation.jointProbability,expectedExplanation.joint);
+  assert.equal(explanation.conditionProbability,expectedExplanation.condition);
+  assert.equal(explanation.jointProbability/explanation.conditionProbability,probability,"The illustrated formula must agree with the actual game probability");
   const eligible = game.pool(round);
   const counts = {};
   // Deterministic stratified inputs verify every draw interval and the filter.
@@ -53,5 +65,8 @@ for (const locale of ["zh", "en"]) {
   assert.equal(context.copy[locale].clues.length, 3);
   assert.equal(context.copy[locale].explanations.length, 3);
   assert.equal(context.copy[locale].summaryTitles.length, 4);
+  assert.equal(context.copy[locale].eventBs.length, 3);
+  assert.equal(context.copy[locale].eventIntersections.length, 3);
+  assert.equal(context.copy[locale].lessonMembership.length, 3);
 }
-console.log("PASS: ball counts, conditional probabilities, uniform eligible draws, score locking, reset, translation coverage, and JavaScript syntax.");
+console.log("PASS: ball counts, conditional probabilities and illustrated derivations, uniform eligible draws, score locking, reset, translation coverage, and JavaScript syntax.");

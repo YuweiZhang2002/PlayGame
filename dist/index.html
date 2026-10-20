@@ -34,6 +34,18 @@
     @keyframes answer-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px) rotate(-1deg)}40%{transform:translateX(6px) rotate(1deg)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
     @keyframes answer-ripple{from{opacity:.8;transform:scale(.98)}to{opacity:0;transform:scale(1.22)}}
     @keyframes score-bounce{0%,100%{transform:scale(1)}40%{transform:scale(1.2);color:#50773d}}
+    .lesson-jump{display:flex;justify-content:center;padding:4px 0 17px}.lesson-link{border:0;background:none;color:#5b7649;padding:8px 13px;font-size:12px;text-decoration:underline;text-underline-offset:5px}
+    .lesson{border-top:1px solid var(--line);margin-top:18px;padding:43px 0 20px;scroll-margin-top:28px}.lesson-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.lesson-heading h2{font-size:30px;line-height:1.35;letter-spacing:-.035em;margin:9px 0 12px}.lesson-heading p{font-size:14px;color:#77846d;max-width:710px;margin:0}.lesson-time{flex-shrink:0;white-space:nowrap;font-size:11px;color:#788c65;border:1px solid #d8e1cc;border-radius:20px;padding:6px 11px;margin-top:26px}
+    .condition-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:25px 0 17px}.condition-controls>span{color:#7e8b72;font-size:11px;margin-right:4px}.condition-button{border:1px solid #d5dfcb;background:#fdfef6;border-radius:22px;padding:8px 16px;color:#6b7e5b;font-size:12px;transition:background .2s,border-color .2s,color .2s}.condition-button:hover{border-color:#89a56d;background:#eef3e7}.condition-button[aria-pressed="true"]{background:#365b42;color:#f8fff1;border-color:#365b42}
+    .lesson-explorer{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);border:1px solid #d6dfce;border-radius:19px;overflow:hidden;background:#fffef8}.lesson-universe{padding:25px 28px;background:#eff3e8}.lesson-step-label{font-size:10px;letter-spacing:.08em;color:#798e67;font-weight:650}.lesson-universe h3,.lesson-count h3{font-size:17px;line-height:1.5;margin:8px 0 6px;letter-spacing:-.02em}.lesson-universe>p,.lesson-count>p{color:#839075;font-size:11px;margin:0}
+    .lesson-balls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:21px 0 17px}.lesson-ball-cell{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 7px;border:1.5px solid #a7ba91;border-radius:13px;background:#f9fcf3;transition:opacity .35s,background .35s,border-color .35s}.lesson-ball-cell.excluded{opacity:.23;background:transparent;border-color:transparent}.lesson-ball-cell.intersection{border-color:#d69a6b;background:#fff7e8}.lesson-ball-cell .ball{width:45px;height:45px}.lesson-ball-cell .ball:before{top:8px;left:8px;width:13px}.lesson-ball-cell .star{font-size:22px}.lesson-ball-cell small{font-size:9px;color:#697d58;line-height:1.3}.lesson-legend{display:flex;gap:15px;flex-wrap:wrap;font-size:10px;color:#728561}.legend-square{display:inline-block;border:1.5px solid #96af7b;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:5px}.legend-square.overlap{background:#f9e0c5;border-color:#d69a6b}
+    .lesson-count{padding:25px 28px}.count-ratio{max-width:290px;margin:16px auto 8px}.count-part{display:flex;align-items:center;gap:14px;padding:11px 3px}.count-part:first-child{border-bottom:1.5px solid #9aa78b}.count-part strong{font-family:Georgia,serif;font-size:44px;line-height:1;min-width:35px;font-weight:400;color:#51713b}.count-part:first-child strong{color:#bf7945}.count-part span.count-label{display:block;font-size:10px;line-height:1.5;color:#849175;margin-bottom:7px}.mini-balls{display:flex;flex-wrap:wrap;gap:6px}.mini-balls .ball{width:21px;height:21px;box-shadow:inset -1px -2px 3px #63351115;flex-shrink:0}.mini-balls .ball:before{display:none}.mini-balls .star{font-size:12px}.lesson-probability{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:10px 0 5px;font-size:14px;color:#80906c}.lesson-probability strong{font-family:Georgia,serif;font-weight:400;font-size:31px;color:#4b6d3b}.lesson-probability .probability-percent{font-family:inherit;font-size:15px;color:#6a8356}.lesson-narration{font-size:11px;text-align:center;color:#788c65;line-height:1.7;margin:9px 0 0;min-height:36px}
+    .formula-section{margin-top:19px;padding:26px 29px 25px;background:#fffef8;border:1px solid #dce3d3;border-radius:18px}.formula-heading{display:flex;gap:14px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}.formula-heading h3{font-size:19px;letter-spacing:-.02em;margin:0}.formula-heading p{font-size:11px;color:#899579;margin:0}.event-definitions{display:grid;grid-template-columns:1fr 1fr 1.45fr;gap:10px;margin:18px 0}.event-definition{display:flex;align-items:center;gap:10px;background:#f1f5e9;padding:10px 12px;border-radius:9px;font-size:11px;line-height:1.5;color:#718362}.event-symbol{font-family:Georgia,serif;font-size:22px;color:#5c7d42;white-space:nowrap}.event-definition:first-child{background:#fbf0df;color:#9b7955}.event-definition:first-child .event-symbol,.intersection-color{color:#bd7542}
+    .formula-general{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:13px;margin:21px 0 8px;font-family:Georgia,"Times New Roman",serif;font-size:26px;color:#3f5e32}.math-frac{display:inline-flex;flex-direction:column;align-items:stretch;text-align:center;font-family:Georgia,"Times New Roman",serif;line-height:1.25;vertical-align:middle}.math-frac>span:first-child{border-bottom:1.3px solid currentColor;padding:0 10px 5px}.math-frac>span:last-child{padding:5px 10px 0}.formula-general .formula-precondition{font-size:14px;color:#839571;margin-left:8px}.formula-gloss{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;font-size:11px;color:#8b967c;margin:13px 0 20px}.formula-gloss b{font-family:Georgia,serif;font-size:16px;font-weight:400;color:#627b4f;margin-right:5px}
+    .formula-worked{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:22px;align-items:center;background:#f0f4e7;border-radius:11px;padding:18px 21px}.formula-worked h4{font-size:12px;margin:0 0 9px;color:#587543}.formula-probabilities{display:grid;gap:7px;font-family:Georgia,serif;font-size:18px;color:#70875b}.formula-probabilities span{display:flex;gap:8px;align-items:center}.formula-probabilities small{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:10px;color:#8a987a}.formula-numeric{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:13px;font-family:Georgia,serif;font-size:25px;color:#4d6b3b}.formula-numeric>strong{font-weight:400;font-size:31px}.formula-numeric .math-frac>span{padding-left:8px;padding-right:8px}.formula-note{margin:16px 0 0;font-size:11px;color:#81916e;line-height:1.8}.formula-note strong{color:#5b7845;font-weight:600}
+    .lesson-think{margin:17px 0 0;border:1px solid #dce4d2;border-radius:11px;background:#f3f6ec;overflow:hidden}.lesson-think summary{cursor:pointer;padding:14px 18px;color:#637e4e;font-size:12px;font-weight:600;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:15px}.lesson-think summary::-webkit-details-marker{display:none}.lesson-think summary:after{content:"+";font-size:20px;font-weight:400}.lesson-think[open] summary:after{content:"−"}.lesson-think summary:focus-visible{outline:3px solid #b77332;outline-offset:-4px}.lesson-think p{padding:0 18px 16px;margin:0;font-size:12px;color:#7b8a6b;line-height:1.9}.lesson-memory{display:flex;gap:13px;align-items:flex-start;margin:20px 0 0;padding:4px 3px;color:#70885c;font-size:12px;line-height:1.9}.lesson-memory>span{font-size:19px;color:#a8b88c}.lesson-memory p{margin:0}.lesson-memory strong{color:#486e36}.summary .lesson-secondary{display:block;width:100%;border:1px solid #cdd9bf;border-radius:9px;background:transparent;color:#6d8358;padding:11px 16px;font-size:13px;margin-top:10px}
+    @media(max-width:850px){.lesson-universe,.lesson-count{padding:21px 18px}.lesson-balls{gap:7px}.lesson-ball-cell .ball{width:39px;height:39px}.lesson-ball-cell .star{font-size:19px}.event-definitions{grid-template-columns:1fr 1fr}.event-definition:last-child{grid-column:1/-1}.formula-numeric{gap:9px;font-size:22px}}
+    @media(max-width:650px){.lesson{padding-top:29px;margin-top:12px}.lesson-heading h2{font-size:25px}.lesson-heading p{font-size:12px}.lesson-time{display:none}.condition-controls{gap:7px;margin-top:19px}.condition-controls>span{width:100%;margin-bottom:2px}.condition-button{padding:8px 13px;font-size:11px}.lesson-explorer{grid-template-columns:1fr}.lesson-universe,.lesson-count{padding:21px}.lesson-balls{max-width:340px;margin:19px auto 15px;gap:9px}.lesson-ball-cell .ball{width:43px;height:43px}.lesson-ball-cell .star{font-size:20px}.lesson-count{border-top:1px solid #dbe3d0}.lesson-narration{min-height:0}.formula-section{padding:22px 18px}.formula-heading h3{font-size:18px}.event-definitions{gap:8px}.event-definition{padding:10px;font-size:10px}.event-symbol{font-size:20px}.formula-general{font-size:23px;gap:9px}.formula-general .formula-precondition{font-size:12px;flex-basis:100%;text-align:center;margin:5px 0 0}.formula-gloss{gap:9px 17px;font-size:10px}.formula-worked{grid-template-columns:1fr;gap:18px;padding:16px}.formula-numeric{padding-top:14px;border-top:1px solid #d6dfc9}.formula-numeric>strong{font-size:30px}.lesson-think summary{font-size:11px;padding:13px 15px}.lesson-memory{font-size:11px}.lesson-jump{padding-bottom:8px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.choice.effect-wrong:after{display:none}}
   </style>
 </head>
@@ -79,6 +91,48 @@
         </div>
       </section>
       <div class="underboard"><p data-i18n="tip">小提示：变淡的球不参与本轮抽取；每轮都会放回全部球。</p><button id="restart-open" class="text-button"><span class="reset-icon" aria-hidden="true">↻</span><span data-i18n="restart">重新开始</span></button></div>
+      <div class="lesson-jump"><button class="lesson-link" id="lesson-jump" data-i18n="lessonJump">玩完后，看看概率为什么会变 ↓</button></div>
+      <section class="lesson" id="conditional-lesson" aria-labelledby="lesson-title">
+        <div class="lesson-heading"><div><div class="eyebrow">THE WHY BEHIND THE GAME</div><h2 id="lesson-title" tabindex="-1" data-i18n="lessonTitle">从这袋球，走到条件概率。</h2><p data-i18n="lessonIntro">条件概率，就是知道一个条件成立后，重新计算目标事件的概率。先看图，再把刚才的动作写成公式。</p></div><span class="lesson-time" data-i18n="lessonTime">2 分钟 · 看图理解</span></div>
+        <div class="condition-controls" role="group" aria-labelledby="condition-label"><span id="condition-label" data-i18n="conditionLabel">点击，换一个条件 B：</span>
+          <button class="condition-button" data-condition="0" aria-pressed="false" data-i18n="lessonAll">◎ 所有球</button>
+          <button class="condition-button" data-condition="1" aria-pressed="true" data-i18n="lessonStarred">★ 带星星</button>
+          <button class="condition-button" data-condition="2" aria-pressed="false" data-i18n="lessonUnstarred">○ 不带星星</button>
+        </div>
+        <div class="lesson-explorer">
+          <div class="lesson-universe"><div class="lesson-step-label" data-i18n="lessonStepOne">01 / 条件决定看哪些球</div><h3 data-i18n="universeTitle">原来的范围：8 颗等可能的球</h3><p data-i18n="universeNote">条件之外的球变淡；亮起的球组成新的参照范围 B。</p>
+            <div class="lesson-balls" id="lesson-balls" role="list" aria-label="条件概率示意图"></div>
+            <div class="lesson-legend"><span><i class="legend-square" aria-hidden="true"></i><span data-i18n="conditionLegend">B：符合条件</span></span><span><i class="legend-square overlap" aria-hidden="true"></i><span data-i18n="overlapLegend">A ∩ B：同时符合条件且为橙色</span></span></div>
+          </div>
+          <div class="lesson-count"><div class="lesson-step-label" data-i18n="lessonStepTwo">02 / 在这个范围里重新计数</div><h3 data-i18n="countTitle">符合目标的球 ÷ 符合条件的球</h3><p data-i18n="countNote">每颗球等可能，所以可以直接比较数量。</p>
+            <div class="count-ratio">
+              <div class="count-part"><strong id="lesson-overlap-count">3</strong><div><span class="count-label" data-i18n="overlapCountLabel">A ∩ B：既是橙色，又符合条件</span><div class="mini-balls" id="lesson-overlap-balls" aria-hidden="true"></div></div></div>
+              <div class="count-part"><strong id="lesson-condition-count">4</strong><div><span class="count-label" data-i18n="conditionCountLabel">B：所有符合条件的球</span><div class="mini-balls" id="lesson-condition-balls" aria-hidden="true"></div></div></div>
+            </div>
+            <div class="lesson-probability"><span>=</span><strong id="lesson-result">3/4</strong><span>=</span><span class="probability-percent" id="lesson-percent">75%</span></div>
+            <div class="lesson-narration" id="lesson-narration" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="formula-section">
+          <div class="formula-heading"><h3 data-i18n="formulaTitle">03 / 把图里的关系，写成公式</h3><p data-i18n="formulaSubtitle">字母对应的，就是刚才那几颗球。</p></div>
+          <div class="event-definitions">
+            <div class="event-definition"><span class="event-symbol">A</span><span data-i18n="eventA">抽到橙色球</span></div>
+            <div class="event-definition"><span class="event-symbol">B</span><span id="event-b"></span></div>
+            <div class="event-definition"><span class="event-symbol intersection-color">A ∩ B</span><span id="event-intersection"></span></div>
+          </div>
+          <div class="formula-general" id="formula-general" role="math">
+            <span>P(A | B)</span><span>=</span><span class="math-frac"><span class="intersection-color">P(A ∩ B)</span><span>P(B)</span></span><span class="formula-precondition">P(B) &gt; 0</span>
+          </div>
+          <div class="formula-gloss"><span data-i18n="givenGloss"><b>|</b>读作“在……条件下”</span><span data-i18n="intersectionGloss"><b>∩</b>表示“两件事同时发生”</span></div>
+          <div class="formula-worked">
+            <div><h4 data-i18n="originalDenominator">先从原来的 8 颗球计算：</h4><div class="formula-probabilities"><span id="joint-probability"></span><span id="condition-probability"></span></div></div>
+            <div class="formula-numeric" id="formula-numeric" role="math"></div>
+          </div>
+          <p class="formula-note" data-i18n="formulaNote">除以 P(B)，就是把<strong>符合条件 B 的范围重新当成整体</strong>。在本游戏中，“都除以 8”会约掉，所以最后就是<strong>符合目标且符合条件的球数 ÷ 符合条件的球数</strong>。</p>
+        </div>
+        <details class="lesson-think"><summary data-i18n="lessonQuestion">想一想：只抽带星星的球时，为什么不是 3/8？</summary><p data-i18n="lessonAnswer">3/8 是从全部 8 颗球中抽到“橙色且带星星”的概率，也就是 P(A ∩ B)。但已知只抽带星星的球后，参照范围变成了 4 颗带星星的球，因此 P(A | B) = 3/4。</p></details>
+        <div class="lesson-memory"><span aria-hidden="true">✦</span><p data-i18n="lessonMemory"><strong>先看条件留下了谁，再看里面有多少符合目标。</strong><br>3/4 描述的是抽取概率，单次仍可能抽到蓝色球。</p></div>
+      </section>
     </main>
     <footer class="footer"><span data-i18n="footer">每一次选择，都是一个小实验。</span><span class="footer-note" data-i18n="footerNote">概率论 · 课堂互动小游戏</span></footer>
   </div>
@@ -104,7 +158,8 @@
       <p class="summary-intro" id="summary-intro">同样一袋球，三个不同的概率。</p>
       <div class="recap"><div><span data-i18n="step0">所有球</span><strong>1/2</strong><small data-i18n="count0">4 橙 / 8 颗</small></div><div><span data-i18n="step1">带星星</span><strong>3/4</strong><small data-i18n="count1">3 橙 / 4 颗</small></div><div><span data-i18n="step2">无星星</span><strong>1/4</strong><small data-i18n="count2">1 橙 / 4 颗</small></div></div>
       <p class="takeaway" data-i18n="takeaway">这就是<strong>条件概率</strong>：<br>在<strong>符合条件的球</strong>中，重新计算橙色球的比例。</p>
-      <button class="next-button" id="play-again" data-i18n="playAgain">再玩一局 ↗</button>
+      <button class="next-button" id="summary-lesson" data-i18n="summaryLesson">看图理解条件概率 ↓</button>
+      <button class="lesson-secondary" id="play-again" data-i18n="playAgain">再玩一局 ↗</button>
       <button class="text-button" data-close="summary-dialog" data-i18n="backToGame">返回查看最后一轮</button>
     </div>
   </dialog>
@@ -126,10 +181,14 @@
       ].map(Object.freeze));
       function pool(round){return balls.filter(rounds[round].accept);}
       function probability(round){const eligible=pool(round);return eligible.filter(ball=>ball.color==="orange").length/eligible.length;}
+      function explanation(round){
+        const eligible=pool(round),overlap=eligible.filter(ball=>ball.color==="orange");
+        return {total:balls.length,eligible,overlap,jointProbability:overlap.length/balls.length,conditionProbability:eligible.length/balls.length};
+      }
       function draw(round,random=Math.random){const eligible=pool(round);return eligible[Math.floor(random()*eligible.length)];}
       function createState(){return {round:0,score:0,answered:false,ready:false,results:[]};}
       function answer(state,value){if(state.answered||![.25,.5,.75].includes(value))return null;const correct=value===probability(state.round);state.answered=true;if(correct)state.score++;state.results.push(correct);return correct;}
-      return Object.freeze({balls,rounds,pool,probability,draw,createState,answer});
+      return Object.freeze({balls,rounds,pool,probability,explanation,draw,createState,answer});
     })();
   </script>
   <script id="translations">
@@ -158,7 +217,28 @@
         result:"这次抽到了<strong>{color}球</strong>",randomNote:"单次结果有随机性，概率高也不保证抽中。",
         next:"下一轮，换条线索",finish:"看看我的成绩",closeRules:"关闭游戏规则",closeRestart:"取消重新开始",
         gameAria:"抽球游戏",progressAria:"游戏进度",ballsAria:"球袋中的八颗球",stampAria:"三轮小游戏",
-        ballAria:"{color}球，{star}，{eligible}",hasStar:"带星星",noStar:"无星星",eligible:"参与本轮抽取",excluded:"不参与本轮抽取",orangeShort:"橙",blueShort:"蓝"
+        ballAria:"{color}球，{star}，{eligible}",hasStar:"带星星",noStar:"无星星",eligible:"参与本轮抽取",excluded:"不参与本轮抽取",orangeShort:"橙",blueShort:"蓝",
+        lessonJump:"玩完后，看看概率为什么会变 ↓",lessonTitle:"从这袋球，走到条件概率。",
+        lessonIntro:"条件概率，就是知道一个条件成立后，重新计算目标事件的概率。先看图，再把刚才的动作写成公式。",
+        lessonTime:"2 分钟 · 看图理解",conditionLabel:"点击，换一个条件 B：",lessonAll:"◎ 所有球",lessonStarred:"★ 带星星",lessonUnstarred:"○ 不带星星",
+        lessonStepOne:"01 / 条件决定看哪些球",universeTitle:"原来的范围：8 颗等可能的球",universeNote:"条件之外的球变淡；亮起的球组成新的参照范围 B。",
+        conditionLegend:"亮起的球：B",overlapLegend:"橙色框：A ∩ B",lessonStepTwo:"02 / 在这个范围里重新计数",
+        countTitle:"符合目标的球 ÷ 符合条件的球",countNote:"每颗球等可能，所以可以直接比较数量。",
+        overlapCountLabel:"A ∩ B：既是橙色，又符合条件",conditionCountLabel:"B：所有符合条件的球",
+        lessonNarration:"在符合条件的 {eligible} 颗球里，有 {overlap} 颗橙色球：{fraction}。",
+        formulaTitle:"03 / 把图里的关系，写成公式",formulaSubtitle:"字母对应的，就是刚才那几颗球。",eventA:"抽到橙色球",
+        eventBs:["抽到任意一颗球（必然事件）","抽到带星星的球","抽到不带星星的球"],
+        eventIntersections:["抽到橙色球","抽到橙色且带星星的球","抽到橙色且不带星星的球"],
+        givenGloss:"<b>|</b>读作“在……条件下”",intersectionGloss:"<b>∩</b>表示“两件事同时发生”",
+        originalDenominator:"先从原来的 8 颗球计算：",
+        formulaNote:"除以 P(B)，就是把<strong>符合条件 B 的范围重新当成整体</strong>。在本游戏中，“都除以 8”会约掉，所以最后就是<strong>符合目标且符合条件的球数 ÷ 符合条件的球数</strong>。",
+        lessonQuestion:"想一想：只抽带星星的球时，为什么不是 3/8？",
+        lessonAnswer:"在这个问题中，把 B 设为“带星星”。3/8 是从全部 8 颗球中抽到“橙色且带星星”的概率，也就是 P(A ∩ B)。但已知只抽带星星的球后，参照范围变成了 4 颗带星星的球，因此 P(A | B) = 3/4。",
+        lessonMemory:"<strong>先看条件留下了谁，再看里面有多少符合目标。</strong><br>例如，只抽带星星的球时，3/4 是抽到橙色球的概率，单次仍可能抽到蓝色球。",
+        summaryLesson:"看图理解条件概率 ↓",lessonDiagramAria:"八颗球的条件概率示意图",
+        lessonBallAria:"{color}球，{star}，{membership}",lessonMembership:["不在条件 B 中","在条件 B 中","在交集 A ∩ B 中，也在条件 B 中"],
+        formulaAria:"A 在 B 条件下的概率，等于 A 与 B 同时发生的概率除以 B 的概率。要求 B 的概率大于零。",
+        workedFormulaAria:"条件概率等于 {overlap}/{total} 除以 {eligible}/{total}，结果为 {fraction}。"
       },
       en: {
         pageTitle:"Pick a Ball · Probability Playground",brand:"Probability Club",tagline:"A little curiosity. A little probability.",howTo:"How to play",topic:"CONDITIONAL PROBABILITY",
@@ -184,7 +264,28 @@
         result:"You drew an <strong>{color} ball</strong>",randomNote:"One draw is random. A high probability is not a guarantee.",
         next:"Next round, new clue",finish:"See my results",closeRules:"Close game rules",closeRestart:"Cancel restart",
         gameAria:"Ball drawing game",progressAria:"Game progress",ballsAria:"The eight balls in the bag",stampAria:"Three rounds",
-        ballAria:"{color} ball, {star}, {eligible}",hasStar:"starred",noStar:"no star",eligible:"eligible this round",excluded:"excluded this round",orangeShort:"O",blueShort:"B"
+        ballAria:"{color} ball, {star}, {eligible}",hasStar:"starred",noStar:"no star",eligible:"eligible this round",excluded:"excluded this round",orangeShort:"O",blueShort:"B",
+        lessonJump:"Finished playing? See why the odds changed ↓",lessonTitle:"From a bag of balls to a formula.",
+        lessonIntro:"Conditional probability is the chance of an event when we know a condition holds. Start with the picture, then turn what you counted into a formula.",
+        lessonTime:"2 MIN · A VISUAL GUIDE",conditionLabel:"Click to change condition B:",lessonAll:"◎ All balls",lessonStarred:"★ Starred",lessonUnstarred:"○ No stars",
+        lessonStepOne:"01 / LET THE CONDITION SET THE SCOPE",universeTitle:"Start with 8 equally likely balls",universeNote:"Balls outside the condition fade. The bright balls form our new reference group, B.",
+        conditionLegend:"Bright balls: B",overlapLegend:"Orange border: A ∩ B",lessonStepTwo:"02 / COUNT WITHIN THAT GROUP",
+        countTitle:"Target balls ÷ eligible balls",countNote:"Each ball is equally likely, so we can compare counts.",
+        overlapCountLabel:"A ∩ B: orange AND eligible",conditionCountLabel:"B: all eligible balls",
+        lessonNarration:"Orange balls: {overlap} out of {eligible} eligible balls. Probability: {fraction}.",
+        formulaTitle:"03 / Turn the picture into a formula",formulaSubtitle:"The letters describe the balls you just counted.",eventA:"Drawing an orange ball",
+        eventBs:["Drawing any ball (a certain event)","Drawing a starred ball","Drawing a ball without a star"],
+        eventIntersections:["Drawing an orange ball","Drawing an orange AND starred ball","Drawing an orange ball WITHOUT a star"],
+        givenGloss:"<b>|</b>means “given that”",intersectionGloss:"<b>∩</b>means “both events happen”",
+        originalDenominator:"First, use the original 8 balls:",
+        formulaNote:"Dividing by P(B) treats <strong>the group meeting condition B as the new whole</strong>. Here, the two denominators of 8 cancel, leaving <strong>the number of orange eligible balls ÷ the number of eligible balls</strong>.",
+        lessonQuestion:"Think about it: when drawing only starred balls, why not 3/8?",
+        lessonAnswer:"Here, let B mean “starred.” The probability 3/8 describes drawing an orange AND starred ball from all 8 balls: P(A ∩ B). Given that only starred balls can be drawn, the reference group contains 4 balls. So P(A | B) = 3/4.",
+        lessonMemory:"<strong>First find who meets the condition. Then count who also meets the target.</strong><br>For starred balls, the chance of orange is 3/4. A single draw can still be blue.",
+        summaryLesson:"See the visual explanation ↓",lessonDiagramAria:"Eight balls illustrating conditional probability",
+        lessonBallAria:"{color} ball, {star}, {membership}",lessonMembership:["outside condition B","inside condition B","inside the intersection A and B, and inside B"],
+        formulaAria:"P of A given B equals P of A intersection B divided by P of B, where P of B is greater than zero.",
+        workedFormulaAria:"Conditional probability is {overlap}/{total} divided by {eligible}/{total}, giving {fraction}."
       }
     };
   </script>
@@ -197,6 +298,8 @@
       let drawnBall=null;
       let selectedValue=null;
       let language="zh";
+      let lessonCondition=1;
+      const conditionButtons=[...document.querySelectorAll(".condition-button")];
       let effectsFrame=null;
       let effectsTimer=null;
       const motionPreference=window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -204,6 +307,46 @@
       const t=(key,values={})=>Object.entries(values).reduce((text,[name,value])=>text.replaceAll(`{${name}}`,value),TRANSLATIONS[language][key]);
       const ballHTML=ball=>`<span class="ball ${ball.color}" aria-hidden="true">${ball.star?'<span class="star">★</span>':""}</span>`;
       const colorName=ball=>t(ball.color);
+      const fractionHTML=(numerator,denominator)=>`<span class="math-frac"><span>${numerator}</span><span>${denominator}</span></span>`;
+      function renderLesson(){
+        const facts=BallGame.explanation(lessonCondition);
+        const eligibleIds=new Set(facts.eligible.map(ball=>ball.id));
+        const overlapIds=new Set(facts.overlap.map(ball=>ball.id));
+        const diagram=$("lesson-balls");
+        diagram.setAttribute("aria-label",t("lessonDiagramAria"));
+        if(!diagram.children.length)diagram.innerHTML=BallGame.balls.map(ball=>`<div class="lesson-ball-cell" data-lesson-ball="${ball.id}" role="listitem">${ballHTML(ball)}<small aria-hidden="true"></small></div>`).join("");
+        BallGame.balls.forEach(ball=>{
+          const eligible=eligibleIds.has(ball.id),overlap=overlapIds.has(ball.id);
+          const cell=diagram.querySelector(`[data-lesson-ball="${ball.id}"]`);
+          cell.classList.toggle("excluded",!eligible);
+          cell.classList.toggle("intersection",overlap);
+          cell.querySelector("small").textContent=colorName(ball);
+          cell.setAttribute("aria-label",t("lessonBallAria",{color:colorName(ball),star:t(ball.star?"hasStar":"noStar"),membership:t("lessonMembership")[overlap?2:eligible?1:0]}));
+        });
+        conditionButtons.forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.condition)===lessonCondition)));
+        $("lesson-overlap-count").textContent=facts.overlap.length;
+        $("lesson-condition-count").textContent=facts.eligible.length;
+        $("lesson-overlap-balls").innerHTML=facts.overlap.map(ballHTML).join("");
+        $("lesson-condition-balls").innerHTML=facts.eligible.map(ballHTML).join("");
+        const fraction=BallGame.rounds[lessonCondition].fraction;
+        $("lesson-result").textContent=fraction;
+        $("lesson-percent").textContent=(BallGame.probability(lessonCondition)*100)+"%";
+        $("lesson-narration").textContent=t("lessonNarration",{eligible:facts.eligible.length,overlap:facts.overlap.length,fraction});
+        $("event-b").textContent=t("eventBs")[lessonCondition];
+        $("event-intersection").textContent=t("eventIntersections")[lessonCondition];
+        $("formula-general").setAttribute("aria-label",t("formulaAria"));
+        $("joint-probability").innerHTML=`<span class="intersection-color">P(A ∩ B) = ${facts.overlap.length}/${facts.total}</span>`;
+        $("condition-probability").textContent=`P(B) = ${facts.eligible.length}/${facts.total}`;
+        const rawFraction=`${facts.overlap.length}/${facts.eligible.length}`;
+        $("formula-numeric").innerHTML=fractionHTML(`${facts.overlap.length}/${facts.total}`,`${facts.eligible.length}/${facts.total}`)+"<span>=</span>"+fractionHTML(facts.overlap.length,facts.eligible.length)+(rawFraction!==fraction?`<span>=</span><strong>${fraction}</strong>`:"");
+        $("formula-numeric").setAttribute("aria-label",t("workedFormulaAria",{overlap:facts.overlap.length,total:facts.total,eligible:facts.eligible.length,fraction}));
+      }
+      function openLesson(){
+        clearAnswerEffects();
+        if($("summary-dialog").open)$("summary-dialog").close();
+        $("lesson-title").focus({preventScroll:true});
+        $("conditional-lesson").scrollIntoView({behavior:motionPreference.matches?"auto":"smooth",block:"start"});
+      }
       function clearAnswerEffects(){
         if(effectsFrame!==null){cancelAnimationFrame(effectsFrame);effectsFrame=null;}
         if(effectsTimer!==null){clearTimeout(effectsTimer);effectsTimer=null;}
@@ -291,6 +434,7 @@
         $("ball-grid").setAttribute("aria-label",t("ballsAria"));
         choices.forEach((button,index)=>button.setAttribute("aria-label",t("choices")[index]));
         renderSummary();
+        renderLesson();
       }
       function renderSummary(){
         $("final-score").textContent=state.score;
@@ -403,6 +547,12 @@
       $("restart-open").addEventListener("click",()=>$("restart-dialog").showModal());
       $("restart-confirm").addEventListener("click",reset);
       $("play-again").addEventListener("click",reset);
+      $("lesson-jump").addEventListener("click",openLesson);
+      $("summary-lesson").addEventListener("click",openLesson);
+      conditionButtons.forEach(button=>button.addEventListener("click",()=>{
+        lessonCondition=Number(button.dataset.condition);
+        renderLesson();
+      }));
       $("language-toggle").addEventListener("click",()=>{
         clearAnswerEffects();
         language=language==="zh"?"en":"zh";
