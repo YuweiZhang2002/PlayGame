@@ -6,6 +6,7 @@ import { pagesConfig, buildPages } from "./scripts/build-pages.mjs";
 
 const original = pagesConfig({});
 assert.equal(original.config.basePath, "/PlayGame/");
+assert.equal(original.config.apiBase, "https://43.129.175.218");
 assert.equal(original.target, "github");
 
 assert.throws(() => pagesConfig({ PAGES_TARGET: "gitlab" }), /PAGES_URL/);
@@ -14,7 +15,7 @@ assert.throws(() => pagesConfig({
 }), /GAME_API_URL/);
 assert.throws(() => pagesConfig({
   PAGES_TARGET: "gitlab", CI_PAGES_URL: "https://example.gitlab.io/PlayGame/",
-  GAME_API_URL: original.config.apiBase,
+  GAME_API_URL: "https://probability-detective-20261020.yuweizhang2002.chatgpt.site",
 }), /independent backend/);
 assert.throws(() => pagesConfig({
   PAGES_TARGET: "gitlab", CI_PAGES_URL: "https://example.gitlab.io/",

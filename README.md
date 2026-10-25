@@ -4,13 +4,15 @@
 
 ## Play / 开始游戏
 
-Public game / 游戏网址: https://yuweizhang2002.github.io/PlayGame/
+Public game / 游戏网址: https://43.129.175.218/
 
-The website is served by **GitHub Pages** from `main` → `/docs`. It uses the existing shared D1 database and Vinext/Cloudflare Worker API for server scoring, timing and live rankings. GitHub Pages does not run a database or backend.
+GitHub Pages entry / GitHub 入口: https://yuweizhang2002.github.io/PlayGame/
 
-网页由 GitHub Pages 托管，访问者无需登录 GitHub 或 ChatGPT。计分、计时与共享排行榜继续使用现有服务器和数据库，因此保留跨设备实时排名。网站直接在 GitHub 网址内运行，不通过 iframe 或跳转显示旧网页。
+The complete game and API run on a Tencent Cloud Hong Kong server with persistent SQLite storage. **GitHub Pages** serves the same frontend from `main` → `/docs` and calls this server for scoring, timing and shared rankings. Neither entry point requires a GitHub or ChatGPT login, or the original `chatgpt.site` backend.
 
-API service: `https://probability-detective-20261020.yuweizhang2002.chatgpt.site`
+完整网页、计分接口和共享排行榜已迁到腾讯云香港服务器；GitHub 入口使用同一个新后台。新服务器使用独立数据库，原网站的历史成绩尚未迁移。服务器租期至 2026 年 11 月 26 日，付费自动续费关闭。
+
+API service: `https://43.129.175.218`. Deployment and maintenance: [`TENCENT-DEPLOYMENT.md`](TENCENT-DEPLOYMENT.md).
 
 游戏流程：阅读并确认规则 → 自选 12 个头像之一、输入昵称 → 点击开始并计时 → 完成三题 → 查看成绩和共享排行榜 → 解锁独立讲解页。
 
@@ -26,9 +28,9 @@ Each completed run is a separate entry. The top 50 are shown, plus the current p
 
 计时由服务器记录：从创建游戏到服务器收到最后一题，包含抽球展示、两题间切换和网络传输时间。每题平均用时 = 总用时 ÷ 3。正确率按首次提交的答案计算；重复提交不会重复计分或改变完成时间。
 
-The GitHub Pages `/PlayGame/lesson/` route checks the session API before showing the explanation and sends unfinished players back to the game. On the original server, `/lesson` also checks completion before returning HTML. This is a casual classroom activity with player nicknames, not a verified-identity examination system.
+The GitHub Pages `/PlayGame/lesson/` route checks the session API before showing the explanation and sends unfinished players back to the game. On the Tencent server, `/lesson` also checks completion before returning HTML. This is a casual classroom activity with player nicknames, not a verified-identity examination system.
 
-GitHub Pages keeps a private attempt token in the browser's local storage and sends it in an Authorization header, so gameplay does not depend on third-party cookies. The API only allows browser requests from its own origin and `https://yuweizhang2002.github.io`. The original site continues to use its HttpOnly, SameSite cookie. Nicknames and completed scores are shared; private attempt tokens never appear in leaderboard responses. Each origin has its own current game and language preference.
+GitHub Pages keeps a private attempt token in the browser's local storage and sends it in an Authorization header, so gameplay does not depend on third-party cookies. The API only allows browser requests from its own origin and `https://yuweizhang2002.github.io`. The Tencent entry uses a Secure, HttpOnly, SameSite cookie. Nicknames and completed scores are shared; private attempt tokens never appear in leaderboard responses. Each origin has its own current game and language preference.
 
 ## Rules / 游戏规则
 
@@ -80,10 +82,9 @@ The English speech and slide deck are separate teaching documents, not website r
 
 ### GitLab migration preparation
 
-The GitLab CI configuration, portable Pages builder and independent Node.js
-backend are described in [`GITLAB-DEPLOYMENT.md`](GITLAB-DEPLOYMENT.md). Deployment
-to a new backend and GitLab Pages is required before the live game can operate
-independently of `chatgpt.site`.
+The GitLab CI configuration and portable Pages builder are described in
+[`GITLAB-DEPLOYMENT.md`](GITLAB-DEPLOYMENT.md). The independent backend is live
+on Tencent Cloud. GitLab Pages remains optional and is not yet published.
 
 The standalone server runs on Node.js 24 and persists results in SQLite. It
 serves the game, lesson and API together, and can also accept the configured
@@ -101,7 +102,7 @@ git commit -m "Update classroom game"
 git push github main
 ```
 
-GitHub publishes `docs/` automatically. Its `.nojekyll` file preserves these buildless assets. The generator adds `/PlayGame/` asset and navigation paths and the API base URL to both entry pages. Changes to `server/` or API routes also require publishing the Worker backend through Sites.
+GitHub publishes `docs/` automatically. Its `.nojekyll` file preserves these buildless assets. The generator adds `/PlayGame/` asset and navigation paths and the API base URL to both entry pages. Changes to `web/`, `public/` or `server/` also require updating the Tencent server copy and restarting `probability-game.service`; the standalone server loads frontend assets at startup.
 
 ### Full local server
 

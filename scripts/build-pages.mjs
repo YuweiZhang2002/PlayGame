@@ -15,7 +15,7 @@ export function pagesConfig(env = process.env) {
     throw new Error("PAGES_URL must be a public HTTPS website URL without credentials, query or hash.");
   }
   const basePath = site.pathname.replace(/\/+$/, "") + "/";
-  const apiValue = env.GAME_API_URL || (gitlab ? "" : "https://probability-detective-20261020.yuweizhang2002.chatgpt.site");
+  const apiValue = env.GAME_API_URL || (gitlab ? "" : "https://43.129.175.218");
   if (!apiValue) {
     throw new Error("Set GAME_API_URL to the independently hosted game backend. GitLab Pages cannot run the shared leaderboard API.");
   }
